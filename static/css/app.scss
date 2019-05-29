@@ -1,20 +1,5 @@
-// $bs:1px solid black;
-// $bgc:background-color;
-// @mixin wh($w, $h, $b, $color) {
-//     width: $w;
-//     height: $h;
-//     border: $b;
-//     #{$bgc}: $color;
-// }
 
-// @mixin whh($w, $h) {
-//     width: $w;
-//     height: $h;
-// }
 
-// @mixin w($w) {
-//     width: $w;
-// }
 body,html{
     width: 100%;
    height: 100%;
@@ -89,5 +74,6 @@ div,
   .content-box {
     width: 100%;
     flex: 1;
-    overflow: auto;}
+    overflow: auto;
+  }
 }

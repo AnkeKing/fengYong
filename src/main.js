@@ -8,6 +8,7 @@ import Loading from './components/Loading';
 import HomeFood from './components/HomeFood';
 import WarnAlert from "./components/WarnAlert";
 import SelectAlert from "./components/SelectAlert";
+import Slides from './components/Slides'
 import 'normalize.css'
 
 
@@ -18,6 +19,7 @@ Vue.component('appLoading',Loading);//全局组件
 Vue.component('appWarnAlert',WarnAlert);
 Vue.component('appSelectAlert',SelectAlert);
 Vue.component('appHomeFood',HomeFood);
+Vue.component('appSlides',Slides);
 
 /* eslint-disable no-new */
 new Vue({

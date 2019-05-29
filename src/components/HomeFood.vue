@@ -48,11 +48,11 @@ export default {
     li {
       display: flex;
       flex-direction: column;
-      border: 1px solid black;
       width: 0.5rem;
       height: 0.5rem;
       justify-content: space-around;
       align-items: center;
+      border: 1px solid red;
       img {
         width: 0.3rem;
       }

@@ -1,7 +1,8 @@
 <template>
  <div class="scroll-box">
-     <h1>ShopCar</h1>
-     <div class="content-box"></div>
+     <div class="content-box">
+         <h1>ShopCar</h1>
+     </div>
      <app-Home-food></app-Home-food>
  </div>
 </template>

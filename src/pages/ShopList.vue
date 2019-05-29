@@ -1,6 +1,8 @@
 <template>
  <div class="box">
-     <h1>list</h1>
+     <div class="content-box">
+         <h1>list</h1>
+     </div>
      <app-Home-food></app-Home-food>
  </div>
 </template>

@@ -55,12 +55,9 @@ const login = {
                 localStorage.setItem("userList", JSON.stringify(state.loginRecordArr));
             } else {
                 state.loginRecordArr = [];
-                console.log("user.loginName:",user.loginName);
                 state.loginRecordArr.push({ 'loginName': user.loginName });
                 for (let l in localUserList) {
-                    if (localUserList[l].loginName != user.loginName) {
-                        console.log("localUserList[l].loginName:",localUserList[l].loginName);
-                        state.loginRecordArr.push(localUserList[l]);
+                    if (localUserList[l].loginName != user.loginName) {state.loginRecordArr.push(localUserList[l]);
                     }
                 }
                 localStorage.setItem("userList", JSON.stringify(state.loginRecordArr));

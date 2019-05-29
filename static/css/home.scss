@@ -1,3 +1,34 @@
+$bs:1px solid black;
+$bgc:background-color;
+
+@mixin whbc($w, $h, $b, $color) {
+  width: $w;
+  height: $h;
+  border: $b;
+  #{$bgc}: $color;
+}
+
+@mixin wh($w, $h) {
+  width: $w;
+  height: $h;
+}
+
+@mixin w($w) {
+  width: $w;
+}
+
+@mixin center() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin setFont($fz, $fc) {
+  font-size: $fz;
+  color: $fc;
+}
+
+
 .scroll-box {
   width: 100%;
   height: 100vh;
@@ -9,12 +40,12 @@
     flex: 1;
     overflow: auto;
 
-
     div[class^="search"] {
+      //搜索框
       width: 100%;
-      border: 1px solid black;
       display: flex;
       justify-content: center;
+      z-index: 77;
 
       div {
         width: 3.47rem;
@@ -63,7 +94,8 @@
       }
     }
 
-    .search-position {//没上滑时的搜索框
+    .search-position {
+      //没上滑时的搜索框
       padding: 0.1rem 0 0.1rem 0;
       position: absolute;
 
@@ -76,12 +108,14 @@
       }
     }
 
-    .search-fixed {//上滑后搜索框fiexed
+    .search-fixed {
+      //上滑后搜索框fiexed
       padding: 0.06rem 0 0.06rem 0;
-        top: 0px;
-        left: 0px;
-        position: fixed;
-        background-color: #DD3333;
+      top: 0px;
+      left: 0px;
+      position: fixed;
+      background-color: #DD3333;
+
       div {
         input {
           background-color: rgba(250, 250, 252, 1);
@@ -89,19 +123,151 @@
       }
     }
 
-    .viewpager-box {//轮播图盒子
-      height: 200px;
-      width: 100%;
+    .slides-box-one {
+      //轮播图one
+      position: relative;
+      background-color: #F1F0F5;
+      height: 2.86rem;
 
-      img {
-        width: 100%;
+      .nav-ul {
+        @include wh(3.55rem, 1.01rem);
+        background-color: rgba(250, 250, 252, 0.95);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        position: absolute;
+        -webkit-transform: translateX(-50%);
+        transform: translateX(-50%);
+        left: 50%;
+        top: 1.76rem;
+        border-radius: 4px;
+
+        li {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          img {
+            @include wh(0.4rem, 0.4rem);
+          }
+
+          a {
+            font-size: 0.12rem;
+            color: #333333;
+            margin-top: 0.1rem;
+          }
+        }
       }
     }
-    span{
+
+    .scrolltext-box {
+      width: 100%;
+      height: 0.4rem;
+      background-color: #ffffff;
+      display: flex;
+      justify-content: center;
+      overflow: hidden;
+
+      span {
         display: flex;
-        height: 1600px;
-        width: 13px;
-        background-color: brown;
+        animation: scrolltext 3s linear infinite;
+
+        img {
+          width: 0.15rem;
+          height: 0.14rem;
+        }
+
+        a {
+          font-size: 0.12rem;
+          color: #333333;
+          margin-left: 0.07rem;
+        }
+      }
+
+      @keyframes scrolltext {
+        0% {
+          transform: translateY(-0.15rem);
+        }
+
+        40% {
+          transform: translateY(0.12rem);
+        }
+
+        60% {
+          transform: translateY(0.12rem);
+        }
+
+        100% {
+          transform: translateY(0.32rem);
+        }
+      }
+    }
+
+    .dailyrcmd-box {
+      @include whbc(100%, 2.19rem, none, #ffffff);
+      overflow-x: scroll;
+      padding: 0.1rem 0.14rem 0.1rem 0.14rem;
+      display: flex;
+
+      li {
+        float: left;
+        @include wh(1.34rem, 1.99rem);
+        border: 0.01rem solid #CCCCCC;
+        padding: 0.1rem 0.09rem 0.11rem 0.09rem;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        justify-content: space-around;
+        margin-right: 0.1rem;
+
+        .rcmdImg {
+          @include wh(0.36rem, 0.2rem);
+          font-size: 0.11rem;
+          color: #FFFFFF;
+          background: url("../../src/assets/img/tuijian.png") no-repeat 100% 100%;
+          position: absolute;
+          top: -0.02rem;
+          left: -0.05rem;
+          @include center();
+        }
+
+        .img {
+          @include wh(1.1rem, 1.14rem);
+          margin-bottom: 0.005rem;
+        }
+
+        .name {
+            @include w(100%);
+          @include setFont(0.12rem, #333333);
+          overflow: hidden; //溢出的部分隐藏；
+          text-overflow: ellipsis; //文本溢出显示省略号；
+          display: -webkit-box; //作为弹性伸缩盒子模型显示
+          -webkit-line-clamp: 1;
+          height: 0.14rem;
+        }
+        .name::after{
+            content: "..."
+        }
+
+        .text {
+          @include setFont(0.09rem, #999999);
+        }
+
+        .shop-msg-box {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 0.07rem;
+
+          img {
+            @include wh(0.2rem, 0.2rem);
+            padding: 0.02rem 0.02rem 0.02rem 0.02rem;
+          }
+
+          a {
+            @include setFont(0.18rem, #DD3333);
+          }
+        }
+      }
     }
   }
 }
