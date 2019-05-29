@@ -1,0 +1,131 @@
+.box {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.box .content-box {
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.box .content-box .logoBox {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0.66rem 0 0.85rem 0;
+}
+
+.box .content-box .logoBox img {
+  width: 0.76rem;
+  height: 0.39rem;
+}
+
+.box .content-box .loginForm {
+  display: flex;
+  flex-direction: column;
+  width: 85%;
+}
+
+.box .content-box .loginForm > li {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.box .content-box .loginForm > li:nth-of-type(1) .phoneListDrop {
+  width: 100%;
+  max-height: 1.52rem;
+  background-color: #FFFFFF;
+  position: absolute;
+  left: 0rem;
+  top: 0.52rem;
+  z-index: 9;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  overflow: auto;
+}
+
+.box .content-box .loginForm > li:nth-of-type(1) .phoneListDrop li {
+  width: 100%;
+  height: 0.38rem;
+  font-family: 'PingFangSC-Regular';
+  font-size: 16px;
+  color: #333333;
+  display: flex;
+  align-items: center;
+  padding-left: 0.3rem;
+}
+
+.box .content-box .loginForm > li input {
+  width: 100%;
+  height: 0.52rem;
+  padding: 0 0.28rem 0 0.2rem;
+  border: none;
+  font-size: 0.16rem;
+  background-color: #FFFFFF;
+}
+
+.box .content-box .loginForm > li .inputLi {
+  height: 0.52rem;
+}
+
+.box .content-box .loginForm > li hr {
+  position: absolute;
+  bottom: 0;
+  background: #E4E4E4;
+  border: 1px solid #E4E4E4;
+  width: 100%;
+  height: 0.007rem;
+  -webkit-transform: scaleY(0.1);
+  transform: scaleY(0.1);
+}
+
+.box .content-box .loginForm > li button {
+  width: 100%;
+  height: 0.44rem;
+  background: rgba(221, 51, 51, 0.5);
+  border-radius: 0.04rem;
+  font-family: 'PingFangSC-Regular';
+  font-size: 0.18rem;
+  color: #FFFFFF;
+  margin: 0.3rem 0 0.05rem 0;
+}
+
+.box .content-box .loginForm > li .loginBtn {
+  background: #DD3333;
+  color: #FFFFFF;
+}
+
+.box .content-box .loginForm > li:nth-of-type(4) {
+  justify-content: flex-end;
+}
+
+.box .content-box .loginForm > li a {
+  font-family: 'PingFangSC-Regular';
+  font-size: 0.13rem;
+  color: #999999;
+  padding: 0.08rem 0 0.08rem;
+  width: 0.55rem;
+}
+
+.box .content-box .toRegister {
+  padding-top: 154px;
+  display: flex;
+  justify-content: center;
+}
+
+.box .content-box .toRegister button {
+  width: 0.85rem;
+  height: 0.34rem;
+  background-color: #FFFFFF;
+  font-family: 'PingFangSC-Regular';
+  font-size: 0.13rem;
+  color: #DD3333;
+}

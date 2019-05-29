@@ -1,0 +1,91 @@
+body, html {
+  width: 100%;
+  height: 100%;
+}
+
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+div,
+ul,
+li,
+span,
+a,
+img,
+button,
+input {
+  box-sizing: border-box;
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+}
+
+ul {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+::-webkit-input-placeholder {
+  /* WebKit, Blink, Edge */
+  color: #cccccc;
+}
+
+:-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: #cccccc;
+}
+
+::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: #cccccc;
+}
+
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: #cccccc;
+}
+
+#app {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.change-color {
+  width: 0.17rem;
+}
+
+.clear-text {
+  width: 0.4rem;
+  padding: 0.13rem;
+  opacity: 0.8;
+  margin-right: 0.05rem;
+}
+
+.role-img {
+  width: 0.4rem;
+  padding: 0.12rem;
+}
+
+.scrollBox {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.scrollBox .content-box {
+  width: 100%;
+  flex: 1;
+  overflow: auto;
+}
