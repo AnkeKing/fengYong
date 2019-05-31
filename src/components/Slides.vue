@@ -1,5 +1,5 @@
 <template>
-  <div class="slides-box">
+  <div :class="slidesClass=='one'?'slides-imgbox-one':'slides-imgbox-two'">
     <!--轮播插件可在不同位置复用 减少代码冗余-->
     <van-swipe
       :autoplay="3000"
@@ -21,7 +21,7 @@ export default {
   data() {
     return {};
   },
-  props: ["slides", "showIndicators"],
+  props: ["slides", "showIndicators",'slidesClass'],
   mounted(){
   },
   components: {
@@ -32,7 +32,7 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss' scoped>
-.slides-box {
+.slides-imgbox-one{
   width: 100%;
   height: 2.16rem;
   border-bottom-left-radius: 40px;
@@ -43,6 +43,15 @@ export default {
     height: 2.16rem;
   }
 }
+.slides-imgbox-two{
+  width: 100%;
+  height: 1.2rem;
+  img {
+    width: 100%;
+    height: 1.2rem;
+  }
+}
+
 </style>
 <style module>
 

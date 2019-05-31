@@ -1,14 +1,13 @@
 <template>
   <div class="box">
     <app-head :title="title" :backBool="true"></app-head>
-    <app-warn-alert></app-warn-alert>
     <div class="content-box">
       <ul class="setpass-form">
         <li class="inputLi">
           <img v-if="userName.length<=0" src="../assets/img/ic_personage.png" class="change-color">
           <img v-else src="../assets/img/ic_personage_red.png" class="change-color">
           <input type="text" placeholder="昵称(2-20字符，限制中文、字母、数字)" v-model="userName">
-         <img
+          <img
             src="../assets/img/ic_clear_text.png"
             @click="userName=''"
             v-if="userName.length>0"
@@ -140,7 +139,7 @@ export default {
         } else {
           this.$store.dispatch("showWarnAsync", {
             warnBool: true,
-            warnText: "手机号码格式错误"
+            warnText: "手机号码格式错误",
           });
         }
       }
@@ -160,7 +159,7 @@ export default {
       ) {
         this.$store.dispatch("showWarnAsync", {
           warnBool: true,
-          warnText: "请输入6-15位的登录密码"
+          warnText: "请输入6-15位的登录密码",
         });
         return false;
       } else {
@@ -174,7 +173,7 @@ export default {
       ) {
         this.$store.dispatch("showWarnAsync", {
           warnBool: true,
-          warnText: "手机号码格式错误"
+          warnText: "手机号码格式错误",
         });
       }
     },
@@ -200,8 +199,7 @@ export default {
                     boxType: "confirm",
                     confirmType: "warn",
                     text: "注册成功",
-                    warn:
-                      "请进行商户认证."
+                    warn: "请进行商户认证."
                   }
                 });
               }
@@ -219,7 +217,7 @@ export default {
         this.$refs.passInput.type = "password";
         this.lookPass = false;
       }
-    },
+    }
   },
   components: {
     appHead: Head

@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <app-warn-alert></app-warn-alert>
     <router-view></router-view>
   </div>
 </template>

@@ -2,8 +2,9 @@
   <div class="home-head-box" v-show="$store.state.home.homeHeadBool">
     <span>
       <img src="../assets/img/ic_dingwei.png">
-      <a>北京</a>
-      <img src="../assets/img/ic_down.png" class="icon-down">
+      <a  v-if="$store.state.token">洁哥的宇宙</a>
+      <a  v-else>北京</a>
+      <img src="../assets/img/ic_down.png" class="icon-down"@click="toSelectCity">
     </span>
     <button>我要卖货</button>
   </div>
@@ -14,6 +15,14 @@ export default {
   name: "Home-head-box",
   data() {
     return {};
+  },
+  methods:{
+    toSelectCity(){
+      this.$router.push('/selectCityPage')
+    }
+  },
+  mounted(){
+    this.$store.commit("home/setHomeHeadBool", true);
   },
   components: {
    

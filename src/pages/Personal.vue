@@ -1,19 +1,25 @@
 <template>
- <div class="box">
+ <div class="scroll-box">
      <div class="content-box">
-         <h1>personal</h1>
+         <h1 @click="logout">personal</h1>
      </div>
-     <app-Home-food></app-Home-food>
  </div>
 </template>
 
 <script>
 export default {
-name:'Box',
+name:'Scroll-box',
  data() {
  return {
 
  }
+ },
+ methods:{
+     logout(){
+         localStorage.removeItem('vuex');
+         this.$store.commit('setToken',false);
+         this.$router.replace('/login');
+     }
  },
  components: {
 

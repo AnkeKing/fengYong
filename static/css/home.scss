@@ -1,5 +1,5 @@
-$bs:1px solid black;
-$bgc:background-color;
+$bs: 1px solid black;
+$bgc: background-color;
 
 @mixin whbc($w, $h, $b, $color) {
   width: $w;
@@ -28,7 +28,6 @@ $bgc:background-color;
   color: $fc;
 }
 
-
 .scroll-box {
   width: 100%;
   height: 100vh;
@@ -39,7 +38,9 @@ $bgc:background-color;
     width: 100%;
     flex: 1;
     overflow: auto;
+    background-color: #F2F1F6;
 
+    //搜索框
     div[class^="search"] {
       //搜索框
       width: 100%;
@@ -123,8 +124,9 @@ $bgc:background-color;
       }
     }
 
+    //轮播图one
     .slides-box-one {
-      //轮播图one
+
       position: relative;
       background-color: #F1F0F5;
       height: 2.86rem;
@@ -160,6 +162,7 @@ $bgc:background-color;
       }
     }
 
+    //滚动文字盒子
     .scrolltext-box {
       width: 100%;
       height: 0.4rem;
@@ -186,87 +189,204 @@ $bgc:background-color;
 
       @keyframes scrolltext {
         0% {
-          transform: translateY(-0.15rem);
+          transform: translateY(-0.12rem);
         }
 
         40% {
-          transform: translateY(0.12rem);
+          transform: translateY(0.11rem);
         }
 
         60% {
-          transform: translateY(0.12rem);
+          transform: translateY(0.11rem);
         }
 
         100% {
-          transform: translateY(0.32rem);
+          transform: translateY(0.35rem);
         }
       }
     }
 
-    .dailyrcmd-box {
-      @include whbc(100%, 2.19rem, none, #ffffff);
-      overflow-x: scroll;
-      padding: 0.1rem 0.14rem 0.1rem 0.14rem;
+    //热门品牌区
+    .brandUl {
+      @include w(100%);
       display: flex;
+      flex-wrap: wrap;
 
       li {
-        float: left;
-        @include wh(1.34rem, 1.99rem);
-        border: 0.01rem solid #CCCCCC;
-        padding: 0.1rem 0.09rem 0.11rem 0.09rem;
-        display: flex;
+        @include whbc(25%, 0.92rem, 0.005rem solid #EEEEEE, #ffffff);
+        @include center();
         flex-direction: column;
-        position: relative;
-        justify-content: space-around;
-        margin-right: 0.1rem;
+        justify-content: space-between;
+        padding: 0.12rem 0 0.12rem 0;
 
-        .rcmdImg {
-          @include wh(0.36rem, 0.2rem);
-          font-size: 0.11rem;
-          color: #FFFFFF;
-          background: url("../../src/assets/img/tuijian.png") no-repeat 100% 100%;
-          position: absolute;
-          top: -0.02rem;
-          left: -0.05rem;
-          @include center();
+        a {
+          @include setFont(0.12rem, #666666);
         }
+      }
+    }
 
-        .img {
-          @include wh(1.1rem, 1.14rem);
-          margin-bottom: 0.005rem;
-        }
 
-        .name {
-            @include w(100%);
-          @include setFont(0.12rem, #333333);
-          overflow: hidden; //溢出的部分隐藏；
-          text-overflow: ellipsis; //文本溢出显示省略号；
-          display: -webkit-box; //作为弹性伸缩盒子模型显示
-          -webkit-line-clamp: 1;
-          height: 0.14rem;
-        }
-        .name::after{
-            content: "..."
-        }
+    .shop-list-box {
+      @include w(100%);
+      //商品标题
+      .shop-banner-box {
+        width: 100%;
+        background-color: #f8f8f8;
+        display: flex;
+        justify-content: center;
+        height: 0.4rem;
+        font-size: 0.14rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
 
-        .text {
-          @include setFont(0.09rem, #999999);
-        }
-
-        .shop-msg-box {
+        >a {
           display: flex;
-          justify-content: space-between;
-          margin-top: 0.07rem;
+          align-items: center;
+        }
 
-          img {
-            @include wh(0.2rem, 0.2rem);
-            padding: 0.02rem 0.02rem 0.02rem 0.02rem;
+        img {
+          width: 0.3rem;
+          margin: 0 0.08rem 0 0.08rem;
+        }
+
+        .red {
+          color: #ED0C0D;
+
+        }
+
+        .green {
+          color: #28B60E;
+        }
+      }
+      //标题图
+      .banner-img-box{
+        @include w(100%);
+        img{
+          @include wh(100%,1.22rem);
+        }
+      }
+      //横向滚动商品区
+      .shop-content-box {
+        @include whbc(100%, 2.19rem, none, #ffffff);
+        overflow-x: scroll;
+        padding: 0.1rem 0.14rem 0.1rem 0.14rem;
+        display: flex;
+
+        li {
+          float: left;
+          @include wh(1.34rem, 1.99rem);
+          border: 0.01rem solid #cccccc;
+          padding: 0.1rem 0.09rem 0.11rem 0.09rem;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+          justify-content: space-around;
+          margin-right: 0.1rem;
+
+          .rcmdImg {
+            @include wh(0.36rem, 0.2rem);
+            font-size: 0.11rem;
+            color: #ffffff;
+            background: url("../../src/assets/img/tuijian.png") no-repeat 100% 100%;
+            position: absolute;
+            top: -0.02rem;
+            left: -0.05rem;
+            @include center();
           }
 
-          a {
-            @include setFont(0.18rem, #DD3333);
+          .img {
+            @include wh(1.1rem, 1.14rem);
+            margin-bottom: 0.005rem;
+          }
+
+          .name {
+            @include w(100%);
+            @include setFont(0.12rem, #333333);
+            overflow : hidden;  //溢出的部分隐藏；
+            text-overflow: ellipsis;// 文本溢出显示省略号；
+            display: -webkit-box;	//作为弹性伸缩盒子模型显示
+            -webkit-line-clamp: 1; /* 限制在一个块元素显示的文本的行数 */
+            -webkit-box-orient: vertical; /* 垂直排列 */
+            word-break: break-all;  
+          }
+
+          .name::after {
+            content: "...";
+          }
+
+          .text {
+            @include setFont(0.09rem, #999999);
+          }
+
+          .shop-msg-box {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.07rem;
+
+            img {
+              @include wh(0.2rem, 0.2rem);
+              padding: 0.02rem 0.02rem 0.02rem 0.02rem;
+            }
+
+            a {
+              @include setFont(0.18rem, #dd3333);
+            }
           }
         }
+      }
+    }
+
+    //底部关键字区
+    .foot-nav-ul {
+      @include whbc(100%, 0.4rem, none, #ffffff);
+      display: flex;
+      align-items: center;
+      padding-left: 0.14rem;
+      border-top: 0.005rem solid #CCCCCC;
+      margin-bottom: 0.19rem;
+
+      li {
+        @include whbc(0.69rem, 0.2rem, 0.005rem solid #CCCCCC, #ffffff);
+        @include center();
+        @include setFont(0.12rem, #666666);
+        margin-right: 0.1rem;
+        border-radius: 30px;
+      }
+
+    }
+
+    //回到顶部
+    .foot-anchor {
+      border-bottom: 0.26rem;
+      height: 0.76rem;
+      position: fixed;
+      right: 0rem;
+      bottom: 0.7rem;
+
+      button {
+        display: block;
+      }
+
+      .login-btn {
+        @include whbc(0.92rem, 0.26rem, none, transparent);
+        @include setFont(0.12rem, #FFFFFF);
+        background: url('../.././src/assets/img/Rectangle13.png') no-repeat;
+        background-size: 107%;
+        background-position: -0.06rem -0.02rem;
+        box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.50);
+        border-top-left-radius: 30px;
+        border-bottom-left-radius: 30px;
+      }
+
+      .toup-btn {
+        @include wh(0.4rem, 0.4rem);
+        background: url('../../src/assets/img/Group@3x.png') no-repeat;
+        background-size: 100%;
+        background-position: -0.02rem -0.02rem;
+        float: right;
+        margin-top: 0.05rem;
       }
     }
   }

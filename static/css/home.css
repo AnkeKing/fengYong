@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .scroll-box {
   width: 100%;
   height: 100vh;
@@ -9,6 +10,7 @@
   width: 100%;
   flex: 1;
   overflow: auto;
+  background-color: #F2F1F6;
 }
 
 .scroll-box .content-box div[class^="search"] {
@@ -149,20 +151,88 @@
 
 @keyframes scrolltext {
   0% {
-    transform: translateY(-0.15rem);
+    transform: translateY(-0.12rem);
   }
   40% {
-    transform: translateY(0.12rem);
+    transform: translateY(0.11rem);
   }
   60% {
-    transform: translateY(0.12rem);
+    transform: translateY(0.11rem);
   }
   100% {
-    transform: translateY(0.32rem);
+    transform: translateY(0.35rem);
   }
 }
 
-.scroll-box .content-box .dailyrcmd-box {
+.scroll-box .content-box .brandUl {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.scroll-box .content-box .brandUl li {
+  width: 25%;
+  height: 0.92rem;
+  border: 0.005rem solid #EEEEEE;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.12rem 0 0.12rem 0;
+}
+
+.scroll-box .content-box .brandUl li a {
+  font-size: 0.12rem;
+  color: #666666;
+}
+
+.scroll-box .content-box .shop-list-box {
+  width: 100%;
+}
+
+.scroll-box .content-box .shop-list-box .shop-banner-box {
+  width: 100%;
+  background-color: #f8f8f8;
+  display: flex;
+  justify-content: center;
+  height: 0.4rem;
+  font-size: 0.14rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+.scroll-box .content-box .shop-list-box .shop-banner-box > a {
+  display: flex;
+  align-items: center;
+}
+
+.scroll-box .content-box .shop-list-box .shop-banner-box img {
+  width: 0.3rem;
+  margin: 0 0.08rem 0 0.08rem;
+}
+
+.scroll-box .content-box .shop-list-box .shop-banner-box .red {
+  color: #ED0C0D;
+}
+
+.scroll-box .content-box .shop-list-box .shop-banner-box .green {
+  color: #28B60E;
+}
+
+.scroll-box .content-box .shop-list-box .banner-img-box {
+  width: 100%;
+}
+
+.scroll-box .content-box .shop-list-box .banner-img-box img {
+  width: 100%;
+  height: 1.22rem;
+}
+
+.scroll-box .content-box .shop-list-box .shop-content-box {
   width: 100%;
   height: 2.19rem;
   border: none;
@@ -172,11 +242,11 @@
   display: flex;
 }
 
-.scroll-box .content-box .dailyrcmd-box li {
+.scroll-box .content-box .shop-list-box .shop-content-box li {
   float: left;
   width: 1.34rem;
   height: 1.99rem;
-  border: 0.01rem solid #CCCCCC;
+  border: 0.01rem solid #cccccc;
   padding: 0.1rem 0.09rem 0.11rem 0.09rem;
   display: flex;
   flex-direction: column;
@@ -185,11 +255,11 @@
   margin-right: 0.1rem;
 }
 
-.scroll-box .content-box .dailyrcmd-box li .rcmdImg {
+.scroll-box .content-box .shop-list-box .shop-content-box li .rcmdImg {
   width: 0.36rem;
   height: 0.2rem;
   font-size: 0.11rem;
-  color: #FFFFFF;
+  color: #ffffff;
   background: url("../../src/assets/img/tuijian.png") no-repeat 100% 100%;
   position: absolute;
   top: -0.02rem;
@@ -199,13 +269,13 @@
   align-items: center;
 }
 
-.scroll-box .content-box .dailyrcmd-box li .img {
+.scroll-box .content-box .shop-list-box .shop-content-box li .img {
   width: 1.1rem;
   height: 1.14rem;
   margin-bottom: 0.005rem;
 }
 
-.scroll-box .content-box .dailyrcmd-box li .name {
+.scroll-box .content-box .shop-list-box .shop-content-box li .name {
   width: 100%;
   font-size: 0.12rem;
   color: #333333;
@@ -213,31 +283,97 @@
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 1;
-  height: 0.14rem;
+  /* 限制在一个块元素显示的文本的行数 */
+  -webkit-box-orient: vertical;
+  /* 垂直排列 */
+  word-break: break-all;
 }
 
-.scroll-box .content-box .dailyrcmd-box li .name::after {
+.scroll-box .content-box .shop-list-box .shop-content-box li .name::after {
   content: "...";
 }
 
-.scroll-box .content-box .dailyrcmd-box li .text {
+.scroll-box .content-box .shop-list-box .shop-content-box li .text {
   font-size: 0.09rem;
   color: #999999;
 }
 
-.scroll-box .content-box .dailyrcmd-box li .shop-msg-box {
+.scroll-box .content-box .shop-list-box .shop-content-box li .shop-msg-box {
   display: flex;
   justify-content: space-between;
   margin-top: 0.07rem;
 }
 
-.scroll-box .content-box .dailyrcmd-box li .shop-msg-box img {
+.scroll-box .content-box .shop-list-box .shop-content-box li .shop-msg-box img {
   width: 0.2rem;
   height: 0.2rem;
   padding: 0.02rem 0.02rem 0.02rem 0.02rem;
 }
 
-.scroll-box .content-box .dailyrcmd-box li .shop-msg-box a {
+.scroll-box .content-box .shop-list-box .shop-content-box li .shop-msg-box a {
   font-size: 0.18rem;
-  color: #DD3333;
+  color: #dd3333;
+}
+
+.scroll-box .content-box .foot-nav-ul {
+  width: 100%;
+  height: 0.4rem;
+  border: none;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  padding-left: 0.14rem;
+  border-top: 0.005rem solid #CCCCCC;
+  margin-bottom: 0.19rem;
+}
+
+.scroll-box .content-box .foot-nav-ul li {
+  width: 0.69rem;
+  height: 0.2rem;
+  border: 0.005rem solid #CCCCCC;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.12rem;
+  color: #666666;
+  margin-right: 0.1rem;
+  border-radius: 30px;
+}
+
+.scroll-box .content-box .foot-anchor {
+  border-bottom: 0.26rem;
+  height: 0.76rem;
+  position: fixed;
+  right: 0rem;
+  bottom: 0.7rem;
+}
+
+.scroll-box .content-box .foot-anchor button {
+  display: block;
+}
+
+.scroll-box .content-box .foot-anchor .login-btn {
+  width: 0.92rem;
+  height: 0.26rem;
+  border: none;
+  background-color: transparent;
+  font-size: 0.12rem;
+  color: #FFFFFF;
+  background: url("../.././src/assets/img/Rectangle13.png") no-repeat;
+  background-size: 107%;
+  background-position: -0.06rem -0.02rem;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.5);
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+}
+
+.scroll-box .content-box .foot-anchor .toup-btn {
+  width: 0.4rem;
+  height: 0.4rem;
+  background: url("../../src/assets/img/Group@3x.png") no-repeat;
+  background-size: 100%;
+  background-position: -0.02rem -0.02rem;
+  float: right;
+  margin-top: 0.05rem;
 }

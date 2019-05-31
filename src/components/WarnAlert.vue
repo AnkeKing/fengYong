@@ -11,10 +11,6 @@ export default {
   },
   methods: {},
   computed: {
-    // ...mapState({
-    //     "warnBool":warnBool,
-    //     "warnText":warnText
-    // }),
     warnBool() {
       return this.$store.state.warnBool;
     },

@@ -1,7 +1,6 @@
 <template>
   <div class="box">
     <app-head :title="title" :backBool="true"></app-head>
-    <app-warn-alert></app-warn-alert>
     <app-Select-alert ref="selectAlert"></app-Select-alert>
     <app-magnifyImg></app-magnifyImg>
     <div class="content-box">
@@ -162,7 +161,6 @@ export default {
     },
     toLogin() {
         this.$router.replace("/login");
-        this.$refs.selectAlert.hiddenAlert();
         this.$store.dispatch("showSelectAlert", {
           selectObj: {
             btns: "确认",

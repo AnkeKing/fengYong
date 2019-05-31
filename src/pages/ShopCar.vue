@@ -3,7 +3,6 @@
      <div class="content-box">
          <h1>ShopCar</h1>
      </div>
-     <app-Home-food></app-Home-food>
  </div>
 </template>
 

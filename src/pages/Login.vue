@@ -1,8 +1,7 @@
 <template>
-  <div class="box" @click="showListBool=false">
+  <div class="scroll-box" @click="showListBool=false">
     <app-head :title="title" :backBool="false"></app-head>
     <app-loading :loadingText="loadingText"></app-loading>
-    <app-warn-alert></app-warn-alert>
     <app-Select-alert></app-Select-alert>
     <div class="content-box">
       <div class="logoBox">
@@ -57,7 +56,7 @@
         <li>
           <button
             :class="passValue.length>0&&phoneValue.length>0?'loginBtn':loginBtn"
-            @click="pushPhoneList"
+            @click="toHome"
             :disabled="passValue.length<=0||phoneValue.length<=0?true:false"
           >登录</button>
         </li>
@@ -76,7 +75,7 @@
 import Head from "../components/Head";
 import { verifyLoginID } from "../api/send";
 export default {
-  name: "Box",
+  name: "Scroll-box",
   data() {
     return {
       title: "登录",
@@ -85,7 +84,8 @@ export default {
       loginBtn: true,
       showListBool: false,
       lookPass: false,
-      loadingText: "登录中"
+      loadingText: "登录中",
+      nextPath: false
     };
   },
   methods: {
@@ -100,26 +100,39 @@ export default {
       }
     },
     //登陆操作
-    pushPhoneList() {
+    toHome() {
       let PASS_REGEXP = /^\S+$/;
       if (
-        this.$store.getters['login/verifyUserPhone'](this.phoneValue)&&
-        this.$store.getters['login/verifyUserPassword'](this.passValue)
+        this.$store.getters["login/verifyUserPhone"](this.phoneValue) &&
+        this.$store.getters["login/verifyUserPassword"](this.passValue)
       ) {
         //1.判断用户名密码格式
         const loginMsg = {
           loginName: this.phoneValue,
           password: this.passValue
         };
-        verifyLoginID(loginMsg).then(res=>{
-          if(res){
-            this.$router.replace('/home');
+        verifyLoginID(loginMsg).then(res => {
+          if (res) {
+            if (this.nextPath) {
+              this.$router.replace({path:this.nextPath});
+              this.$store.dispatch("showWarnAsync", {
+                warnBool: true,
+                warnText: "登录成功",
+              });
+            } else {
+              this.$router.replace("/");
+              this.$store.dispatch("showWarnAsync", {
+                warnBool: true,
+                warnText: "登录成功",
+              });
+            }
           }
-        })
+
+        });
       } else {
         this.$store.dispatch("showWarnAsync", {
           warnBool: true,
-          warnText: "用户名或密码格式错误"
+          warnText: "用户名或密码格式错误",
         });
       }
     },
@@ -130,7 +143,7 @@ export default {
     }
   },
   mounted() {
-    
+    this.nextPath = this.$route.query.nextPath;
   },
   computed: {
     phoneList() {

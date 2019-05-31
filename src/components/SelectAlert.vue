@@ -83,7 +83,8 @@ export default {
           question: "切换证件类型后编辑的信息将被清空,确定切换吗?",
           btns: "取消-确定",
           boxType: "confirm",
-          confirmType: "question"
+          confirmType: "question",
+          currentPath:'/registerIdent'
         }
       });
       this.selectType = type;

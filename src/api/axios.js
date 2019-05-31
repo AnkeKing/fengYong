@@ -13,6 +13,7 @@ service.interceptors.request.use(config => {
     store.commit("showLoading", true);
     if (store.state.token) {
         config.headers.token = store.state.token;
+       // config.headers.userId=sto
     } else {
         router.replace('/login');
     }
@@ -23,6 +24,7 @@ service.interceptors.request.use(config => {
 
 service.interceptors.response.use(response => {
     store.commit("showLoading", false);
+    // console.log(response);
     return response;
 }, error => {
     return Promise.reject(error);
@@ -40,7 +42,7 @@ function http(url,method,data,params){
         }else{
             store.dispatch("showWarnAsync", {//提示信息
                 warnBool: true,
-                warnText: res.data.status.statusReason
+                warnText: res.data.status.statusReason,
               });
             return false;
         }

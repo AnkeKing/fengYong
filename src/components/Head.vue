@@ -2,6 +2,7 @@
   <div class="headbox">
     <img v-show="backBool" src="../assets/img/Fill1.png" class="back-img"@click="goBack">
     <a>{{title}}</a>
+    <img v-show="searchBool" src="../assets/img/ic_search.png" class="search-img"@click="goSearch">
   </div>
 </template>
 
@@ -14,9 +15,12 @@ export default {
   methods:{
     goBack(){
       this.$router.go(-1);
+    },
+    goSearch(){
+
     }
   },
-  props: ["title", "backBool"],
+  props: ["title", "backBool","searchBool"],
   components: {}
 };
 </script>
@@ -42,6 +46,14 @@ export default {
     position: absolute;
     top: 0.03rem;
     left: 0.13rem;
+  }
+  .search-img{
+   width: 0.3rem;
+    display: block;
+    padding: 0.07rem;
+    position: absolute;
+    top: 0.06rem;
+    right: 0.15rem;
   }
   &::after {
     content: "";

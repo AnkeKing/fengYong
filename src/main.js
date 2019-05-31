@@ -5,20 +5,18 @@ import App from './App'
 import router from './router'
 import store from './store/store';
 import Loading from './components/Loading';
-import HomeFood from './components/HomeFood';
+import TabBar from './components/TabBar';
 import WarnAlert from "./components/WarnAlert";
 import SelectAlert from "./components/SelectAlert";
 import Slides from './components/Slides'
 import 'normalize.css'
-
-
 
 Vue.config.productionTip = false
 Vue.prototype.Event=new Vue();
 Vue.component('appLoading',Loading);//全局组件
 Vue.component('appWarnAlert',WarnAlert);
 Vue.component('appSelectAlert',SelectAlert);
-Vue.component('appHomeFood',HomeFood);
+Vue.component('appTabBar',TabBar);
 Vue.component('appSlides',Slides);
 
 /* eslint-disable no-new */

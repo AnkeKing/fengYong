@@ -1,38 +1,14 @@
 <template>
-  <div class="box">
-    <app-head class="header-box"></app-head>
+  <div class="scroll-box">
+    <app-head class="header-box":title="title":backBool="true":searchBool="true"></app-head>
+    <div class="location-box">
+      <span><a>获取失败</a><a>当前定位城市</a></span>
+      <span><img src="../assets/img/location.png"@click="getLocation"><a>重新定位</a></span>
+    </div>
     <div class="content-box">
-      <!-- <mt-index-list>
-        <mt-index-section index="A">
-          <mt-cell title="Aaron"></mt-cell>
-          <mt-cell title="Alden"></mt-cell>
-          <mt-cell title="Austin"></mt-cell>
-        </mt-index-section>
-        <mt-index-section index="B">
-          <mt-cell title="Baldwin"></mt-cell>
-          <mt-cell title="Braden"></mt-cell>
-        </mt-index-section>
-        <mt-index-section index="Z">
-          <mt-cell title="Zack"></mt-cell>
-          <mt-cell title="Zane"></mt-cell>
-        </mt-index-section>
-      </mt-index-list> -->
-
-      <!-- <van-index-bar :index-list="cityData">
-  <van-index-anchor index="1">标题1</van-index-anchor>
-  <van-cell title="文本" />
-  <van-cell title="文本" />
-  <van-cell title="文本" />
-
-  <van-index-anchor index="2">标题2</van-index-anchor>
-  <van-cell title="文本" />
-  <van-cell title="文本" />
-  <van-cell title="文本" />
-</van-index-bar> -->
-
-      <!-- <ul @touchmove="bMove=true" class="city-list"> -->
+      <ul @touchmove="bMove=true" class="city-list">
       <!-- 解决滑动与点击发生的冲突 -->
-      <!-- <li v-for="item in cityData">
+     <li v-for="item in cityData">
           <a ref="userIndexs">{{item.index}}</a>
           <ul>
             <li v-for="city in item.users">{{city.name}}</li>
@@ -40,17 +16,16 @@
         </li>
       </ul>
       <ul ref="listIndex" class="index-list">
-        <li ref="listIndexChild" v-for="i in cityData" @touchstart="setScrollPos">{{i.index}}</li>
-      </ul>-->
+        <li ref="listIndexChild" v-for="i in cityData"@touchstart="setScrollPos">{{i.index}}</li>
+      </ul>
     </div>
   </div>
 </template>
 
  <script>
 import Head from "../components/Head";
-// import { IndexBar, IndexAnchor} from 'vant';
 export default {
-  name: "Box",
+  name: "Scroll-box",
   data() {
     return {
       cityData: [
@@ -249,80 +224,43 @@ export default {
             { name: "科zz尔温" }
           ]
         }
-      ]
+      ],
+      title:'选择城市',
+      bMove:false,
     };
   },
   components: {
     appHead: Head,
-    // [IndexBar.name]:IndexBar,
-    // [IndexAnchor.name]:IndexAnchor,
-    // [Cell.name]:Cell,
-    //  vanIndexBar:IndexBar,
-    // vanIndexAnchor:IndexAnchor,
   },
-  methods: {},
+  methods: {
+    setScrollPos(ev){//点击改变滚动条的位置
+        var userIndexs=this.$refs.userIndexs;
+        for(var i=0;i<userIndexs.length;i++){
+            if(userIndexs[i].innerHTML==ev.target.innerHTML){
+                var tH=document.getElementsByClassName("header-box")[0].offsetHeight;
+                var sectionBox=document.getElementsByClassName("content-box")[0];
+                sectionBox.scrollTop=0;
+                // sectionBox.scrollTop=userIndexs[i].offsetTop-tH;//两种方法设置滚动条的位置
+                 sectionBox.scrollTo(sectionBox.scrollLeft, userIndexs[i].offsetTop-tH); 
+            }
+        }
+      },
+      showTel(tel){
+          if(!this.bMove){
+            this.event.$emit('show',tel);
+          }else{
+            this.bMove=false;
+          }
+         
+      },
+      getLocation(){
+        
+      }
+  },
   mounted() {}
 };
 </script>
 
 <style  rel='stylesheet/scss' lang='scss' scoped>
-.box {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  position: relative;
-  .content-box {
-    width: 100%;
-    height: 100%;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    .city-list {
-      width: 100%;
-      > li {
-        width: 100%;
-        > a {
-          // 首字母
-          width: 100%;
-          height: 0.21rem;
-          display: flex;
-          align-items: center;
-          font-size: 0.16rem;
-          color: #333333;
-          background-color: #f6f6f6;
-          padding-left: 0.16rem;
-          font-weight: bold;
-        }
-        > ul {
-          width: 100%;
-          padding: 0 0.16rem 0 0.16rem;
-          > li {
-            width: 100%;
-            height: 0.45rem;
-            display: flex;
-            align-items: center;
-            border-bottom: 0.005rem solid #f2f1f6;
-            font-size: 0.16rem;
-            color: #333333;
-          }
-        }
-      }
-    }
-    .index-list {
-      position: fixed;
-      right: 0.07rem;
-      transform-origin: 50% 50%;
-      display: flex;
-      flex-direction: column;
-      > li {
-        font-size: 0.12rem;
-        color: #333333;
-        font-weight: bold;
-        margin-bottom: 0.05rem;
-      }
-    }
-  }
-}
+@import url("../../static/css/selectCityPage");
 </style>

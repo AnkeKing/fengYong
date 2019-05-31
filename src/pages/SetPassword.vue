@@ -1,7 +1,6 @@
 <template>
   <div class="box">
     <app-head :title="title" :backBool="true"></app-head>
-    <app-warn-alert></app-warn-alert>
     <div class="content-box">
       <ul class="setpass-form">
         <li class="inputLi">
@@ -62,7 +61,6 @@
 
 <script>
 import Head from "../components/Head";
-import WarnAlert from "../components/WarnAlert";
 import { sendVerifyCode } from "../api/send";
 import { setPassword } from "../api/send";
 export default {
@@ -106,7 +104,7 @@ export default {
         } else {
           this.$store.dispatch("showWarnAsync", {
             warnBool: true,
-            warnText: "手机号码格式错误"
+            warnText: "手机号码格式错误",
           });
         }
       }
@@ -126,7 +124,7 @@ export default {
       ) {
         this.$store.dispatch("showWarnAsync", {
           warnBool: true,
-          warnText: "请输入6-15位的登录密码"
+          warnText: "请输入6-15位的登录密码",
         });
       }
     },
@@ -139,7 +137,7 @@ export default {
       ) {
         this.$store.dispatch("showWarnAsync", {
           warnBool: true,
-          warnText: "两次密码不一致"
+          warnText: "两次密码不一致",
         });
         return false;
       } else {
@@ -156,7 +154,7 @@ export default {
           if (res) {
             this.$store.dispatch("showWarnAsync", {
               warnBool: true,
-              warnText: res.result
+              warnText: res.result,
             });
             this.$router.replace("/login");
           }
@@ -165,8 +163,7 @@ export default {
     }
   },
   components: {
-    appHead: Head,
-    appWarnAlert: WarnAlert
+    appHead: Head
   }
 };
 </script>

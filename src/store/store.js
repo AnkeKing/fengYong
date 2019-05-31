@@ -8,8 +8,8 @@ const register = {
     namespaced: true,
     state: {
         upLoadingImg: false,
-        magnifyBool:false,
-        magnifyImg:''
+        magnifyBool: false,
+        magnifyImg: ''
     },
     getters: {
 
@@ -20,7 +20,7 @@ const register = {
         },
         magnifyBool(state, imgObj) {
             state.magnifyBool = imgObj.bool;
-            state.magnifyImg=imgObj.img;
+            state.magnifyImg = imgObj.img;
         },
     }
 }
@@ -57,7 +57,8 @@ const login = {
                 state.loginRecordArr = [];
                 state.loginRecordArr.push({ 'loginName': user.loginName });
                 for (let l in localUserList) {
-                    if (localUserList[l].loginName != user.loginName) {state.loginRecordArr.push(localUserList[l]);
+                    if (localUserList[l].loginName != user.loginName) {
+                        state.loginRecordArr.push(localUserList[l]);
                     }
                 }
                 localStorage.setItem("userList", JSON.stringify(state.loginRecordArr));
@@ -66,23 +67,24 @@ const login = {
         },
 
     },
-    
+
 }
-const home={
+const home = {
     namespaced: true,
-    state:{
-        homeHeadBool:true
+    state: {
+        homeHeadBool: true,
     },
-    mutations:{
-        setHomeHeadBool(state,bool){
-            state.homeHeadBool=bool;
-        }
+    mutations: {
+        setHomeHeadBool(state, bool) {
+            state.homeHeadBool = bool;
+        },
     }
 }
 const Store = new Vuex.Store({
     state: {
         warnBool: false,
         warnText: "",
+        currentPath: '',
         loading: false,
         selectObj: [],
         papersType: '营业执照',
@@ -95,7 +97,8 @@ const Store = new Vuex.Store({
     mutations: {
         showWarn(state, warnObj) {
             state.warnBool = warnObj.warnBool;
-            state.warnText = warnObj.warnText
+            state.warnText = warnObj.warnText;
+            state.currentPath = warnObj.currentPath;
         },
         showLoading(state, bool) {
             state.loading = bool;
@@ -106,6 +109,7 @@ const Store = new Vuex.Store({
         showSelectAlert(state, selectObj) {
             state.alertBool = true;
             state.selectObj = selectObj.selectObj;
+            state.currentPath = selectObj.currentPath;
         },
         changePapersType(state, type) {
             state.papersType = type;
@@ -115,20 +119,11 @@ const Store = new Vuex.Store({
         },
     },
     actions: {
-        showWarnAsync(context, warnObj) {//显示错误信息
-            if (!context.state.loading) {//如果loading没显示时错误信息的弹窗立即显示
-                context.commit("showWarn", { 'warnBool': warnObj.warnBool, 'warnText': warnObj.warnText });
-                setTimeout(() => {
-                    context.commit("showWarn", { 'warnBool': false, 'warnText': '' });
-                }, 2000)
-            } else {//如果loading显示时错误信息的弹窗等待几秒
-                setTimeout(() => {
-                    context.commit("showWarn", { 'warnBool': warnObj.warnBool, 'warnText': warnObj.warnText });
-                }, 1000)
-                setTimeout(() => {
-                    context.commit("showWarn", { 'warnBool': false, 'warnText': '' });
-                }, 2700)
-            }
+        showWarnAsync(context, warnObj) {//显示信息
+            context.commit("showWarn", warnObj);
+            setTimeout(() => {
+                context.commit("showWarn", { 'warnBool': false, 'warnText': '' });
+            }, 2000)
         },
         showSelectAlert(context, selectObj) {
             context.commit('changeAlertBool', true);
@@ -138,7 +133,7 @@ const Store = new Vuex.Store({
     modules: {
         login: login,
         register: register,
-        home:home
+        home: home
     },
     plugins: [createPersistedState({
         reducer(val) {

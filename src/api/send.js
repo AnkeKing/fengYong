@@ -17,7 +17,7 @@ export const verifyLoginID = data => {//登录
         }else{
             store.dispatch("showWarnAsync", {//提示信息
                 warnBool: true,
-                warnText: res.data.status.statusReason
+                warnText: res.data.status.statusReason,
               });
         }
     })
@@ -36,4 +36,7 @@ export const sendVerifyCode=data=>{//忘记密码发送验证码
 } 
 export const setPassword=data=>{//忘记密码设置新密码
     return http('/user/passUpdate','post',data,data);
+} 
+export const getNotLoginHomeData=data=>{//未登录时的首页
+    return http('/getListB2bIndex','post',data,data);
 }
