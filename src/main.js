@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store/store';
+import Head from './components/Head';
 import Loading from './components/Loading';
 import TabBar from './components/TabBar';
 import WarnAlert from "./components/WarnAlert";
@@ -13,7 +14,8 @@ import 'normalize.css'
 
 Vue.config.productionTip = false
 Vue.prototype.Event=new Vue();
-Vue.component('appLoading',Loading);//全局组件
+Vue.component('appHead',Head);//全局组件
+Vue.component('appLoading',Loading);
 Vue.component('appWarnAlert',WarnAlert);
 Vue.component('appSelectAlert',SelectAlert);
 Vue.component('appTabBar',TabBar);

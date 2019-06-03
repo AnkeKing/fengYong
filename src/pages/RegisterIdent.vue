@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <app-head :title="title" :backBool="true"></app-head>
+    <app-head :backBool="true"></app-head>
     <app-Select-alert ref="selectAlert"></app-Select-alert>
     <app-magnifyImg></app-magnifyImg>
     <div class="content-box">
@@ -114,14 +114,12 @@
 </template>
 
 <script>
-import Head from "../components/Head";
 import MagnifyImg from '../components/MagnifyImg';
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 export default {
   name: "Box",
   data() {
     return {
-      title: "商户认证",
       // papersType:"营业执照",
       name: "",
       charter: "",
@@ -204,8 +202,10 @@ export default {
       }
     }
   },
+  created(){
+      this.$store.commit("setHeaderTitle","商户认证");
+  },
   components: {
-    appHead: Head,
     appMagnifyImg:MagnifyImg
   }
 };

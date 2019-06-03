@@ -1,10 +1,10 @@
 import qs from 'qs';
 import store from '../store/store';
-import {service,http} from './axios';
+import {needInterceptorService,needInterceptorHttp,notInterceptorService,notInterceptorHttp} from './axios';
 
 
 export const verifyLoginID = data => {//登录
-    return service({
+    return notInterceptorService({
         url:"/user/login",
         method:'post',
         data:qs.stringify(data)
@@ -23,20 +23,23 @@ export const verifyLoginID = data => {//登录
     })
 }
 export const sendRegisterVerigyCode=data=>{//注册发送验证码
-    return http('/user/sms','post',data,data);
+    return notInterceptorHttp('/user/sms','post',data,data);
 }
 export const verigyRegisterCode=data=>{//注册验证验证码
-    return http('/user/smsValid','post',data,data);
+    return notInterceptorHttp('/user/smsValid','post',data,data);
 }
 export const submitRegisterMsg=data=>{//注册
-    return http('/user/register','post',data,data);
+    return notInterceptorHttp('/user/register','post',data,data);
 }
 export const sendVerifyCode=data=>{//忘记密码发送验证码
-    return http('/user/getPasswordCode','post',data,data);
+    return notInterceptorHttp('/user/getPasswordCode','post',data,data);
 } 
 export const setPassword=data=>{//忘记密码设置新密码
-    return http('/user/passUpdate','post',data,data);
+    return notInterceptorHttp('/user/passUpdate','post',data,data);
 } 
 export const getNotLoginHomeData=data=>{//未登录时的首页
-    return http('/getListB2bIndex','post',data,data);
+    return notInterceptorHttp('/getListB2bIndex','post',data,data);
+}
+export const getNeedLoginHomeData=data=>{//需要登录时的首页
+    return needInterceptorHttp('/app/merchant/getByUserId?id='+data.id,'post',data,data);
 }

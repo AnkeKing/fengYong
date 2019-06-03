@@ -367,6 +367,8 @@ $bgc: background-color;
 
       button {
         display: block;
+        position: absolute;
+        right: 0rem;
       }
 
       .login-btn {
@@ -374,10 +376,11 @@ $bgc: background-color;
         @include setFont(0.12rem, #FFFFFF);
         background: url('../.././src/assets/img/Rectangle13.png') no-repeat;
         background-size: 107%;
-        background-position: -0.06rem -0.02rem;
+        background-position: -0.06rem -0.04rem;
         box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.50);
         border-top-left-radius: 30px;
         border-bottom-left-radius: 30px;
+        top:0rem;
       }
 
       .toup-btn {
@@ -386,7 +389,7 @@ $bgc: background-color;
         background-size: 100%;
         background-position: -0.02rem -0.02rem;
         float: right;
-        margin-top: 0.05rem;
+        bottom: 0rem;
       }
     }
   }

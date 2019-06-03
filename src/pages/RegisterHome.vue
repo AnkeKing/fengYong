@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <app-head :title="title" :backBool="true"></app-head>
+    <app-head :backBool="true"></app-head>
     <div class="content-box">
       <ul class="setpass-form">
         <li class="inputLi">
@@ -90,7 +90,6 @@
 </template>
 
 <script>
-import Head from "../components/Head";
 import { sendRegisterVerigyCode } from "../api/send";
 import { verigyRegisterCode } from "../api/send";
 import { submitRegisterMsg } from "../api/send";
@@ -98,7 +97,6 @@ export default {
   name: "Box",
   data() {
     return {
-      title: "注册",
       userName: "",
       phoneValue: "",
       passValue: "",
@@ -134,6 +132,8 @@ export default {
           sendRegisterVerigyCode({ phone: this.phoneValue }).then(res => {
             if (!res) {
               this.clearTime(timer);
+            }else{
+              console.log(res)
             }
           });
         } else {
@@ -219,8 +219,10 @@ export default {
       }
     }
   },
+  created(){
+      this.$store.commit("setHeaderTitle","注册");
+  },
   components: {
-    appHead: Head
   }
 };
 </script>

@@ -6,11 +6,19 @@ import SetPassword from '../pages/SetPassword';
 import RegisterHome from '../pages/RegisterHome';
 import RegisterIdent from '../pages/RegisterIdent';
 import Main from '../pages/Main';
-import Home from '../pages/Home';
-import ShopList from '../pages/ShopList';
-import ShopCar from '../pages/ShopCar';
-import Personal from '../pages/Personal';
-import SelectCityPage from '../pages/SelectCityPage';
+import Home from '../pages/mainChild/Home';
+
+import HomeMain from '../pages/mainChild/HomeMain';
+import SelectCityPage from '../pages/mainChild/homeChild/SelectCityPage';
+
+import ShopList from '../pages/mainChild/ShopList';
+import ShopCar from '../pages/mainChild/ShopCar';
+
+import Personal from '../pages/mainChild/Personal';
+import PersonalMain from '../pages/mainChild/PersonalMain';
+import SetPage from '../pages/mainChild/personalChild/SetPage';
+
+
 import store from '../store/store';
 
 Vue.use(Router)
@@ -41,20 +49,31 @@ const router = new Router({
       path: '/',
       name: 'main',
       component: Main,
-      redirect: '/home',
+      redirect: '/main/home',
       children: [
         {
-          path: '/home',
+          path: '/main/home',
           name: 'home',
           component: Home,
+        }, {
+          path: '/main/homeMain',
+          name: 'homeMain',
+          component: HomeMain,
+          children: [
+            {
+              path: '/selectCityPage',
+              name: 'selectCityPage',
+              component: SelectCityPage,
+            }
+          ]
         },
         {
-          path: '/shopList',
+          path: '/main/shopList',
           name: 'shopList',
           component: ShopList,
         },
         {
-          path: '/shopCar',
+          path: '/main/shopCar',
           name: 'shopCar',
           component: ShopCar,
           meta: {
@@ -62,19 +81,25 @@ const router = new Router({
           }
         },
         {
-          path: '/personal',
+          path: '/main/personal',
           name: 'personal',
           component: Personal,
           meta: {
             requireAuth: true
           }
+        }, {
+          path: '/personalMain',
+          name: 'personalMain',
+          component: PersonalMain,
+          children: [
+            {
+              path: '/setPage',
+              name: 'setPage',
+              component: SetPage,
+            }
+          ]
         },
       ]
-    },
-    {
-      path: "/selectCityPage",
-      name: 'selectCityPage',
-      component: SelectCityPage,
     },
     {
       path: "*", redirect: "/login"
@@ -88,7 +113,7 @@ router.beforeEach((to, from, next) => {
       next();
     } else {
       // console.log("路由守卫传参：",to);
-      next({path:'/login',query:{nextPath:to.path}});
+      next({ path: '/login', query: { nextPath: to.path } });
     }
   }
   next();

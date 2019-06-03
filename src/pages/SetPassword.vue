@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <app-head :title="title" :backBool="true"></app-head>
+    <app-head :backBool="true"></app-head>
     <div class="content-box">
       <ul class="setpass-form">
         <li class="inputLi">
@@ -60,14 +60,12 @@
 </template>
 
 <script>
-import Head from "../components/Head";
 import { sendVerifyCode } from "../api/send";
 import { setPassword } from "../api/send";
 export default {
   name: "Box",
   data() {
     return {
-      title: "忘记密码",
       phoneValue: '',
       passValue: "",
       newpassValue: "",
@@ -162,8 +160,10 @@ export default {
       }
     }
   },
+  created(){
+      this.$store.commit("setHeaderTitle","忘记密码");
+  },
   components: {
-    appHead: Head
   }
 };
 </script>

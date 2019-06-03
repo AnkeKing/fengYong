@@ -32,7 +32,7 @@
           <hr>
         </li>
         <li :class="btnArr.length<2?'confirm-btn-box':'confirm-btn-box2'">
-          <button v-for="btn in btnArr" @click="btnEvent(btn)">{{btn}}</button>
+          <button v-for="btn in btnArr" @click="btnEvent(btn,selectObj)">{{btn}}</button>
         </li>
       </ul>
     </div>
@@ -69,9 +69,9 @@ export default {
       if (modelObj.model == "papers") {
         this.selectPapersType(modelObj.type);
       } else if (modelObj.model == "photo") {
-          this.$store.commit("register/upLoadingImg", {
-            bool: true
-          });
+        this.$store.commit("register/upLoadingImg", {
+          bool: true
+        });
         this.hiddenAlert();
       }
       // console.log("更改证件类型触发方法：", this.$store.state.selectObj);
@@ -84,19 +84,30 @@ export default {
           btns: "取消-确定",
           boxType: "confirm",
           confirmType: "question",
-          currentPath:'/registerIdent'
+          nextActionType: "setData"
         }
       });
       this.selectType = type;
     },
-    btnEvent(btn) {
+    btnEvent(btn, obj) {
       //按钮后点击后触发对应的事件
       if (btn == "取消") {
         this.hiddenAlert();
+        this.btnBool = false;
       } else {
-        this.$store.commit("changePapersType", this.selectType);
+        if (obj.nextActionType == "setData") {
+          this.$store.commit("changePapersType", this.selectType);
+          this.Event.$emit("clear", true);
+        } else if (obj.nextActionType == "nextLogout") {
+          localStorage.removeItem("vuex");
+          this.$store.commit("setToken", false);
+          this.$router.replace("/login");
+          this.$store.dispatch("showWarnAsync", {
+            warnBool: true,
+            warnText: "退出登录成功"
+          });
+        }
         this.hiddenAlert();
-        this.Event.$emit("clear", true);
       }
     }
   },

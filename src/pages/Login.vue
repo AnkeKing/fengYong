@@ -1,6 +1,6 @@
 <template>
   <div class="scroll-box" @click="showListBool=false">
-    <app-head :title="title" :backBool="false"></app-head>
+    <app-head :backBool="false"></app-head>
     <app-loading :loadingText="loadingText"></app-loading>
     <app-Select-alert></app-Select-alert>
     <div class="content-box">
@@ -72,13 +72,12 @@
 </template>
 
 <script>
-import Head from "../components/Head";
 import { verifyLoginID } from "../api/send";
+import {getNeedLoginHomeData} from "../api/send";
 export default {
   name: "Scroll-box",
   data() {
     return {
-      title: "登录",
       phoneValue: "",
       passValue: "",
       loginBtn: true,
@@ -126,6 +125,10 @@ export default {
                 warnText: "登录成功",
               });
             }
+            console.log(res);
+           let dataa= getNeedLoginHomeData({'id':res.result.id});
+           console.log("返回的数据：",dataa);
+            // this.$store.commit("main/home/setNotLogHomeShopList",this.goodsRecommendList );
           }
 
         });
@@ -150,8 +153,10 @@ export default {
       return JSON.parse(localStorage.getItem("userList")) || [];
     }
   },
+  created(){
+      this.$store.commit("setHeaderTitle","登录");
+  },
   components: {
-    appHead: Head
   }
 };
 </script>

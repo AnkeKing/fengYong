@@ -2,9 +2,25 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
 Vue.use(Vuex)
+const home={//孙级
+    namespaced: true,
+    state: {
+        homeHeadBool: true,
+        homeShopList:null
+    },
+    mutations: {
+        setHomeHeadBool(state, bool) {
+            state.homeHeadBool = bool;
+        },
+        setHomeShopList(state,data){
+            state.homeShopList=data;
+        },
+    },
+    actions:{
+    }
+}
 
-
-const register = {
+const register = {//子级
     namespaced: true,
     state: {
         upLoadingImg: false,
@@ -24,7 +40,7 @@ const register = {
         },
     }
 }
-const login = {
+const login = {//子级
     namespaced: true,
     state: {
         loginRecordArr: [],
@@ -69,36 +85,37 @@ const login = {
     },
 
 }
-const home = {
+const main = {//子级
     namespaced: true,
     state: {
-        homeHeadBool: true,
+
     },
     mutations: {
-        setHomeHeadBool(state, bool) {
-            state.homeHeadBool = bool;
-        },
+        
+    },
+    modules:{
+        home:home
     }
 }
+
 const Store = new Vuex.Store({
     state: {
+        headerTitle:'',
         warnBool: false,
         warnText: "",
-        currentPath: '',
         loading: false,
         selectObj: [],
         papersType: '营业执照',
         alertBool: false,
         token: '',
+        
     },
     getters: {
-
     },
     mutations: {
         showWarn(state, warnObj) {
             state.warnBool = warnObj.warnBool;
             state.warnText = warnObj.warnText;
-            state.currentPath = warnObj.currentPath;
         },
         showLoading(state, bool) {
             state.loading = bool;
@@ -109,7 +126,6 @@ const Store = new Vuex.Store({
         showSelectAlert(state, selectObj) {
             state.alertBool = true;
             state.selectObj = selectObj.selectObj;
-            state.currentPath = selectObj.currentPath;
         },
         changePapersType(state, type) {
             state.papersType = type;
@@ -117,6 +133,9 @@ const Store = new Vuex.Store({
         setToken(state, token) {//把token存入本地localStorage
             state.token = token;
         },
+        setHeaderTitle(state,title){
+            state.headerTitle=title;
+        }
     },
     actions: {
         showWarnAsync(context, warnObj) {//显示信息
@@ -133,7 +152,7 @@ const Store = new Vuex.Store({
     modules: {
         login: login,
         register: register,
-        home: home
+        main: main
     },
     plugins: [createPersistedState({
         reducer(val) {

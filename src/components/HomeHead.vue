@@ -1,5 +1,5 @@
 <template>
-  <div class="home-head-box" v-show="$store.state.home.homeHeadBool">
+  <div class="home-head-box" v-show="$store.state.main.home.homeHeadBool">
     <span>
       <img src="../assets/img/ic_dingwei.png">
       <a  v-if="$store.state.token">洁哥的宇宙</a>
@@ -22,7 +22,7 @@ export default {
     }
   },
   mounted(){
-    this.$store.commit("home/setHomeHeadBool", true);
+    this.$store.commit("main/home/setHomeHeadBool", true);
   },
   components: {
    

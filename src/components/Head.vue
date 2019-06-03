@@ -1,7 +1,7 @@
 <template>
   <div class="headbox">
     <img v-show="backBool" src="../assets/img/Fill1.png" class="back-img"@click="goBack">
-    <a>{{title}}</a>
+    <a>{{$store.state.headerTitle}}</a>
     <img v-show="searchBool" src="../assets/img/ic_search.png" class="search-img"@click="goSearch">
   </div>
 </template>
@@ -20,7 +20,7 @@ export default {
 
     }
   },
-  props: ["title", "backBool","searchBool"],
+  props: ["backBool","searchBool"],
   components: {}
 };
 </script>
