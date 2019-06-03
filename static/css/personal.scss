@@ -1,0 +1,460 @@
+.scroll-box {
+  background-color: #EEEEEE;
+    overflow: scroll;
+    flex: 1;
+  //用户信息区
+  .personal-msg-box {
+    width: 100%;
+    background: linear-gradient(left, #DD3333, #F46839);
+    padding: 0.1rem 0.13rem 0.4rem 0.16rem;
+    position: relative;
+
+    >div {
+      position: relative;
+      z-index: 9;
+    }
+
+    >img {
+      position: absolute;
+      z-index: 1;
+    }
+
+    >img:nth-of-type(1) {
+      right: 1.03rem;
+      bottom: 0.28rem;
+      width: 0.56rem;
+    }
+
+    >img:nth-of-type(2) {
+      width: 0.53rem;
+      right: 0.86rem;
+      bottom: 0.5rem;
+      opacity: 0.7;
+    }
+
+    >img:nth-of-type(3) {
+      width: 0.53rem;
+      right: 1.65rem;
+      bottom: 0.92rem;
+      opacity: 0.6;
+    }
+
+    >img:nth-of-type(4) {
+      width: 0.58rem;
+      left: -0.29rem;
+      bottom: 0.06rem;
+    }
+
+    div:nth-of-type(1) {
+      display: flex;
+      justify-content: flex-end;
+
+      img {
+        width: 0.25rem;
+        height: 0.25rem;
+        padding: 0.029rem;
+        margin-right: 0.2rem;
+
+      }
+
+      button {
+        border: 0.005rem solid #FFFFFF;
+        border-radius: 27px;
+        background-color: transparent;
+        font-size: 0.14rem;
+        color: #FFFFFF;
+        width: 0.77rem;
+        height: 0.24rem;
+      }
+    }
+
+    div:nth-of-type(2) {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .left {
+        display: flex;
+        align-items: center;
+
+        .photo-span {
+          background: #FFFFFF;
+          border: 0.02rem solid #F2B2AF;
+          display: flex;
+          align-items: center;
+          margin-right: 0.12rem;
+          width: 0.6rem;
+          height: 0.6rem;
+          border-radius: 50%;
+
+          img {
+            width: 100%;
+            height: 0.36rem;
+            ;
+          }
+        }
+
+        .msg-span {
+          display: flex;
+          flex-direction: column;
+          align-self: flex-end;
+
+          a {
+            margin-bottom: 0.07rem;
+          }
+
+          .username {
+            font-size: 0.16rem;
+            color: #FFFFFF;
+          }
+
+          .phone {
+            font-size: 0.12rem;
+            color: #FFFFFF;
+          }
+        }
+      }
+
+      .right {
+        img {
+          width: 0.25rem;
+          height: 0.25rem;
+          padding: 0.05rem;
+        }
+      }
+
+    }
+  }
+
+  //用户购物信息区
+  .shoping-msg-box {
+    position: relative;
+    z-index: 9;
+    top: -0.24rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    //我的订单
+    .myorder-box {
+      background: #FFFFFF;
+      border-radius: 4px;
+      width: 95%;
+      height: 1.29rem;
+
+      div {
+        display: flex;
+        justify-content: space-between;
+        height: 0.4rem;
+        position: relative;
+        align-items: center;
+        padding: 0 0.05rem 0 0.16rem;
+
+        hr {
+          position: absolute;
+          bottom: 0;
+          background: #EEEEEE;
+          border: 1px solid #EEEEEE;
+          width: 100%;
+          height: 0.007rem;
+          -webkit-transform: scaleY(0.1);
+          transform: scaleY(0.1);
+        }
+
+        >a {
+          font-size: 0.14rem;
+          color: #333333;
+        }
+
+        >span {
+          display: flex;
+          align-items: center;
+
+          a {
+            font-size: 0.12rem;
+            color: #666666;
+          }
+
+          img {
+            width: 0.18rem;
+            height: 0.18rem;
+            padding: 0.025rem 0.02rem 0.025rem 0.02rem;
+            margin-left: 0.02rem;
+          }
+        }
+      }
+
+      ul {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+
+        li {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          height: 0.885rem;
+          align-items: center;
+
+          img {
+            width: 0.27rem;
+            height: 0.27rem;
+          }
+
+          a {
+            font-size: 0.12rem;
+            color: #333333;
+            margin-top: 0.14rem;
+          }
+        }
+      }
+    }
+
+    //收藏的数据
+    .collect-box {
+      background: #FFFFFF;
+      border-radius: 4px;
+      width: 95%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin: 0.1rem 0 0.1rem 0;
+
+      li {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 0.8rem;
+
+        a:nth-of-type(1) {
+          font-size: 0.2rem;
+          color: #333333;
+          font-weight: bold;
+        }
+
+        a:nth-of-type(2) {
+          margin-top: 0.14rem;
+          font-size: 0.12rem;
+          color: #333333;
+        }
+      }
+    }
+
+    //物流信息
+    .logistics-box {
+      padding: 0.15rem 0 0.15rem 0;
+      width: 95%;
+      height: 1.31rem;
+      background: #FFFFFF;
+      border-radius: 4px;
+
+      ul {
+        height: 1rem;
+        overflow-y: scroll;
+
+        li {
+          display: flex;
+          height: 0.5rem;
+
+          //物流时间
+          .time-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 0.67rem;
+            height: 0.5rem;
+            position: relative;
+            border-right: 0.01rem solid #DDDDDD;
+            // hr{
+            //     position: absolute;
+            //     height: 0.49rem;
+            //     background-color:#DDDDDD;
+            //     top: 0px;
+            //     right: 0px;
+            //     transform: rotateY(80deg);
+            //     width: 0.01rem;
+            // }
+            span {
+              background: #DDDDDD;
+              width: 0.05rem;
+              height: 0.05rem;
+              border-radius: 50%;
+              position: absolute;
+              top: 47%;
+              right: -0.026rem;
+            }
+
+            a {
+              font-size: 0.1rem;
+            }
+
+            >a:nth-of-type(1) {
+              color: #999999;
+              margin-bottom: 0.08rem;
+            }
+
+            >a:nth-of-type(2) {
+              color: #666666;
+            }
+
+          }
+
+          //物流信息
+          .msg-box {
+            display: flex;
+            margin-left: 0.1rem;
+            align-items: center;
+
+            div:nth-of-type(1) {
+              width: 0.36rem;
+              height: 0.36rem;
+
+              img {
+                width: 100%;
+                height: 100%;
+              }
+            }
+
+            div:nth-of-type(2) {
+              margin-left: 0.05rem;
+
+              span:nth-of-type(1) {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-left: 0.05rem;
+
+                a:nth-of-type(1) {
+                  font-size: 0.12rem;
+                  color: #DD3333;
+                }
+
+                a:nth-of-type(2) {
+                  font-size: 0.1rem;
+                  color: #999999;
+                }
+
+              }
+
+              span:nth-of-type(2) {
+                display: flex;
+                align-items: center;
+                align-self: flex-end;
+                margin-top: 0.09rem;
+
+                a {
+                  font-size: 0.11rem;
+                  color: #666666;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    //浏览记录
+    .browse-box {
+        width: 100%;
+      .shop-banner-box {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        height: 0.4rem;
+        font-size: 0.14rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+
+         a {
+          display: flex;
+          align-items: center;
+          color: #F36639;
+        }
+
+        img {
+          width: 0.3rem;
+          margin: 0 0.08rem 0 0.08rem;
+        }
+
+      }
+      .browse-ul{
+        width: 100%;
+          li{
+              padding: 0.15rem 0.14rem 0.15rem 0.14rem;
+              width: 100%;
+              background-color: #FFFFFF;
+              display: flex;
+              position: relative;
+              hr{
+                position: absolute;
+                bottom: 0;
+                background: #E4E4E4;
+                border: 1px solid #E4E4E4;
+                width: 100%;
+                height: 0.007rem;
+                -webkit-transform: scaleY(0.1);
+                transform: scaleY(0.1);
+              }
+              >div:nth-of-type(1){
+                  width: 1rem;
+                  height: 1rem;
+                  margin-right: 0.09rem;
+                  img{
+                      width: 100%;
+                      height: 100%;
+                  }
+              }
+              >div:nth-of-type(2){
+               display: flex;
+               flex-direction: column;
+               justify-content: space-between;
+               flex: 1;
+                div:nth-of-type(1){
+                    a{
+                        font-size: 0.12rem;
+                        color: #333333;
+                    }
+                }
+                div:nth-of-type(2){
+                    display: flex;
+                    justify-content: space-between;
+                    .left{
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                        padding-top: 0.07rem;
+                        span:nth-of-type(1){
+                            a:nth-of-type(1){
+                                color: #DD3333;
+                                font-size: 0.13rem;
+                                margin-right: 0.2rem;
+                            }a:nth-of-type(2){
+                                color: #999999;
+                                font-size: 0.1rem;
+                            }
+                        }
+                        span:nth-of-type(2){a{
+                                color: #999999;
+                                font-size: 0.1rem;
+                            }
+                        }
+                    }
+                    .right{
+                        img{
+                            width: 0.32rem;
+                            padding: 0.13rem 0.08rem 0.03rem 0.08rem;
+                        }
+                    }
+                }
+            }
+          }
+      }
+    }
+
+  }
+
+}
