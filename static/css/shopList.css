@@ -167,11 +167,10 @@
 }
 
 .scroll-box .layout-box .content-box .hotbrand-box .hotbrand-ul {
-  width: 95%;
+  width: 100%;
   margin-top: 0.15rem;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
 }
 
 .scroll-box .layout-box .content-box .hotbrand-box .hotbrand-ul li {
@@ -179,7 +178,7 @@
   height: 0.77rem;
   border: 0.005rem solid #EEEEEE;
   padding: 0.055rem;
-  margin-bottom: 0.1rem;
+  margin: 0 0.075rem 0.1rem 0;
 }
 
 .scroll-box .layout-box .content-box .hotbrand-box .hotbrand-ul li img {

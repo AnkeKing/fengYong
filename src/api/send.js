@@ -41,9 +41,15 @@ export const setPassword=data=>{//忘记密码设置新密码
 export const getHomeData=data=>{//不需要登录的首页
     return notInterceptorHttp('/getListB2bIndex','post',data,data);
 }
-export const getPersonalData=data=>{//需要登录的个人中心
+export const getPersonalData=data=>{//需要登录的个人中心-依赖登录接口
     return needInterceptorHttp('/app/merchant/getByUserId/'+data.id,'post',data,data);
 }
-export const getShopListData=data=>{//需要登录时的商品分类
+export const getLoginedHomeData=data=>{//需要登录时的首页-依赖个人中心接口
+    return needInterceptorHttp('/getListOfShopByGroupId','post',data,data);
+}
+export const getShopListData=data=>{//需要登录时的商品分类-依赖个人中心接口
     return needInterceptorHttp('/getSortInfoByStationIdV2/'+data.stationId,'post',data,data);
+}
+export const getShopBrandData=data=>{//需要登录时的品牌信息-依赖商品分类接口
+    return needInterceptorHttp('/getBrandInfo','post',data,data);
 }

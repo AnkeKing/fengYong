@@ -42,8 +42,7 @@
       <!-- 商品内容区 -->
       <div
         class="shop-list-box"
-        v-if="goodsRecommendList"
-        v-for="list,listindex in goodsRecommendList"
+        v-for="list,listindex in homeList"
       >
         <div class="shop-banner-box">
           <img src="../../assets/img/lingshi-left-icon.png" v-if="listindex/2!=0">
@@ -52,7 +51,7 @@
           <img src="../../assets/img/lingshi-right-icon.png" v-if="listindex/2!=0">
           <img src="../../assets/img/remen-right-icon.png" v-else>
         </div>
-        <div class="banner-img-box">
+        <div class="banner-img-box"v-if="list.b2bFloorBannerList.length>0">
           <img :src="list.b2bFloorBannerList[0].picUrl">
         </div>
         <ul class="shop-content-box">
@@ -91,7 +90,7 @@
 
 <script>
 import HomeHead from "../../components/HomeHead";
-import { getHomeData} from "../../api/send";
+import { getHomeData, getLoginedHomeData } from "../../api/send";
 export default {
   name: "Scroll-box",
   data() {
@@ -151,7 +150,7 @@ export default {
             "https://hbimg.huabanimg.com/48262f312c14a3df04ac0a39aa4d212dc12266cdaac5b-mKLCPG_fw658"
         }
       ],
-      goodsRecommendList: null, //好物推荐
+      homeList: null, //好物推荐
       loadingText: "加载中"
     };
   },
@@ -180,29 +179,44 @@ export default {
         }
         document.getElementsByClassName("content-box")[0].scrollTop = count;
       }, 2);
+    },
+    getHomeData(params) {
+      getHomeData({
+        merchantId: params.merchantId,
+        siteid: params.siteid,
+        storeCustId: params.storeCustId,
+        terminal: params.terminal,
+        storeId: params.storeId
+      }).then(res => {
+        this.homeList = res.result.b2bFloorVoList;
+        console.log("需要登录的首页数据???",this.homeList);
+      });
     }
   },
   mounted() {
-    this.$store.commit("showLoading", true);
-    if (this.$store.state.main.home.homeShopList) {//如果发送过请求就在store中取数据
-      this.goodsRecommendList = this.$store.state.main.home.homeShopList;
-    } else {
-        getHomeData({
+      if (this.$store.state.token) {
+        this.getHomeData({
+          merchantId: this.$store.state.userMsg.merchantId,
+          siteid:  this.$store.state.userMsg.stationId,
+          storeCustId:this.$store.state.userMsg.id,
+          terminal: 3,
+          storeId: this.$store.state.userMsg.storeId
+        });
+      } else {
+        this.getHomeData({
           merchantId: 0,
           siteid: 22,
           storeCustId: 0,
           terminal: 3,
           storeId: 0
-        }).then(res => {
-          this.goodsRecommendList = res.result.b2bFloorVoList;
-          this.$store.commit(
-            "main/home/setHomeShopList",
-            this.goodsRecommendList
-          );
-          console.log("首页的数据：",res);
         });
-    }
-    this.$store.commit("showLoading", false);
+      }
+    // getLoginedHomeData({ groupId: this.$store.state.userMsg.groupId }).then(
+    //   res => {
+    //     console.log("个人数据", res);
+    //   }
+    // );
+    
   },
   components: {
     appHomeHead: HomeHead

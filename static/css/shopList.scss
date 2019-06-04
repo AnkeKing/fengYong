@@ -60,17 +60,19 @@
   .layout-box {
     display: flex;
     overflow: auto;
+
     //商品分类导航栏
     .shop-nav {
       width: 0.96rem;
       background: #F2F2F2;
       overflow: scroll;
-     border: 0.01rem solid #F2F2F2;
-     position: absolute;
-     top: 0.85rem;
-     left: 0;
-     right: 0;
-     bottom:0;
+      border: 0.01rem solid #F2F2F2;
+      position: absolute;
+      top: 0.85rem;
+      left: 0;
+      right: 0;
+      bottom: 0;
+
       li {
         width: 100%;
         height: 0.5rem;
@@ -81,6 +83,7 @@
         font-size: 0.14;
         color: #666666;
         position: relative;
+
         hr {
           height: 0.48rem;
           position: absolute;
@@ -107,6 +110,7 @@
       padding: 0.15rem 0 0 0.15rem;
       overflow: scroll;
       margin-left: 0.96rem;
+
       .shop-detail-box {
         margin-bottom: 0.25rem;
 
@@ -120,6 +124,7 @@
           flex-wrap: wrap;
           margin-top: 0.15rem;
           width: 95%;
+
           li {
             display: flex;
             flex-direction: column;
@@ -128,6 +133,7 @@
             width: 0.77rem;
             height: 0.77rem;
             margin-bottom: 0.1rem;
+
             img {
               width: 80%;
               margin-bottom: 0.06rem;
@@ -150,12 +156,12 @@
           color: #000000;
           display: flex;
 
-          a  {
+          a {
             width: 0.02rem;
             display: block;
             height: 0.09rem;
             background-color: #EE793E;
-            margin:0.03rem 0.05rem 0 0;
+            margin: 0.03rem 0.05rem 0 0;
           }
 
           a :nth-of-type(2) {
@@ -166,18 +172,17 @@
         }
 
         .hotbrand-ul {
-          width: 95%;
+          width: 100%;
           margin-top: 0.15rem;
           display: flex;
           flex-wrap: wrap;
-          justify-content: space-between;
 
           li {
             width: 0.77rem;
             height: 0.77rem;
             border: 0.005rem solid #EEEEEE;
             padding: 0.055rem;
-            margin-bottom: 0.1rem;
+            margin:0 0.075rem 0.1rem 0;
 
             img {
               width: 100%;
@@ -188,5 +193,5 @@
       }
     }
   }
-  
+
 }

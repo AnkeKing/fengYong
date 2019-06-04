@@ -7,14 +7,10 @@ const home={//孙级
     namespaced: true,
     state: {
         homeHeadBool: true,
-        homeShopList:null
     },
     mutations: {
         setHomeHeadBool(state, bool) {
             state.homeHeadBool = bool;
-        },
-        setHomeShopList(state,data){
-            state.homeShopList=data;
         },
     },
     actions:{
@@ -23,16 +19,12 @@ const home={//孙级
 const shopList={//孙级
     namespaced: true,
     state:{
-        shopList:null,
-        shopIndex:0
+        shopIndex:0,
     },
     mutations:{
-        setShopList(state, list) {
-            state.shopList =list;
-        },
         setShopIndex(state,index){
             state.shopIndex=index;
-        }
+        },
     }
 }
 const register = {//子级
@@ -120,6 +112,7 @@ const Store = new Vuex.Store({
         warnBool: false,
         warnText: "",
         loading: false,
+        dataLoading:false,
         selectObj: [],
         papersType: '营业执照',
         alertBool: false,
@@ -136,6 +129,9 @@ const Store = new Vuex.Store({
         },
         showLoading(state, bool) {
             state.loading = bool;
+        },
+        showDataLoading(state, bool) {
+            state.dataLoading = bool;
         },
         changeAlertBool(state, alertBool) {
             state.alertBool = alertBool;
@@ -171,13 +167,13 @@ const Store = new Vuex.Store({
             context.commit('changeAlertBool', true);
             context.commit('showSelectAlert', selectObj);
         },
-        logoutHandle(context){
+        logoutHandle(context){//退出登录
             localStorage.removeItem("vuex");
             context.commit("setToken", false);
             context.commit("setUserId", false);
             context.commit("setUserMsg", null);
             router.replace("/login");
-        }
+        },
     },
     modules: {
         login: login,

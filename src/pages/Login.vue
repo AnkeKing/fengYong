@@ -72,8 +72,12 @@
 </template>
 
 <script>
-import { verifyLoginID } from "../api/send";
-import { getPersonalData, getShopListData } from "../api/send";
+import {
+  verifyLoginID,
+  getPersonalData,
+  getShopListData,
+  getShopBrandData
+} from "../api/send";
 export default {
   name: "Scroll-box",
   data() {
@@ -99,7 +103,7 @@ export default {
       }
     },
     //登陆操作
-    toHome() {
+   async toHome() {
       let PASS_REGEXP = /^\S+$/;
       if (
         this.$store.getters["login/verifyUserPhone"](this.phoneValue) &&
@@ -110,7 +114,8 @@ export default {
           loginName: this.phoneValue,
           password: this.passValue
         };
-        verifyLoginID(loginMsg).then(res => {
+      verifyLoginID(loginMsg).then(res => {
+          //登录
           if (res) {
             if (this.nextPath) {
               //判断用户没登录之前有没有想进的页面
@@ -122,18 +127,7 @@ export default {
               warnBool: true,
               warnText: "登录成功"
             });
-            getPersonalData({ id: res.result.id }).then(res => {
-              if (res) {
-                this.$store.commit("setUserMsg", res.result);
-                console.log("个人中心接口返回的数据：", res.result);
-                getShopListData({stationId:res.result.stationId}).then(res => {
-                  if (res) {
-                    this.$store.commit("main/shopList/setShopList", res.result.list);
-                    console.log("商品分类接口返回的数据：", this.$store.state.main.shopList.shopList);
-                  }
-                });
-              }
-            });
+            this.getPersonal(res.result.id);
           }
         });
       } else {
@@ -142,6 +136,15 @@ export default {
           warnText: "用户名或密码格式错误"
         });
       }
+    },
+    getPersonal(id) {
+      //个人中心
+      return getPersonalData({ id: id }).then(res => {
+        if (res) {
+          this.$store.commit("setUserMsg", res.result);
+          console.log("个人中心接口返回的数据：", res.result);
+        }
+      });
     },
     //在历史记录中选择手机号码
     checkPhone(index) {

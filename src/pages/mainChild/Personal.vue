@@ -6,7 +6,7 @@
       <img src="../../assets/img/miff.png">
       <img src="../../assets/img/miff.png">
       <div>
-        <img src="../../assets/img/set.png"@click="toSetUserMsg">
+        <img src="../../assets/img/set.png" @click="toSetUserMsg">
         <button>我要卖货</button>
       </div>
       <div>
@@ -20,7 +20,7 @@
           </span>
         </div>
         <div class="right">
-          <img src="../../assets/img/ic_next_left_white.png"@click="viewPersonalMsg">
+          <img src="../../assets/img/ic_next_left_white.png" @click="viewPersonalMsg">
         </div>
       </div>
     </div>
@@ -174,20 +174,31 @@
           <img src="../../assets/img/remen-right-icon.png">
         </div>
         <ul class="browse-ul">
-            <li>
-                <div><img src="../../assets/img/WechatIMG292.png"></div>
-                <div>
-                    <div><a>农夫山泉巴啦啦能量</a></div>
-                    <div>
-                        <span class="left">
-                            <span><a>￥7.00</a><a>一袋起批</a></span>
-                            <span><a>成都双流宏福有限公司</a></span>
-                        </span>
-                        <span class="right"><img src="../../assets/img/ic_shop.png"></span>
-                    </div>
-                </div>
-                <hr>
-            </li>
+          <li>
+            <div>
+              <img src="../../assets/img/WechatIMG292.png">
+            </div>
+            <div>
+              <div>
+                <a>农夫山泉巴啦啦能量</a>
+              </div>
+              <div>
+                <span class="left">
+                  <span>
+                    <a>￥7.00</a>
+                    <a>一袋起批</a>
+                  </span>
+                  <span>
+                    <a>成都双流宏福有限公司</a>
+                  </span>
+                </span>
+                <span class="right">
+                  <img src="../../assets/img/ic_shop.png">
+                </span>
+              </div>
+            </div>
+            <hr>
+          </li>
         </ul>
       </div>
     </div>
@@ -195,26 +206,42 @@
 </template>
 
 <script>
+import {getPersonalData} from '../../api/send';
 export default {
   name: "Scroll-box",
   data() {
     return {
-      userMsg:"",
-      telphone:""
+      userMsg: "",
+      telphone: ""
     };
   },
   methods: {
-    toSetUserMsg(){
-        this.$router.push({'name':'setPage'});
+    toSetUserMsg() {
+      this.$router.push({ name: "setPage" });
     },
-    viewPersonalMsg(){
-      this.$router.push({name:'personalMsg'});
+    viewPersonalMsg() {
+      this.$router.push({ name: "personalMsg" });
+    },
+    getPersonal(id) {
+      //个人中心
+      return getPersonalData({ id: id }).then(res => {
+        if (res) {
+          this.$store.commit("setUserMsg", res.result);
+          console.log("个人中心接口返回的数据：", res.result);
+        }
+      });
     }
   },
-  mounted(){
-      this.userMsg = this.$store.state.userMsg;//获取个人信息
-     let tel=this.userMsg.telphone;
-      this.telphone=tel.replace(tel.substring(3,7),"****");
+  mounted() {
+    if (this.$store.state.token) {
+      if (this.$store.state.userMsg) {
+        this.userMsg = this.$store.state.userMsg; //获取个人信息
+        let tel = this.userMsg.telphone;
+        this.telphone = tel.replace(tel.substring(3, 7), "****");
+      } else {
+        this.getPersonal(this.$store.state.userId);
+      }
+    }
   },
   components: {}
 };

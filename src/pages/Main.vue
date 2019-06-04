@@ -1,5 +1,6 @@
 <template>
   <div class="box">
+    <app-data-loading></app-data-loading>
     <router-view></router-view>
     <app-tab-bar></app-tab-bar>
   </div>
