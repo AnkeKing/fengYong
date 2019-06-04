@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import router from '../router/index';
 import createPersistedState from "vuex-persistedstate"
 Vue.use(Vuex)
 const home={//孙级
@@ -19,7 +20,21 @@ const home={//孙级
     actions:{
     }
 }
-
+const shopList={//孙级
+    namespaced: true,
+    state:{
+        shopList:null,
+        shopIndex:0
+    },
+    mutations:{
+        setShopList(state, list) {
+            state.shopList =list;
+        },
+        setShopIndex(state,index){
+            state.shopIndex=index;
+        }
+    }
+}
 const register = {//子级
     namespaced: true,
     state: {
@@ -94,7 +109,8 @@ const main = {//子级
         
     },
     modules:{
-        home:home
+        home:home,
+        shopList:shopList
     }
 }
 
@@ -108,7 +124,8 @@ const Store = new Vuex.Store({
         papersType: '营业执照',
         alertBool: false,
         token: '',
-        
+        userId:'',
+        userMsg:null
     },
     getters: {
     },
@@ -133,9 +150,15 @@ const Store = new Vuex.Store({
         setToken(state, token) {//把token存入本地localStorage
             state.token = token;
         },
+        setUserId(state, id) {
+            state.userId = id;
+        },
+        setUserMsg(state, msg) {
+            state.userMsg = msg;
+        },
         setHeaderTitle(state,title){
             state.headerTitle=title;
-        }
+        },
     },
     actions: {
         showWarnAsync(context, warnObj) {//显示信息
@@ -148,6 +171,13 @@ const Store = new Vuex.Store({
             context.commit('changeAlertBool', true);
             context.commit('showSelectAlert', selectObj);
         },
+        logoutHandle(context){
+            localStorage.removeItem("vuex");
+            context.commit("setToken", false);
+            context.commit("setUserId", false);
+            context.commit("setUserMsg", null);
+            router.replace("/login");
+        }
     },
     modules: {
         login: login,
@@ -159,7 +189,9 @@ const Store = new Vuex.Store({
             // console.log("val:",val);
             return {
                 // 只储存state中的token 使vuex的token刷新不掉
-                token: val.token
+                token: val.token,
+                userId:val.userId,
+                userMsg:val.userMsg
             }
         }
     })]

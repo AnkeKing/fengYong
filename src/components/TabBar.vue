@@ -49,6 +49,8 @@ export default {
 .tab-bar {
   width: 100%;
   background-color: #ffffff;
+  position: relative;
+  z-index: 9;
   ul {
     width: 100%;
     display: flex;

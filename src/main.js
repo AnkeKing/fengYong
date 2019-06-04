@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import store from './store/store';
 import Head from './components/Head';
+import SlotHead from './components/SlotHead';
 import Loading from './components/Loading';
 import TabBar from './components/TabBar';
 import WarnAlert from "./components/WarnAlert";
@@ -20,6 +21,7 @@ Vue.component('appWarnAlert',WarnAlert);
 Vue.component('appSelectAlert',SelectAlert);
 Vue.component('appTabBar',TabBar);
 Vue.component('appSlides',Slides);
+Vue.component('appSlotHead',SlotHead);
 
 /* eslint-disable no-new */
 new Vue({

@@ -17,6 +17,10 @@ import ShopCar from '../pages/mainChild/ShopCar';
 import Personal from '../pages/mainChild/Personal';
 import PersonalMain from '../pages/mainChild/PersonalMain';
 import SetPage from '../pages/mainChild/personalChild/SetPage';
+import MsgMain from '../pages/mainChild/personalChild/MsgMain';
+import PersonalMsg from '../pages/mainChild/personalChild/msgDetail/PersonalMsg';
+import ShopMsg from '../pages/mainChild/personalChild/msgDetail/ShopMsg';
+
 
 
 import store from '../store/store';
@@ -96,7 +100,23 @@ const router = new Router({
               path: '/setPage',
               name: 'setPage',
               component: SetPage,
-            }
+            },{
+              path: '/msgMain',
+              name: 'msgMain',
+              component:MsgMain,
+              children:[
+                {
+                  path: '/personalMsg',
+                  name: 'personalMsg',
+                  component: PersonalMsg,
+                },
+                {
+                  path: '/shopMsg',
+                  name: 'shopMsg',
+                  component: ShopMsg,
+                }
+              ]
+            },
           ]
         },
       ]

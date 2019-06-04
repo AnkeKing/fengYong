@@ -12,6 +12,7 @@ export const verifyLoginID = data => {//登录
         // console.log('send.js:',res);
         if(res.data.status.statusCode===0){
             store.commit('setToken',res.data.result.token);
+            store.commit('setUserId',res.data.result.id);
             store.commit('login/loginRecord',{'loginName':data.loginName});
             return res.data;
         }else{
@@ -37,9 +38,12 @@ export const sendVerifyCode=data=>{//忘记密码发送验证码
 export const setPassword=data=>{//忘记密码设置新密码
     return notInterceptorHttp('/user/passUpdate','post',data,data);
 } 
-export const getNotLoginHomeData=data=>{//未登录时的首页
+export const getHomeData=data=>{//不需要登录的首页
     return notInterceptorHttp('/getListB2bIndex','post',data,data);
 }
-export const getNeedLoginHomeData=data=>{//需要登录时的首页
-    return needInterceptorHttp('/app/merchant/getByUserId?id='+data.id,'post',data,data);
+export const getPersonalData=data=>{//需要登录的个人中心
+    return needInterceptorHttp('/app/merchant/getByUserId/'+data.id,'post',data,data);
+}
+export const getShopListData=data=>{//需要登录时的商品分类
+    return needInterceptorHttp('/getSortInfoByStationIdV2/'+data.stationId,'post',data,data);
 }

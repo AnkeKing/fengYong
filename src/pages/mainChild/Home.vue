@@ -91,7 +91,7 @@
 
 <script>
 import HomeHead from "../../components/HomeHead";
-import { getNotLoginHomeData, getNeedLoginHomeData } from "../../api/send";
+import { getHomeData} from "../../api/send";
 export default {
   name: "Scroll-box",
   data() {
@@ -184,14 +184,10 @@ export default {
   },
   mounted() {
     this.$store.commit("showLoading", true);
-    if (this.$store.state.main.home.homeShopList) {
+    if (this.$store.state.main.home.homeShopList) {//如果发送过请求就在store中取数据
       this.goodsRecommendList = this.$store.state.main.home.homeShopList;
     } else {
-      // if (this.$store.state.token) {
-      //   let dataa = getNeedLoginHomeData({ id: res.result.id });//数据获取失败
-      //   console.log("登录的数据：", dataa);
-      // } else {
-        getNotLoginHomeData({
+        getHomeData({
           merchantId: 0,
           siteid: 22,
           storeCustId: 0,
@@ -203,9 +199,8 @@ export default {
             "main/home/setHomeShopList",
             this.goodsRecommendList
           );
-          console.log("未登录的数据：", this.goodsRecommendList);
+          console.log("首页的数据：",res);
         });
-      // }
     }
     this.$store.commit("showLoading", false);
   },

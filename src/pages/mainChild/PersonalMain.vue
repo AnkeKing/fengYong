@@ -1,6 +1,5 @@
 <template>
  <div class="box">
-     <app-head :backBool="true":searchBool="false"></app-head>
      <router-view></router-view>
  </div>
 </template>
@@ -14,7 +13,6 @@ name:'Box',
  }
  },
  created(){
-      this.$store.commit("setHeaderTitle","");
   },
  components: {
 
@@ -23,4 +21,7 @@ name:'Box',
 </script>
 
 <style  rel='stylesheet/scss' lang='scss' scoped>
+.box{
+  background-color: #F2F1F6;
+}
 </style>

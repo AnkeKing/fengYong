@@ -1,6 +1,6 @@
 <template>
   <div class="scroll-box" @click="showListBool=false">
-    <app-head :backBool="false"></app-head>
+    <app-head :backBool="false" :search="false"></app-head>
     <app-loading :loadingText="loadingText"></app-loading>
     <app-Select-alert></app-Select-alert>
     <div class="content-box">
@@ -73,7 +73,7 @@
 
 <script>
 import { verifyLoginID } from "../api/send";
-import {getNeedLoginHomeData} from "../api/send";
+import { getPersonalData, getShopListData } from "../api/send";
 export default {
   name: "Scroll-box",
   data() {
@@ -113,29 +113,33 @@ export default {
         verifyLoginID(loginMsg).then(res => {
           if (res) {
             if (this.nextPath) {
-              this.$router.replace({path:this.nextPath});
-              this.$store.dispatch("showWarnAsync", {
-                warnBool: true,
-                warnText: "登录成功",
-              });
+              //判断用户没登录之前有没有想进的页面
+              this.$router.replace({ path: this.nextPath });
             } else {
               this.$router.replace("/");
-              this.$store.dispatch("showWarnAsync", {
-                warnBool: true,
-                warnText: "登录成功",
-              });
             }
-            console.log(res);
-           let dataa= getNeedLoginHomeData({'id':res.result.id});
-           console.log("返回的数据：",dataa);
-            // this.$store.commit("main/home/setNotLogHomeShopList",this.goodsRecommendList );
+            this.$store.dispatch("showWarnAsync", {
+              warnBool: true,
+              warnText: "登录成功"
+            });
+            getPersonalData({ id: res.result.id }).then(res => {
+              if (res) {
+                this.$store.commit("setUserMsg", res.result);
+                console.log("个人中心接口返回的数据：", res.result);
+                getShopListData({stationId:res.result.stationId}).then(res => {
+                  if (res) {
+                    this.$store.commit("main/shopList/setShopList", res.result.list);
+                    console.log("商品分类接口返回的数据：", this.$store.state.main.shopList.shopList);
+                  }
+                });
+              }
+            });
           }
-
         });
       } else {
         this.$store.dispatch("showWarnAsync", {
           warnBool: true,
-          warnText: "用户名或密码格式错误",
+          warnText: "用户名或密码格式错误"
         });
       }
     },
@@ -153,11 +157,10 @@ export default {
       return JSON.parse(localStorage.getItem("userList")) || [];
     }
   },
-  created(){
-      this.$store.commit("setHeaderTitle","登录");
+  created() {
+    this.$store.commit("setHeaderTitle", "登录");
   },
-  components: {
-  }
+  components: {}
 };
 </script>
 

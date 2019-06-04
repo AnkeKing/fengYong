@@ -99,9 +99,7 @@ export default {
           this.$store.commit("changePapersType", this.selectType);
           this.Event.$emit("clear", true);
         } else if (obj.nextActionType == "nextLogout") {
-          localStorage.removeItem("vuex");
-          this.$store.commit("setToken", false);
-          this.$router.replace("/login");
+          this.$store.dispatch('logoutHandle');
           this.$store.dispatch("showWarnAsync", {
             warnBool: true,
             warnText: "退出登录成功"

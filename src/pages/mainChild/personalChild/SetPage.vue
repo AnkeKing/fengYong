@@ -1,5 +1,10 @@
 <template>
   <div class="box">
+    <app-slot-head styles="slot-head" :backBool="true" :searchBool="false">
+      <template v-slot:title>
+        <a>设置</a>
+      </template>
+    </app-slot-head>
     <app-Select-alert ref="selectAlert"></app-Select-alert>
     <div class="photo-box">
       <span class="photo-span">
@@ -68,7 +73,6 @@ export default {
     }
   },
   created(){
-      this.$store.commit("setHeaderTitle","设置");
   },
   computed: {
   },

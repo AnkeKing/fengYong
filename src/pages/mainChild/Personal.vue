@@ -15,12 +15,12 @@
             <img src="../../assets/img/ic_bills_come.png">
           </span>
           <span class="msg-span">
-            <a class="username">ShingD22</a>
-            <a class="phone">136323233</a>
+            <a class="username">{{userMsg.nickName}}</a>
+            <a class="phone">{{telphone}}</a>
           </span>
         </div>
         <div class="right">
-          <img src="../../assets/img/ic_next_left_white.png">
+          <img src="../../assets/img/ic_next_left_white.png"@click="viewPersonalMsg">
         </div>
       </div>
     </div>
@@ -198,12 +198,23 @@
 export default {
   name: "Scroll-box",
   data() {
-    return {};
+    return {
+      userMsg:"",
+      telphone:""
+    };
   },
   methods: {
     toSetUserMsg(){
         this.$router.push({'name':'setPage'});
+    },
+    viewPersonalMsg(){
+      this.$router.push({name:'personalMsg'});
     }
+  },
+  mounted(){
+      this.userMsg = this.$store.state.userMsg;//获取个人信息
+     let tel=this.userMsg.telphone;
+      this.telphone=tel.replace(tel.substring(3,7),"****");
   },
   components: {}
 };

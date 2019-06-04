@@ -1,14 +1,14 @@
 <template>
-  <div class="headbox">
+  <div class="slot-head-box":class="styles">
     <img v-show="backBool" src="../assets/img/Fill1.png" class="back-img"@click="goBack">
-    <a>{{$store.state.headerTitle}}</a>
+      <slot name="title"></slot>
     <img v-show="searchBool" src="../assets/img/ic_search.png" class="search-img"@click="goSearch">
   </div>
 </template>
 
 <script>
 export default {
-  name: "Headbox",
+  name: "Slot-head-box",
   data() {
     return {};
   },
@@ -20,13 +20,13 @@ export default {
 
     }
   },
-  props: ["backBool","searchBool"],
+  props: ["backBool","searchBool","styles"],
   components: {}
 };
 </script>
 
 <style rel='stylesheet/scss' lang='scss'scoped>
-.headbox {
+.slot-head-box {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -34,12 +34,12 @@ export default {
   padding: 0.13rem 0 0.13rem 0;
   width: 100%;
   position: relative;
-  z-index: 9;
   a {
     font-family: "PingFangSC-Regular";
     font-size: 0.18rem;
     color: #030303;
   }
+  
   .back-img {
     width: 0.3rem;
     display: block;
@@ -67,4 +67,16 @@ export default {
     transform: scaleY(0.5);
   }
 }
+.slot-head {
+      span {
+        .active {
+          color: #DD3333;
+        }
+        a{
+          font-size: 0.16rem;
+          color: #333333;
+          margin-left: 0.19rem;
+        }
+      }
+    }
 </style>

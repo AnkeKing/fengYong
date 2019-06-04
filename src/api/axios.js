@@ -10,10 +10,11 @@ let needInterceptorService = axios.create({//需要token拦截的请求
     // headers: {'Content-Type': 'application/json'}
 });
 needInterceptorService.interceptors.request.use(config => {
-    console.log("request发送请求：",config);
+    // console.log("request发送请求：", config);
     store.commit("showLoading", true);
     if (store.state.token) {
         config.headers.token = store.state.token;
+        config.headers.userId = store.state.userId;
     } else {
         router.replace('/login');
     }
@@ -24,41 +25,36 @@ needInterceptorService.interceptors.request.use(config => {
 
 needInterceptorService.interceptors.response.use(response => {
     store.commit("showLoading", false);
-    
-    
-    // if(response.data.status.statusCode===1895001){
-        // router.replace('/login');
-    //     return false;
-    // }else{
-        // return response;
-    // }
+    if (response.data.status.statusCode === 1895001) {
+        store.dispatch('logoutHandle');
+    }
     return response;
 }, error => {
-    if(error.message.includes('timeout')){   // 判断请求异常信息中是否含有超时timeout字符串
+    if (error.message.includes('timeout')) {   // 判断请求异常信息中是否含有超时timeout字符串
         store.dispatch("showWarnAsync", {//提示信息
             warnBool: true,
             warnText: "网络请求超时",
-          });
-      }
+        });
+    }
     return Promise.reject(error);
 })
 
-function needInterceptorHttp(url,method,data,params){
+function needInterceptorHttp(url, method, data, params) {
     return needInterceptorService({
-        url:url,
-        method:method,
-        data:data,
+        url: url,
+        method: method,
+        data: data,
         params,
-    }).then(res=>{
-            if(res.data.status.statusCode===0){
-                return res.data;
-            }else{
-                store.dispatch("showWarnAsync", {//提示信息
-                    warnBool: true,
-                    warnText: res.data.status.statusReason,
-                  });
-                return false;
-            }
+    }).then(res => {
+        if (res.data.status.statusCode === 0) {
+            return res.data;
+        } else {
+            store.dispatch("showWarnAsync", {//提示信息
+                warnBool: true,
+                warnText: res.data.status.statusReason,
+            });
+            return false;
+        }
     })
 }
 
@@ -68,25 +64,25 @@ let notInterceptorService = axios.create({//不需要token拦截的请求 否则
     timeout: 5000,
 });
 
-function notInterceptorHttp(url,method,data,params){
+function notInterceptorHttp(url, method, data, params) {
     return notInterceptorService({
-        url:url,
-        method:method,
-        data:data,
+        url: url,
+        method: method,
+        data: data,
         params,
-    }).then(res=>{
-        if(res.data.status.statusCode===0){
+    }).then(res => {
+        if (res.data.status.statusCode === 0) {
             return res.data;
-        }else{
+        } else {
             store.dispatch("showWarnAsync", {//提示信息
                 warnBool: true,
                 warnText: res.data.status.statusReason,
-              });
+            });
             return false;
         }
     })
 }
 
 
-export {needInterceptorService,notInterceptorService,needInterceptorHttp,notInterceptorHttp}
+export { needInterceptorService, notInterceptorService, needInterceptorHttp, notInterceptorHttp }
 

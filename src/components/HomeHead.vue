@@ -39,6 +39,8 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 0 0.12rem 0 0.12rem;
+  position: relative;
+  z-index: 9;
   span {
     display: flex;
     justify-content: space-between;
