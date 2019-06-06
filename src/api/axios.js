@@ -34,7 +34,7 @@ needInterceptorService.interceptors.response.use(response => {
             warnText: "网络请求超时",
         });
     }
-    store.commit("showLoading", false);
+    store.commit("showDataLoading", false);
     return Promise.reject(error);
 })
 
@@ -105,6 +105,8 @@ function notInterceptorHttp(url, method, data, params) {
             });
             return false;
         }
+    }).catch(error=>{
+        Promise.reject(error);
     })
 }
 

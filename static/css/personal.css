@@ -265,6 +265,10 @@
   border-right: 0.01rem solid #DDDDDD;
 }
 
+.scroll-box .shoping-msg-box .logistics-box ul li .time-box hr {
+  display: none;
+}
+
 .scroll-box .shoping-msg-box .logistics-box ul li .time-box span {
   background: #DDDDDD;
   width: 0.05rem;

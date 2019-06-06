@@ -72,12 +72,7 @@
 </template>
 
 <script>
-import {
-  verifyLoginID,
-  getPersonalData,
-  getShopListData,
-  getShopBrandData
-} from "../api/send";
+import { verifyLoginID } from "../api/send";
 export default {
   name: "Scroll-box",
   data() {
@@ -103,7 +98,7 @@ export default {
       }
     },
     //登陆操作
-   async toHome() {
+    async toHome() {
       let PASS_REGEXP = /^\S+$/;
       if (
         this.$store.getters["login/verifyUserPhone"](this.phoneValue) &&
@@ -114,7 +109,7 @@ export default {
           loginName: this.phoneValue,
           password: this.passValue
         };
-      verifyLoginID(loginMsg).then(res => {
+        verifyLoginID(loginMsg).then(res => {
           //登录
           if (res) {
             if (this.nextPath) {
@@ -127,7 +122,12 @@ export default {
               warnBool: true,
               warnText: "登录成功"
             });
-            this.getPersonal(res.result.id);
+            this.$store
+              .dispatch("getUserMsg", { id: res.result.id })
+              .then(res => {
+                this.$store
+                  .dispatch("getUserSecondMsg",{groupId: res.groupId});
+              });
           }
         });
       } else {
@@ -136,15 +136,6 @@ export default {
           warnText: "用户名或密码格式错误"
         });
       }
-    },
-    getPersonal(id) {
-      //个人中心
-      return getPersonalData({ id: id }).then(res => {
-        if (res) {
-          this.$store.commit("setUserMsg", res.result);
-          console.log("个人中心接口返回的数据：", res.result);
-        }
-      });
     },
     //在历史记录中选择手机号码
     checkPhone(index) {

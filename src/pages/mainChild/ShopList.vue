@@ -21,10 +21,11 @@
         </li>
       </ul>
       <div class="content-box">
-        <div class="shop-detail-box" v-if="shopList">
+        <div class="shop-detail-box" v-if="shopList.length>0">
           <a class="shop-title">{{shopList[$store.state.main.shopList.shopIndex].sName}}</a>
           <ul class="shop-detail-ul">
             <li
+              v-if="shopList[$store.state.main.shopList.shopIndex].stationSaleTypeModels.length>0"
               v-for="(shop,index) in shopList[$store.state.main.shopList.shopIndex].stationSaleTypeModels"
               :key="index"
             >
@@ -33,7 +34,7 @@
             </li>
           </ul>
         </div>
-        <div class="hotbrand-box">
+        <div class="hotbrand-box" v-if="brandList.length>0">
           <span class="brand-title">
             <a></a>
             <p>热门品牌</p>
@@ -55,36 +56,47 @@ export default {
   name: "Scroll-box",
   data() {
     return {
-      shopList: null,
-      brandList: null
+      shopList: [{ sName: "" , stationSaleTypeModels: []}],
+      brandList: []
     };
   },
   mounted() {
     if (this.$store.state.token) {
       this.getShopList(this.$store.state.userMsg.stationId).then(list => {
-        this.getShopBrand(list[this.$store.state.main.shopList.shopIndex].id, this.$store.state.userMsg.stationId);
+        this.getShopBrand(
+          list[this.$store.state.main.shopList.shopIndex].id,
+          this.$store.state.userMsg.stationId
+        );
       });
     } else {
       this.getShopList(22).then(list => {
-        this.getShopBrand(list[this.$store.state.main.shopList.shopIndex].id, 22);
+        this.getShopBrand(
+          list[this.$store.state.main.shopList.shopIndex].id,
+          2
+        );
       });
     }
+  },
+  destroyed(){
+    this.$store.commit("main/shopList/setShopIndex", 0);
   },
   methods: {
     viewShopDetail(index) {
       this.$store.commit("main/shopList/setShopIndex", index);
       if (this.$store.state.token) {
-        this.getShopList(this.$store.state.userMsg.stationId).then(list=>{
-          this.getShopBrand(list[this.$store.state.main.shopList.shopIndex].id, this.$store.state.userMsg.stationId);
-        })
+        this.getShopList(this.$store.state.userMsg.stationId).then(list => {
+          this.getShopBrand(
+            list[this.$store.state.main.shopList.shopIndex].id,
+            this.$store.state.userMsg.stationId
+          );
+        });
       } else {
-        this.getShopList(22).then(list=>{
-          console.log("没登录的分类",list);
-          console.log("选中的商品",list[this.$store.state.main.shopList.shopIndex]);
-          console.log("选中的商品的id",list[this.$store.state.main.shopList.shopIndex].id);
-          console.log("选中的商品下标",index)
-          this.getShopBrand(list[this.$store.state.main.shopList.shopIndex].id, 22);
-        })
+        this.getShopList(22).then(list => {
+          this.getShopBrand(
+            list[this.$store.state.main.shopList.shopIndex].id,
+            2
+          );
+        });
       }
     },
     getShopList(stationId) {
@@ -92,8 +104,7 @@ export default {
       return getShopListData({
         stationId: stationId
       }).then(res => {
-        console.log("商品分类数据：", res.result.list);
-        this.shopList=res.result.list;
+        this.shopList = res.result.list;
         return res.result.list;
       });
     },
@@ -103,13 +114,10 @@ export default {
         firstSaleTypeId: firstSaleTypeId,
         num: 100,
         stationId: stationId
-        // firstSaleTypeId: 2894,
-        // num: 100,
-        // stationId: 22
       }).then(res => {
         if (res) {
           this.brandList = res.result;
-          console.log("品牌信息：",res);
+          // console.log("品牌信息：", res);
           return res.result;
         }
       });

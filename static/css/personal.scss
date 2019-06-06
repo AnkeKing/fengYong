@@ -267,7 +267,7 @@
             height: 0.5rem;
             position: relative;
             border-right: 0.01rem solid #DDDDDD;
-            // hr{
+            hr{
             //     position: absolute;
             //     height: 0.49rem;
             //     background-color:#DDDDDD;
@@ -275,7 +275,8 @@
             //     right: 0px;
             //     transform: rotateY(80deg);
             //     width: 0.01rem;
-            // }
+            display: none;
+            }
             span {
               background: #DDDDDD;
               width: 0.05rem;

@@ -2,8 +2,9 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import router from '../router/index';
 import createPersistedState from "vuex-persistedstate"
+import { getPersonalData,getPersonalDataSecond } from "../api/send";
 Vue.use(Vuex)
-const home={//孙级
+const home = {//孙级
     namespaced: true,
     state: {
         homeHeadBool: true,
@@ -13,17 +14,17 @@ const home={//孙级
             state.homeHeadBool = bool;
         },
     },
-    actions:{
+    actions: {
     }
 }
-const shopList={//孙级
+const shopList = {//孙级
     namespaced: true,
-    state:{
-        shopIndex:0,
+    state: {
+        shopIndex: 0,
     },
-    mutations:{
-        setShopIndex(state,index){
-            state.shopIndex=index;
+    mutations: {
+        setShopIndex(state, index) {
+            state.shopIndex = index;
         },
     }
 }
@@ -98,27 +99,28 @@ const main = {//子级
 
     },
     mutations: {
-        
+
     },
-    modules:{
-        home:home,
-        shopList:shopList
+    modules: {
+        home: home,
+        shopList: shopList
     }
 }
 
 const Store = new Vuex.Store({
     state: {
-        headerTitle:'',
+        headerTitle: '',
         warnBool: false,
         warnText: "",
         loading: false,
-        dataLoading:false,
+        dataLoading: false,
         selectObj: [],
         papersType: '营业执照',
         alertBool: false,
         token: '',
-        userId:'',
-        userMsg:null
+        userId: '',
+        userMsg: null,
+        userSecondMsg:null
     },
     getters: {
     },
@@ -152,9 +154,13 @@ const Store = new Vuex.Store({
         setUserMsg(state, msg) {
             state.userMsg = msg;
         },
-        setHeaderTitle(state,title){
-            state.headerTitle=title;
+        setUserSecondMsg(state,msg){
+            state.userSecondMsg = msg;
         },
+        setHeaderTitle(state, title) {
+            state.headerTitle = title;
+        },
+
     },
     actions: {
         showWarnAsync(context, warnObj) {//显示信息
@@ -167,13 +173,30 @@ const Store = new Vuex.Store({
             context.commit('changeAlertBool', true);
             context.commit('showSelectAlert', selectObj);
         },
-        logoutHandle(context){//退出登录
+        logoutHandle(context) {//退出登录
             localStorage.removeItem("vuex");
             context.commit("setToken", false);
             context.commit("setUserId", false);
             context.commit("setUserMsg", null);
+            context.commit("setUserSecondMsg", null);
             router.replace("/login");
         },
+        getUserMsg(context,obj) {
+           return getPersonalData({ id: obj.id }).then(res => {
+                if (res) {
+                    context.commit("setUserMsg", res.result);
+                    return res.result;
+                }
+            })
+        },
+        getUserSecondMsg(context,obj){
+            return getPersonalDataSecond({ groupId: obj.groupId }).then(res => {
+                if (res) {
+                    context.commit("setUserSecondMsg", res.result.items[0]);
+                    return res.result.items[0];
+                }
+            })
+        }
     },
     modules: {
         login: login,
@@ -186,8 +209,9 @@ const Store = new Vuex.Store({
             return {
                 // 只储存state中的token 使vuex的token刷新不掉
                 token: val.token,
-                userId:val.userId,
-                userMsg:val.userMsg
+                userId: val.userId,
+                userMsg: val.userMsg,
+                userSecondMsg:val.userSecondMsg
             }
         }
     })]

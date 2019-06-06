@@ -51,12 +51,21 @@ export default {
   background-color: #ffffff;
   position: relative;
   z-index: 9;
+  &::after{
+      content: "";
+      position:absolute;
+      border: 1px solid #666666;
+      width: 100%;
+      transform: scaleY(0.05);
+      top: 0px;
+    }
   ul {
     width: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
     padding: 0.05rem 0 0.05rem 0;
+    
     li {
       display: flex;
       flex-direction: column;

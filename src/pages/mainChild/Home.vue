@@ -2,7 +2,7 @@
   <div class="scroll-box">
     <app-home-head></app-home-head>
     <app-loading :loadingText="loadingText"></app-loading>
-    <div class="content-box" @scroll="setSearchStatus">
+    <div class="content-box" ref="contentBox" @scroll="setSearchStatus">
       <!-- 搜索框 -->
       <div id="top" :class="scrollBool?'search-fixed':'search-position'">
         <div>
@@ -40,18 +40,15 @@
         </span>
       </div>
       <!-- 商品内容区 -->
-      <div
-        class="shop-list-box"
-        v-for="list,listindex in homeList"
-      >
+      <div class="shop-list-box" v-for="list,listindex in homeList.b2bFloorVoList">
         <div class="shop-banner-box">
-          <img src="../../assets/img/lingshi-left-icon.png" v-if="listindex/2!=0">
+          <img src="../../assets/img/lingshi-left-icon.png" v-if="listindex/2==0">
           <img src="../../assets/img/remen-left-icon.png" v-else>
-          <a :class="listindex/2!=0?'green':'red'">{{list.name}}</a>
-          <img src="../../assets/img/lingshi-right-icon.png" v-if="listindex/2!=0">
+          <a :class="listindex/2==0?'green':'red'">{{list.name}}</a>
+          <img src="../../assets/img/lingshi-right-icon.png" v-if="listindex/2==0">
           <img src="../../assets/img/remen-right-icon.png" v-else>
         </div>
-        <div class="banner-img-box"v-if="list.b2bFloorBannerList.length>0">
+        <div class="banner-img-box" v-if="list.b2bFloorBannerList.length>0">
           <img :src="list.b2bFloorBannerList[0].picUrl">
         </div>
         <ul class="shop-content-box">
@@ -68,12 +65,6 @@
           </li>
         </ul>
       </div>
-      <!-- <ul class="brandUl">
-        <li v-for="obj in brandMsgData">
-          <img :src="obj.img">
-          <a>{{obj.name}}</a>
-        </li>
-      </ul>-->
       <ul class="foot-nav-ul">
         <li>喜宴用水</li>
         <li>健康用水</li>
@@ -90,7 +81,7 @@
 
 <script>
 import HomeHead from "../../components/HomeHead";
-import { getHomeData, getLoginedHomeData } from "../../api/send";
+import { getHomeData, getPersonalData } from "../../api/send";
 export default {
   name: "Scroll-box",
   data() {
@@ -150,7 +141,9 @@ export default {
             "https://hbimg.huabanimg.com/48262f312c14a3df04ac0a39aa4d212dc12266cdaac5b-mKLCPG_fw658"
         }
       ],
-      homeList: null, //好物推荐
+      homeList: {
+        b2bFloorVoList: []
+      }, //商品分类
       loadingText: "加载中"
     };
   },
@@ -168,16 +161,15 @@ export default {
     //回到顶部
     totop() {
       var timer = null;
-      var scrollTop = document.getElementsByClassName("content-box")[0]
-        .scrollTop;
-      var count = scrollTop;
+      var count = this.$refs.contentBox.scrollTop;
+      var that = this; //定时器中的this指向发生改变
       timer = setInterval(function() {
         count -= 10;
         if (count <= 0) {
           clearInterval(timer);
           count = 0;
         }
-        document.getElementsByClassName("content-box")[0].scrollTop = count;
+        that.$refs.contentBox.scrollTop = count;
       }, 2);
     },
     getHomeData(params) {
@@ -188,20 +180,32 @@ export default {
         terminal: params.terminal,
         storeId: params.storeId
       }).then(res => {
-        this.homeList = res.result.b2bFloorVoList;
-        console.log("需要登录的首页数据???",this.homeList);
+        this.homeList = res.result;
       });
     }
   },
   mounted() {
-      if (this.$store.state.token) {
+    if (this.$store.state.userMsg&&this.$store.state.token) {
         this.getHomeData({
           merchantId: this.$store.state.userMsg.merchantId,
-          siteid:  this.$store.state.userMsg.stationId,
-          storeCustId:this.$store.state.userMsg.id,
+          siteid: this.$store.state.userMsg.stationId,
+          storeCustId: this.$store.state.userMsg.id,
           terminal: 3,
           storeId: this.$store.state.userMsg.storeId
         });
+    } else {
+      if (this.$store.state.token) {
+        this.$store
+          .dispatch("getUserMsg", { id: this.$store.state.userId })
+          .then(res => {
+            this.getHomeData({
+              merchantId: res.merchantId,
+              siteid: res.stationId,
+              storeCustId: res.id,
+              terminal: 3,
+              storeId: res.storeId
+            });
+          });
       } else {
         this.getHomeData({
           merchantId: 0,
@@ -211,12 +215,7 @@ export default {
           storeId: 0
         });
       }
-    // getLoginedHomeData({ groupId: this.$store.state.userMsg.groupId }).then(
-    //   res => {
-    //     console.log("个人数据", res);
-    //   }
-    // );
-    
+    }
   },
   components: {
     appHomeHead: HomeHead

@@ -296,6 +296,19 @@
 .scroll-box .content-box .shop-list-box .shop-content-box li .text {
   font-size: 0.09rem;
   color: #999999;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  /* 限制在一个块元素显示的文本的行数 */
+  -webkit-box-orient: vertical;
+  /* 垂直排列 */
+  word-break: break-all;
+}
+
+.scroll-box .content-box .shop-list-box .shop-content-box li .text::after {
+  content: "...";
 }
 
 .scroll-box .content-box .shop-list-box .shop-content-box li .shop-msg-box {
