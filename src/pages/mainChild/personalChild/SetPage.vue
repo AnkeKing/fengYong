@@ -10,7 +10,7 @@
       <span class="photo-span">
         <img src="../../../assets/img/ic_bills_come.png">
       </span>
-      <a>Kality</a>
+      <a>{{nickName}}</a>
     </div>
     <div class="nickname-box">
       <a>昵称</a>
@@ -27,7 +27,7 @@
       <li>
         <a>修改登录手机号</a>
         <span>
-          <a>152***5981</a>
+          <a>{{telphone}}</a>
           <img src="../../../assets/img/ic-next-left.png">
         </span>
         <hr>
@@ -54,10 +54,13 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "Box",
   data() {
-    return {};
+    return {
+      telphone:""
+    };
   },
   methods: {
     logout() {
@@ -72,9 +75,15 @@ export default {
       });
     }
   },
-  created(){
+  mounted(){
+     let tel = this.userMsg.telphone;
+     this.telphone = tel.replace(tel.substring(3, 7), "****");
   },
   computed: {
+    ...mapState({
+      userMsg: state => state.userMsg,
+      nickName:state => state.userMsg.nickName,
+    })
   },
   components: {}
 };

@@ -28,6 +28,13 @@ const shopList = {//孙级
         },
     }
 }
+// const shopCarPersiste = createPersiste({
+// 	ciphertext: true, // 加密存本地, 默认为false
+// 	LS: {
+// 		module: shopCar,
+// 		storePath: 'shopCar' // __storePath:(和Vuex中的option.modules:{key：value}的key,一,一对应)__
+// 	},
+// })
 const register = {//子级
     namespaced: true,
     state: {
@@ -103,7 +110,8 @@ const main = {//子级
     },
     modules: {
         home: home,
-        shopList: shopList
+        shopList: shopList,
+        // shopCar:shopCar
     }
 }
 
@@ -120,7 +128,8 @@ const Store = new Vuex.Store({
         token: '',
         userId: '',
         userMsg: null,
-        userSecondMsg:null
+        userSecondMsg:null,
+        shopCarData:[],
     },
     getters: {
     },
@@ -151,16 +160,31 @@ const Store = new Vuex.Store({
         setUserId(state, id) {
             state.userId = id;
         },
-        setUserMsg(state, msg) {
+        setUserMsg(state, msg) {//个人数据1
             state.userMsg = msg;
         },
-        setUserSecondMsg(state,msg){
+        setUserSecondMsg(state,msg){//个人数据2
             state.userSecondMsg = msg;
         },
-        setHeaderTitle(state, title) {
+        setHeaderTitle(state, title) {//设置头部title
             state.headerTitle = title;
         },
-
+        addToShopCar(state,shopCarData){//加入购物车
+            let localShopCarData=JSON.parse(localStorage.getItem('vuex'))['shopCarData'];
+            let arr=[];
+            console.log(localShopCarData.length);
+            if(!localShopCarData.length>0){
+                arr.push(shopCarData);
+                console.log("arr:",arr)
+            }else{
+                for(let sc in localShopCarData){
+                    if(localShopCarData[sc].skuId!=shopCarData.skuId){
+                        arr.push(shopCarData);
+                    }
+                }
+            }
+            state.shopCarData=arr;
+        }
     },
     actions: {
         showWarnAsync(context, warnObj) {//显示信息
@@ -211,10 +235,11 @@ const Store = new Vuex.Store({
                 token: val.token,
                 userId: val.userId,
                 userMsg: val.userMsg,
-                userSecondMsg:val.userSecondMsg
+                userSecondMsg:val.userSecondMsg,
+                shopCarData:val.shopCarData
             }
         }
-    })]
+    })],
 })
 
 export default Store

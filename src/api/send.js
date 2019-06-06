@@ -1,10 +1,10 @@
 import qs from 'qs';
 import store from '../store/store';
-import {needInterceptorService,needInterceptorHttp,notInterceptorService,notInterceptorHttp} from './axios';
+import {Service,http} from './axios';
 
 
 export const verifyLoginID = data => {//登录
-    return notInterceptorService({
+    return Service({
         url:"/user/login",
         method:'post',
         data:qs.stringify(data)
@@ -24,35 +24,38 @@ export const verifyLoginID = data => {//登录
     })
 }
 export const sendRegisterVerigyCode=data=>{//注册发送验证码
-    return notInterceptorHttp('/user/sms','post',data,data);
+    return http('/user/sms','post',data,data);
 }
 export const verigyRegisterCode=data=>{//注册验证验证码
-    return notInterceptorHttp('/user/smsValid','post',data,data);
+    return http('/user/smsValid','post',data,data);
 }
 export const submitRegisterMsg=data=>{//注册
-    return notInterceptorHttp('/user/register','post',data,data);
+    return http('/user/register','post',data,data);
 }
 export const sendVerifyCode=data=>{//忘记密码发送验证码
-    return notInterceptorHttp('/user/getPasswordCode','post',data,data);
+    return http('/user/getPasswordCode','post',data,data);
 } 
 export const setPassword=data=>{//忘记密码设置新密码
-    return notInterceptorHttp('/user/passUpdate','post',data,data);
+    return http('/user/passUpdate','post',data,data);
 } 
 export const getHomeData=data=>{//首页
-    return needInterceptorHttp('/getListB2bIndex','post',data,data);
+    return http('/getListB2bIndex','post',data,data);
 }
-export const getPersonalData=data=>{//需要登录的个人数据1-依赖登录接口
-    return needInterceptorHttp('/app/merchant/getByUserId/'+data.id,'post',data,data);
+export const getPersonalData=data=>{//个人数据1-依赖登录接口
+    return http('/app/merchant/getByUserId/'+data.id,'post',data,data);
 }
-export const getPersonalDataSecond=data=>{//需要登录的个人数据2-依赖个人数据1
-    return needInterceptorHttp('/getListOfShopByGroupId','post',data,data);
+export const getPersonalDataSecond=data=>{//个人数据2-依赖个人数据1
+    return http('/getListOfShopByGroupId','post',data,data);
 }
 export const getShopListData=data=>{//商品分类-依赖个人数据1
-    return needInterceptorHttp('/getSortInfoByStationIdV2/'+data.stationId,'post',data,data);
+    return http('/getSortInfoByStationIdV2/'+data.stationId,'post',data,data);
 }
 export const getShopBrandData=data=>{//品牌信息-依赖商品分类接口
-    return needInterceptorHttp('/getBrandInfo','post',data,data);
+    return http('/getBrandInfo','post',data,data);
 }
-export const getShopCarData=data=>{//需要登录的购物车-依赖个人数据1
-    return needInterceptorHttp('/getShoppingCart','get',data,data);
+export const getShopCarData=data=>{//购物车-依赖个人数据1+个人数据2
+    return http('/getShoppingCart','get',data,data);
+}
+export const selectShop=data=>{//选中商品接⼝-依赖个人数据1+个人数据2
+    return http('/modifyCheckState','post',data,data);
 }

@@ -8,6 +8,9 @@ import RegisterIdent from '../pages/RegisterIdent';
 import Main from '../pages/Main';
 import Home from '../pages/mainChild/Home';
 
+import PublicMain from '../pages/mainChild/PublicMain';
+import ShopDetail from '../pages/mainChild/publicChild/ShopDetail';
+
 import HomeMain from '../pages/mainChild/HomeMain';
 import SelectCityPage from '../pages/mainChild/homeChild/SelectCityPage';
 
@@ -55,11 +58,14 @@ const router = new Router({
       component: Main,
       redirect: '/main/home',
       children: [
+         //home
         {
           path: '/main/home',
           name: 'home',
           component: Home,
-        }, {
+        },
+        //homeMain
+         {
           path: '/main/homeMain',
           name: 'homeMain',
           component: HomeMain,
@@ -76,6 +82,7 @@ const router = new Router({
           name: 'shopList',
           component: ShopList,
         },
+        //shopCar
         {
           path: '/main/shopCar',
           name: 'shopCar',
@@ -84,6 +91,7 @@ const router = new Router({
             requireAuth: true
           }
         },
+        //personal
         {
           path: '/main/personal',
           name: 'personal',
@@ -91,7 +99,9 @@ const router = new Router({
           meta: {
             requireAuth: true
           }
-        }, {
+        },
+        //personalMain
+         {
           path: '/personalMain',
           name: 'personalMain',
           component: PersonalMain,

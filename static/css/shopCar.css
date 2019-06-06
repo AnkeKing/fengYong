@@ -81,10 +81,11 @@
 .scroll-box .content-box .shop-group .special-offer > hr {
   position: absolute;
   width: 100%;
-  border: 1px solid #999999;
-  transform: scaleY(0.7);
-  bottom: -0.02rem;
+  background-color: #999999;
+  transform: scaleY(0.03);
   left: 0px;
+  height: 0.01rem;
+  bottom: -0.01rem;
 }
 
 .scroll-box .content-box .shop-group .special-offer span {
@@ -140,10 +141,11 @@
 .scroll-box .content-box .shop-group .shop-msg-ul > li > hr {
   position: absolute;
   width: 100%;
-  border: 1px solid #999999;
-  transform: scaleY(0.3);
-  bottom: -0.02rem;
+  background-color: #999999;
+  transform: scaleY(0.03);
   left: 0px;
+  height: 0.01rem;
+  bottom: -0.01rem;
 }
 
 .scroll-box .content-box .shop-group .shop-msg-ul > li .shopimg-box {
@@ -162,6 +164,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  width: 70%;
 }
 
 .scroll-box .content-box .shop-group .shop-msg-ul > li .msg-box .name {
@@ -252,7 +255,7 @@
 
 .scroll-box .content-box .shop-group .shop-msg-ul > li .msg-box .count-box {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-top: 0.05rem;
 }
 
@@ -300,6 +303,8 @@
 
 .scroll-box .content-box .shop-group .shop-msg-ul > li .msg-box .count-box .select-count-box {
   display: flex;
+  height: 0.26rem;
+  align-items: center;
 }
 
 .scroll-box .content-box .shop-group .shop-msg-ul > li .msg-box .count-box .select-count-box button {
