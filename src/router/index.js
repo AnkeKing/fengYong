@@ -31,20 +31,25 @@ import store from '../store/store';
 Vue.use(Router)
 const router = new Router({
   routes: [
+    //login
     {
       path: '/login',
       name: 'login',
       component: Login
-    }, {
+    }, 
+    //setPassword
+    {
       path: '/setPassword',
       name: 'setPassword',
       component: SetPassword
     },
+    //registerHome
     {
       path: '/registerHome',
       name: 'registerHome',
       component: RegisterHome
     },
+    //registerIdent
     {
       path: '/registerIdent',
       name: 'registerIdent',
@@ -52,7 +57,9 @@ const router = new Router({
       // beforeEnter: (to, from, next) => {
       //   console.log(to);
       // }
-    }, {
+    }, 
+    //main
+    {
       path: '/',
       name: 'main',
       component: Main,
@@ -77,6 +84,7 @@ const router = new Router({
             }
           ]
         },
+         //shopList
         {
           path: '/main/shopList',
           name: 'shopList',
@@ -129,6 +137,17 @@ const router = new Router({
             },
           ]
         },
+        //publicMain 
+        {
+          path:"/publicMain",
+          name:"publicMain",
+          component:PublicMain,
+          children:[
+            {path:"/shopDetail",
+            name:"shopDetail",
+            component:ShopDetail,}
+          ]
+        }
       ]
     },
     {
@@ -138,8 +157,8 @@ const router = new Router({
   mode: 'history'
 })
 router.beforeEach((to, from, next) => {
-  if (to.meta.requireAuth) {
-    if (store.state.token) {
+  if (to.meta.requireAuth) {//判断要跳转的页面是否需要登录
+    if (store.state.token) {//如果需要则判断是否有token
       next();
     } else {
       // console.log("路由守卫传参：",to);

@@ -97,11 +97,12 @@
           </span>
         </div>
       </div>
+      <div class="toSettleAccounts">
       <button
-        class="toSettleAccounts"
+        class="footer-btn"
         :class="allCheckBool?'red':'gray'"
         :disabled="allCheckBool?true:false"
-      >去结算</button>
+      >去结算</button></div>
     </div>
   </div>
 </template>

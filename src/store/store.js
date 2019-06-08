@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import router from '../router/index';
 import createPersistedState from "vuex-persistedstate"
-import { getPersonalData,getPersonalDataSecond } from "../api/send";
+import { getPersonalData, getPersonalDataSecond, getGoodsColl,getGoodsDetail } from "../api/send";
 Vue.use(Vuex)
 const home = {//孙级
     namespaced: true,
@@ -111,7 +111,67 @@ const main = {//子级
     modules: {
         home: home,
         shopList: shopList,
-        // shopCar:shopCar
+    }
+}
+const publicMain = {
+    namespaced: true,
+    state: {
+        goodsColl: [],
+        goodsDetail:null,
+        description:[]
+    },
+    mutations: {
+        setGoodsColl(state, obj) {
+            state.goodsColl = obj;
+        },
+        setGoodsDetail(state, obj) {
+            state.goodsDetail = obj;
+        },
+        setDescription(state,arr){
+            state.description=arr;
+        }
+    },
+    actions: {
+        getGoodsColl(context, obj) {
+            getGoodsColl({
+                userId: context.rootState.userId,
+                skuId: obj.skuId,
+                source:context.rootState.userSecondMsg.source
+            }).then(res => {
+                console.log("这是什么鬼：", res);
+                context.commit("setGoodsColl", res)
+            })
+        },
+       getGoodsDetail(context, obj) {
+            // return getGoodsDetail({
+            //     skuId: obj.skuId,
+            //     stationId:context.rootState.userMsg.stationId,
+            //     userId: context.rootState.userId,
+            //     storeId:context.rootState.userSecondMsg.storeId,
+            //     merchantId:context.rootState.userMsg.merchantId,
+            //     id:context.rootState.userSecondMsg.id
+            // }).then(res => {
+                
+            //     let srcArr=[];
+            //     let initArr=res.result.description.split('"');
+            //     for(let r=0;r<initArr.length;r++){
+            //         if(initArr[r].indexOf("http")!=-1){
+            //             srcArr.push(initArr[r]);
+            //         }
+            //     }
+            //     context.commit("setDescription", srcArr);
+            //     context.commit("setGoodsDetail", res.result);
+            //     // console.log("商品详情？", context.state.goodsDetail);
+            //     return res.result;
+            // })
+        },
+
+        // async commitGoodsDetail(context,obj){
+        //     await context.dispatch("getGoodsDetail",obj);
+        //     context.commit("setGoodsDetail", dispatch("getGoodsDetail",obj));
+        // }
+    },
+    modules: {
     }
 }
 
@@ -128,8 +188,8 @@ const Store = new Vuex.Store({
         token: '',
         userId: '',
         userMsg: null,
-        userSecondMsg:null,
-        shopCarData:[],
+        userSecondMsg: null,
+        shopCarData: [],
     },
     getters: {
     },
@@ -163,27 +223,27 @@ const Store = new Vuex.Store({
         setUserMsg(state, msg) {//个人数据1
             state.userMsg = msg;
         },
-        setUserSecondMsg(state,msg){//个人数据2
+        setUserSecondMsg(state, msg) {//个人数据2
             state.userSecondMsg = msg;
         },
         setHeaderTitle(state, title) {//设置头部title
             state.headerTitle = title;
         },
-        addToShopCar(state,shopCarData){//加入购物车
-            let localShopCarData=JSON.parse(localStorage.getItem('vuex'))['shopCarData'];
-            let arr=[];
+        addToShopCar(state, shopCarData) {//加入购物车
+            let localShopCarData = JSON.parse(localStorage.getItem('vuex'))['shopCarData'];
+            let arr = [];
             console.log(localShopCarData.length);
-            if(!localShopCarData.length>0){
+            if (!localShopCarData.length > 0) {
                 arr.push(shopCarData);
-                console.log("arr:",arr)
-            }else{
-                for(let sc in localShopCarData){
-                    if(localShopCarData[sc].skuId!=shopCarData.skuId){
+                console.log("arr:", arr);
+            } else {
+                for (let sc in localShopCarData) {
+                    if (localShopCarData[sc].skuId != shopCarData.skuId) {
                         arr.push(shopCarData);
                     }
                 }
             }
-            state.shopCarData=arr;
+            state.shopCarData = arr;
         }
     },
     actions: {
@@ -205,15 +265,15 @@ const Store = new Vuex.Store({
             context.commit("setUserSecondMsg", null);
             router.replace("/login");
         },
-        getUserMsg(context,obj) {
-           return getPersonalData({ id: obj.id }).then(res => {
+        getUserMsg(context, obj) {
+            return getPersonalData({ id: obj.id }).then(res => {
                 if (res) {
                     context.commit("setUserMsg", res.result);
                     return res.result;
                 }
             })
         },
-        getUserSecondMsg(context,obj){
+        getUserSecondMsg(context, obj) {
             return getPersonalDataSecond({ groupId: obj.groupId }).then(res => {
                 if (res) {
                     context.commit("setUserSecondMsg", res.result.items[0]);
@@ -225,7 +285,8 @@ const Store = new Vuex.Store({
     modules: {
         login: login,
         register: register,
-        main: main
+        main: main,
+        publicMain: publicMain
     },
     plugins: [createPersistedState({
         reducer(val) {
@@ -235,8 +296,8 @@ const Store = new Vuex.Store({
                 token: val.token,
                 userId: val.userId,
                 userMsg: val.userMsg,
-                userSecondMsg:val.userSecondMsg,
-                shopCarData:val.shopCarData
+                userSecondMsg: val.userSecondMsg,
+                shopCarData: val.shopCarData
             }
         }
     })],

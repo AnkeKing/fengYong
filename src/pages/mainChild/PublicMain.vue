@@ -1,6 +1,7 @@
 <template>
  <div class="box">
-     
+     <app-head :backBool="true" :search="false"></app-head>
+     <router-view></router-view>
  </div>
 </template>
 

@@ -14,6 +14,9 @@ import SelectAlert from "./components/SelectAlert";
 import Slides from './components/Slides'
 import 'normalize.css'
 import { Loading } from 'vant';
+import { Swipe, SwipeItem } from 'vant';
+
+Vue.use(Swipe).use(SwipeItem);
 
 Vue.use(Loading);
 Vue.config.productionTip = false

@@ -44,7 +44,7 @@
         <div class="shop-banner-box">
           <img src="../../assets/img/lingshi-left-icon.png" v-if="listindex/2==0">
           <img src="../../assets/img/remen-left-icon.png" v-else>
-          <a :class="listindex/2==0?'green':'red'">{{list.name}}</a>
+          <a :class="listindex/2==0?'font-green':'font-red'">{{list.name}}</a>
           <img src="../../assets/img/lingshi-right-icon.png" v-if="listindex/2==0">
           <img src="../../assets/img/remen-right-icon.png" v-else>
         </div>
@@ -54,7 +54,7 @@
         <ul class="shop-content-box">
           <li v-for="obj,index in list.goodsListRecommendLocationsList">
             <!-- <span class="rcmdImg" v-show="obj.newBool">新品</span> -->
-            <img :src="obj.picsUrl" class="img">
+            <img :src="obj.picsUrl" class="img" @click="toShopDetail(obj)">
             <a class="name" v-if="obj.goodsName">{{obj.goodsName}}{{obj.specification}}</a>
             <a class="text">{{obj.dealerName}}</a>
             <span class="shop-msg-box">
@@ -81,7 +81,8 @@
 
 <script>
 import HomeHead from "../../components/HomeHead";
-import { getHomeData, getPersonalData } from "../../api/send";
+import { mapState } from "vuex";
+import { getHomeData, getPersonalData, getGoodsDetail } from "../../api/send";
 export default {
   name: "Scroll-box",
   data() {
@@ -144,7 +145,7 @@ export default {
       homeList: {
         b2bFloorVoList: []
       }, //商品分类
-      loadingText: "加载中"
+      loadingText: "加载中",
     };
   },
   methods: {
@@ -182,17 +183,30 @@ export default {
       }).then(res => {
         this.homeList = res.result;
       });
-    }
+    },
+    toShopDetail(obj) {//跳入商品详情页
+        console.log("obj",obj);
+        this.$router.push({name:"shopDetail",query:{skuId:obj.skuId}});
+    },
+  },
+  computed: {
+    ...mapState({
+      stationId: state => state.userMsg.stationId,
+      userId: state => state.userId,
+      storeId: state => state.userSecondMsg.storeId,
+      merchantId: state => state.userMsg.merchantId,
+      id: state => state.userSecondMsg.id,
+    })
   },
   mounted() {
-    if (this.$store.state.userMsg&&this.$store.state.token) {
-        this.getHomeData({
-          merchantId: this.$store.state.userMsg.merchantId,
-          siteid: this.$store.state.userMsg.stationId,
-          storeCustId: this.$store.state.userMsg.id,
-          terminal: 3,
-          storeId: this.$store.state.userMsg.storeId
-        });
+    if (this.$store.state.userMsg && this.$store.state.token) {
+      this.getHomeData({
+        merchantId: this.$store.state.userMsg.merchantId,
+        siteid: this.$store.state.userMsg.stationId,
+        storeCustId: this.$store.state.userMsg.id,
+        terminal: 3,
+        storeId: this.$store.state.userMsg.storeId
+      });
     } else {
       if (this.$store.state.token) {
         this.$store

@@ -422,16 +422,4 @@
 
 .scroll-box .settle-accounts-box .toSettleAccounts {
   width: 30%;
-  height: 0.5rem;
-  font-size: 0.16rem;
-  color: #FFFFFF;
-  border: none;
-}
-
-.scroll-box .settle-accounts-box .red {
-  background: #DD3333;
-}
-
-.scroll-box .settle-accounts-box .gray {
-  background: #999999;
 }
