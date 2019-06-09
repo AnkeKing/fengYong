@@ -68,3 +68,6 @@ export const getGoodsDetail = data => {//商品详情-依赖个人数据1+个人
 export const getGoodsParams = data => {//进入商品详情-依赖个人数据1+个人数据2
     return http('/html/getGoodsParamsBySkuId/' + data.skuId, 'get', qs.stringify(data), data);
 }
+export const join = data => {//加入购物车-依赖太多了..
+    return http('/join', 'post',data, data);
+}

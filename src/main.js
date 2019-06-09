@@ -12,6 +12,7 @@ import TabBar from './components/TabBar';
 import WarnAlert from "./components/WarnAlert";
 import SelectAlert from "./components/SelectAlert";
 import Slides from './components/Slides'
+import Sku from './components/Sku';
 import 'normalize.css'
 import { Loading } from 'vant';
 import { Swipe, SwipeItem } from 'vant';
@@ -29,6 +30,7 @@ Vue.component('appTabBar',TabBar);
 Vue.component('appSlides',Slides);
 Vue.component('appSlotHead',SlotHead);
 Vue.component('appDataLoading',DataLoading);
+Vue.component('appSku',Sku);
 
 /* eslint-disable no-new */
 new Vue({

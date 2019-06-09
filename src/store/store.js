@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import router from '../router/index';
 import createPersistedState from "vuex-persistedstate"
-import { getPersonalData, getPersonalDataSecond, getGoodsColl,getGoodsDetail } from "../api/send";
+import { getPersonalData, getPersonalDataSecond, getGoodsColl, getGoodsDetail } from "../api/send";
 Vue.use(Vuex)
 const home = {//孙级
     namespaced: true,
@@ -117,18 +117,40 @@ const publicMain = {
     namespaced: true,
     state: {
         goodsColl: [],
-        goodsDetail:null,
-        description:[]
+        goodsDetail: null,
+        orderPrice: [],
+        picsUrl: "",
+        skuBool: false,
+        quantityNum:0,
+        measurementNum:0
     },
     mutations: {
         setGoodsColl(state, obj) {
             state.goodsColl = obj;
         },
         setGoodsDetail(state, obj) {
-            state.goodsDetail = obj;
+            state.goodsDetail = obj.goodsDetail;
+            state.orderPrice = obj.orderPrice;
+            state.picsUrl = obj.picsUrl;
+            state.quantityNum= obj.quantity;
+            state.measurementNum= obj.measurement
         },
-        setDescription(state,arr){
-            state.description=arr;
+        setSkuBool(state, bool) {
+            state.skuBool = bool;
+        },
+        addShopNum(state, numObj) {
+            if(numObj.name=="quantity"){
+                state.quantityNum++;
+            }else{
+                state.measurementNum++;
+            }
+        }, 
+        minusShopNum(state, numObj) {
+            if(numObj.name=="quantity"){
+                state.quantityNum--;
+            }else{
+                state.measurementNum--;
+            }
         }
     },
     actions: {
@@ -136,40 +158,12 @@ const publicMain = {
             getGoodsColl({
                 userId: context.rootState.userId,
                 skuId: obj.skuId,
-                source:context.rootState.userSecondMsg.source
+                source: context.rootState.userSecondMsg.source
             }).then(res => {
                 console.log("这是什么鬼：", res);
                 context.commit("setGoodsColl", res)
             })
         },
-       getGoodsDetail(context, obj) {
-            // return getGoodsDetail({
-            //     skuId: obj.skuId,
-            //     stationId:context.rootState.userMsg.stationId,
-            //     userId: context.rootState.userId,
-            //     storeId:context.rootState.userSecondMsg.storeId,
-            //     merchantId:context.rootState.userMsg.merchantId,
-            //     id:context.rootState.userSecondMsg.id
-            // }).then(res => {
-                
-            //     let srcArr=[];
-            //     let initArr=res.result.description.split('"');
-            //     for(let r=0;r<initArr.length;r++){
-            //         if(initArr[r].indexOf("http")!=-1){
-            //             srcArr.push(initArr[r]);
-            //         }
-            //     }
-            //     context.commit("setDescription", srcArr);
-            //     context.commit("setGoodsDetail", res.result);
-            //     // console.log("商品详情？", context.state.goodsDetail);
-            //     return res.result;
-            // })
-        },
-
-        // async commitGoodsDetail(context,obj){
-        //     await context.dispatch("getGoodsDetail",obj);
-        //     context.commit("setGoodsDetail", dispatch("getGoodsDetail",obj));
-        // }
     },
     modules: {
     }

@@ -186,6 +186,7 @@ export default {
     },
     toShopDetail(obj) {//跳入商品详情页
         console.log("obj",obj);
+        this.$store.dispatch("publicMain/getGoodsColl",obj);
         this.$router.push({name:"shopDetail",query:{skuId:obj.skuId}});
     },
   },

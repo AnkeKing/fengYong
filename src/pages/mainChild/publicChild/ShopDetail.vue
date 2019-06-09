@@ -1,5 +1,33 @@
 <template>
   <div class="scroll-box">
+    <!-- 快速导航 -->
+    <div class="fix-nav">
+      <div class="nav-btn" @click="navBool=!navBool">
+        <img src="../../../assets/img/ic_tabs.png" v-if="!navBool">
+        <span v-else>
+          <img src="../../../assets/img/ic_tabsX.png">
+        </span>
+        <a v-if="!navBool">快速导航</a>
+      </div>
+      <ul class="show-link" v-show="navBool">
+        <router-link :to="{name:'home'}" tag="li">
+          <img src="../../../assets/img/ic_tabsGrunp(5).png">
+        </router-link>
+        <router-link :to="{name:'shopList'}" tag="li">
+          <img src="../../../assets/img/ic_tabsGrunp(3).png">
+        </router-link>
+        <router-link :to="{name:'shopCar'}" tag="li">
+          <img src="../../../assets/img/ic_tabsGrunp(4).png">
+          <a class="count-circe">4</a>
+        </router-link>
+        <router-link :to="{name:'personal'}" tag="li">
+          <img src="../../../assets/img/ic_tabsGrunp(6).png">
+        </router-link>
+        <router-link :to="{name:'home'}" tag="li">
+          <img src="../../../assets/img/ic_tabsGrunp(1).png">
+        </router-link>
+      </ul>
+    </div>
     <div class="content-box" v-if="goodsDetail&&goodsDetail.goodsOl">
       <div class="show-shop">
         <div class="shop-swiper">
@@ -15,8 +43,9 @@
           <div class="price-box">
             <span>
               <a>￥</a>
-              <a>{{goodsDetail.goodsOl.orderPrice}}</a>
-              <a>.00</a>
+              <a>{{orderPrice[0]}}.</a>
+              <a v-if="orderPrice.length>1">{{orderPrice[1]}}</a>
+              <a v-else>00</a>
             </span>
             <a>{{goodsDetail.goodsOl.minimumOrderQuantity}}{{goodsDetail.goodsOl.quantityUnit}}起批</a>
           </div>
@@ -82,7 +111,7 @@
         </li>
       </ul>
       <div class="toAddShopCar">
-        <button class="footer-btn red">加入购物车</button>
+        <button class="footer-btn red" @click="toAddShopCar">加入购物车</button>
       </div>
     </div>
   </div>
@@ -98,9 +127,11 @@ export default {
       recommendBool: true,
       normsParamsBool: false,
       shopDetail: null,
-      description: [],
-      picsUrl: [],
-      goodsDetail: null
+      description: [], //商品详情图
+      picsUrl: [], //商品展示图
+      orderPrice: [],
+      goodsDetail: null,
+      navBool: false
     };
   },
   methods: {
@@ -134,7 +165,7 @@ export default {
         for (let r = 0; r < initArr2.length; r++) {
           this.picsUrl.push({ image: initArr2[r] });
         }
-        console.log(this.goodsDetail);
+        this.orderPrice = (this.goodsDetail.goodsOl.orderPrice + "").split(".");
         return res.result;
       });
     },
@@ -144,16 +175,30 @@ export default {
         storeGlobalId: this.storeId,
         storeGroupId: this.id
       }).then(res => {
-          console.log("商品详情的第三个接口：",res);
+        console.log("商品详情的第三个接口：", res);
       });
+    },
+    toAddShopCar() {
+      this.$store.commit("publicMain/setGoodsDetail", {
+        goodsDetail: this.goodsDetail,
+        orderPrice: this.orderPrice,
+        picsUrl: this.picsUrl[0].image,
+        quantity:this.goodsDetail.goodsOl.minimumOrderQuantity,
+        measurement:this.goodsDetail.goodsOl.ratio1
+      });
+      console.log("当前展示的商品",this.goodsDetail);
+      this.$store.commit("publicMain/setSkuBool", true);
+      
     }
   },
   mounted() {
     this.getGoodsDetail({ skuId: this.$route.query.skuId });
     this.getGoodsParams({ skuId: this.$route.query.skuId });
+    
   },
   created() {
     this.$store.commit("setHeaderTitle", "商品详情");
+    this.navBool = false;
   },
   computed: {
     ...mapState({
