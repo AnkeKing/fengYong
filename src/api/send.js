@@ -53,21 +53,24 @@ export const getShopListData = data => {//商品分类-依赖个人数据1
 export const getShopBrandData = data => {//品牌信息-依赖商品分类接口
     return http('/getBrandInfo', 'post', data, data);
 }
-export const getShopCarData = data => {//购物车-依赖个人数据1+个人数据2
+export const getShopCarData = data => {//购物车
     return http('/getShoppingCart', 'get', data, data);
 }
-export const selectShop = data => {//check选中商品-依赖个人数据1+个人数据2
+export const selectShop = data => {//check选中商品
     return http('/modifyCheckState', 'post', data, data);
 }
 export const getGoodsColl = data => {//咱也不知道这是啥
     return http('/goodsColl/collected', 'post', data, data);
 }
-export const getGoodsDetail = data => {//商品详情-依赖个人数据1+个人数据2+商品的skuId
+export const getGoodsDetail = data => {//商品详情
     return http('/goodsDetail/' + data.skuId + "/" + data.stationId + "/" + data.userId + "/" + data.storeId + "/" + data.merchantId + "/" + data.id, 'get', data, data);
 }
-export const getGoodsParams = data => {//进入商品详情-依赖个人数据1+个人数据2
+export const getGoodsParams = data => {//进入商品详情 --error
     return http('/html/getGoodsParamsBySkuId/' + data.skuId, 'get', qs.stringify(data), data);
 }
-export const join = data => {//加入购物车-依赖太多了..
+export const join = data => {//加入购物车
     return http('/join', 'post',data, data);
+}
+export const modify = data => {//加入购物车-依赖
+    return http('/modify', 'post',data, data);
 }

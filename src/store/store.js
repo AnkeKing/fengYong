@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import router from '../router/index';
 import createPersistedState from "vuex-persistedstate"
-import { getPersonalData, getPersonalDataSecond, getGoodsColl, getGoodsDetail } from "../api/send";
+import { getPersonalData, getPersonalDataSecond, getGoodsColl, getShopCarData } from "../api/send";
 Vue.use(Vuex)
 const home = {//孙级
     namespaced: true,
@@ -117,14 +117,25 @@ const publicMain = {
     namespaced: true,
     state: {
         goodsColl: [],
-        goodsDetail: null,
+        goodsDetail: null,//商品详情
         orderPrice: [],
         picsUrl: "",
         skuBool: false,
-        quantityNum:0,
-        measurementNum:0
+        quantityNum: 0,
+        measurementNum: 0,
+        shopCarAmount: 0,
+        shopCarData: [
+            {
+                validShoppingCartDealerVos: [
+                    { groupGoodsVoList: [{ shoppingCartGoodsResponseVo: "" }] }
+                ]
+            }
+        ],
     },
     mutations: {
+        setShopCarAmount(state, num) {
+            state.shopCarAmount = num;
+        },
         setGoodsColl(state, obj) {
             state.goodsColl = obj;
         },
@@ -132,25 +143,28 @@ const publicMain = {
             state.goodsDetail = obj.goodsDetail;
             state.orderPrice = obj.orderPrice;
             state.picsUrl = obj.picsUrl;
-            state.quantityNum= obj.quantity;
-            state.measurementNum= obj.measurement
+            state.quantityNum = obj.quantity;
+            state.measurementNum = obj.measurement
         },
         setSkuBool(state, bool) {
             state.skuBool = bool;
         },
         addShopNum(state, numObj) {
-            if(numObj.name=="quantity"){
+            if (numObj.name == "quantity") {
                 state.quantityNum++;
-            }else{
+            } else {
                 state.measurementNum++;
             }
-        }, 
+        },
         minusShopNum(state, numObj) {
-            if(numObj.name=="quantity"){
+            if (numObj.name == "quantity") {
                 state.quantityNum--;
-            }else{
+            } else {
                 state.measurementNum--;
             }
+        },
+        setShopCarData(state, obj) {
+            state.shopCarData = obj
         }
     },
     actions: {
@@ -164,6 +178,22 @@ const publicMain = {
                 context.commit("setGoodsColl", res)
             })
         },
+        getShopCarData(context) {
+            return getShopCarData({
+                userId: context.rootState.userMsg.userId,
+                merchantId: context.rootState.userMsg.merchantId,
+                siteId: context.rootState.userMsg.stationId,
+                shopId: context.rootState.userSecondMsg.storeId,
+                provId: context.rootState.userSecondMsg.province,
+                cityId: context.rootState.userSecondMsg.city,
+                countyId: context.rootState.userSecondMsg.county,
+                streetId: context.rootState.userSecondMsg.town,
+                storeId: context.rootState.userSecondMsg.id
+            }).then(res => {
+                context.commit("setShopCarData", res.result);
+                return res.result;
+            });
+        }
     },
     modules: {
     }

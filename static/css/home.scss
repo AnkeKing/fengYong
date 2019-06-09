@@ -325,6 +325,7 @@ $bgc: background-color;
             -webkit-line-clamp: 1; /* 限制在一个块元素显示的文本的行数 */
             -webkit-box-orient: vertical; /* 垂直排列 */
             word-break: break-all;
+            white-space: nowrap;
           }
 
           .text::after {

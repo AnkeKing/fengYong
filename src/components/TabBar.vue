@@ -5,12 +5,14 @@
         <img :src="item.defaultImg"v-if="item.name!==$route.name":class='item.name=="shopList"?"specialImg":""'>
         <img :src="item.selectedImg"v-else :class='item.name=="shopList"?"specialImg":""'>
         <a>{{item.title}}</a>
+        <a class="count-circe"v-if="item.name=='shopCar'">{{}}</a>
       </router-link>
     </ul>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "Tab-bar",
   data() {
@@ -40,6 +42,18 @@ export default {
         }
       ]
     };
+  },
+   mounted() {
+    this.$store.dispatch("publicMain/getShopCarData");
+    for(let x in this.shopCarAmount) {
+      console.log(x);
+    }
+     console.log("???");
+  },
+  computed: {
+    ...mapState({
+      shopCarData:state=>state.publicMain.shopCarData
+    })
   },
   components: {}
 };
@@ -71,6 +85,7 @@ export default {
       flex-direction: column;
       justify-content: space-around;
       align-items: center;
+      position: relative;
       img {
         width: 0.3rem;
       }
@@ -82,6 +97,16 @@ export default {
         font-size: 0.11rem;
         color: #666666;
         margin-top: 0.05rem;
+      }
+      .count-circe{
+        font-size: 0.12rem;
+        color: #ffffff !important;
+        position: absolute;
+        right: -0.11rem;
+        top: -0.02rem;
+        width: 0.17rem;
+        height: 0.17rem;
+        opacity: 0.8;
       }
     }
     .current-select{
