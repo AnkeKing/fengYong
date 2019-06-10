@@ -5,7 +5,7 @@
         <img :src="item.defaultImg"v-if="item.name!==$route.name":class='item.name=="shopList"?"specialImg":""'>
         <img :src="item.selectedImg"v-else :class='item.name=="shopList"?"specialImg":""'>
         <a>{{item.title}}</a>
-        <a class="count-circe"v-if="item.name=='shopCar'">{{}}</a>
+        <a class="count-circe"v-if="item.name=='shopCar'&&shopCarData.goodsCount>0">{{shopCarData.goodsCount}}</a>
       </router-link>
     </ul>
   </div>
@@ -40,15 +40,14 @@ export default {
           selectedImg:require('../assets/img/ic_my_selected.png'),
           name:'personal'
         }
-      ]
+      ],
     };
   },
    mounted() {
     this.$store.dispatch("publicMain/getShopCarData");
-    for(let x in this.shopCarAmount) {
-      console.log(x);
-    }
-     console.log("???");
+  },
+  created(){
+      // this.$store.dispatch("publicMain/getShopCarData");
   },
   computed: {
     ...mapState({

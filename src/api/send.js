@@ -1,6 +1,6 @@
 import qs from 'qs';
 import store from '../store/store';
-import { Service, http } from './axios';
+import { Service, http,specialHttp } from './axios';
 
 
 export const verifyLoginID = data => {//登录
@@ -66,7 +66,7 @@ export const getGoodsDetail = data => {//商品详情
     return http('/goodsDetail/' + data.skuId + "/" + data.stationId + "/" + data.userId + "/" + data.storeId + "/" + data.merchantId + "/" + data.id, 'get', data, data);
 }
 export const getGoodsParams = data => {//进入商品详情 --error
-    return http('/html/getGoodsParamsBySkuId/' + data.skuId, 'get', qs.stringify(data), data);
+    return specialHttp('/html/getGoodsParamsBySkuId/' + data.skuId, 'get', qs.stringify(data), data);
 }
 export const join = data => {//加入购物车
     return http('/join', 'post',data, data);

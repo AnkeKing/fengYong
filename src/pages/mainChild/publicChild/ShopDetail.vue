@@ -18,7 +18,7 @@
         </router-link>
         <router-link :to="{name:'shopCar'}" tag="li">
           <img src="../../../assets/img/ic_tabsGrunp(4).png">
-          <a class="count-circe">4</a>
+          <a class="count-circe"v-if="shopCarData.goodsCount>0">{{shopCarData.goodsCount}}</a>
         </router-link>
         <router-link :to="{name:'personal'}" tag="li">
           <img src="../../../assets/img/ic_tabsGrunp(6).png">
@@ -74,23 +74,8 @@
             <img :src="s.image">
           </li>
         </ul>
-        <ul class="shop-norms-params" v-if="normsParamsBool">
-          <li>
-            <a>产地</a>
-            <a>中国大陆</a>
-            <hr>
-          </li>
-          <li>
-            <a>包装</a>
-            <a>盒装</a>
-            <hr>
-          </li>
-          <li>
-            <a>生产日期</a>
-            <a>2019年02月24日</a>
-            <hr>
-          </li>
-        </ul>
+        <div class="shop-norms-params"v-html="goodsParams" v-if="normsParamsBool&&goodsParams.indexOf('span')!=-1">{{goodsParams}}</div>
+        <div class="shop-norms-none"v-if="normsParamsBool&&goodsParams.indexOf('span')==-1">暂无规格参数</div>
       </div>
     </div>
     <div class="footer">
@@ -104,14 +89,15 @@
           <img src="../../../assets/img/ic_collect_defult.png">
           <a>收藏</a>
         </li>
-        <li>
+        <router-link :to="{name:'shopCar'}" tag="li">
           <img src="../../../assets/img/ic_shoppingCart.png">
-          <a class="count-circe">4</a>
+          <a class="count-circe"v-if="shopCarData.goodsCount>0">{{shopCarData.goodsCount}}</a>
           <a>购物车</a>
-        </li>
+        </router-link>
       </ul>
-      <div class="toAddShopCar">
-        <button class="footer-btn red" @click="toAddShopCar">加入购物车</button>
+      <div class="toAddShopCar"v-if="goodsDetail">
+        <button class="footer-btn red" @click="toAddShopCar"v-if="goodsDetail.skuSaleNum>0">加入购物车</button>
+        <button class="footer-btn gray"v-else>补货中</button>
       </div>
     </div>
   </div>
@@ -131,18 +117,22 @@ export default {
       picsUrl: [], //商品展示图
       orderPrice: [],
       goodsDetail: null,
-      navBool: false
+      navBool: false,
+      goodsParams:""
     };
   },
   methods: {
+    //显示商品介绍
     showRecommend() {
       this.recommendBool = true;
       this.normsParamsBool = false;
     },
+    //显示商品规格参数
     showNormsParams() {
       this.recommendBool = false;
       this.normsParamsBool = true;
     },
+    //商品详情
     getGoodsDetail(obj) {
       return getGoodsDetail({
         skuId: obj.skuId,
@@ -169,13 +159,14 @@ export default {
         return res.result;
       });
     },
+    //商品规格参数
     getGoodsParams(obj) {
       getGoodsParams({
         skuId: obj.skuId,
         storeGlobalId: this.storeId,
         storeGroupId: this.id
       }).then(res => {
-        console.log("商品详情的第三个接口：", res);
+        this.goodsParams=res.substring(res.indexOf('<div class="lis"'),res.indexOf('</body>'));
       });
     },
     toAddShopCar() {
@@ -192,9 +183,10 @@ export default {
     }
   },
   mounted() {
-    this.getGoodsDetail({ skuId: this.$route.query.skuId });
+    this.getGoodsDetail({ skuId: this.$route.query.skuId }).then(res=>{
+      console.log("uuuuu",res);
+    });
     this.getGoodsParams({ skuId: this.$route.query.skuId });
-    
   },
   created() {
     this.$store.commit("setHeaderTitle", "商品详情");
@@ -206,7 +198,8 @@ export default {
       userId: state => state.userId,
       storeId: state => state.userSecondMsg.storeId,
       merchantId: state => state.userMsg.merchantId,
-      id: state => state.userSecondMsg.id
+      id: state => state.userSecondMsg.id,
+      shopCarData:state=>state.publicMain.shopCarData
     })
   },
   components: {}

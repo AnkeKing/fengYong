@@ -1,7 +1,6 @@
 <template>
   <div class="scroll-box" @click="showListBool=false">
     <app-head :backBool="false" :search="false"></app-head>
-    <app-loading :loadingText="loadingText"></app-loading>
     <app-Select-alert></app-Select-alert>
     <div class="content-box">
       <div class="logoBox">
@@ -82,7 +81,6 @@ export default {
       loginBtn: true,
       showListBool: false,
       lookPass: false,
-      loadingText: "登录中",
       nextPath: false
     };
   },

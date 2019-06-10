@@ -25,9 +25,7 @@ Service.interceptors.request.use(config => {
 
 Service.interceptors.response.use(response => {
     store.commit("showLoading", false);
-    if (response.data.status.statusCode === 1895001) {
-        store.dispatch('logoutHandle');
-    }
+    
     return response;
 }, error => {
     if (error.message.includes('timeout')) {   // 判断请求异常信息中是否含有超时timeout字符串
@@ -83,6 +81,8 @@ function http(url, method, data, params) {
     }).then(res => {
         if (res.data.status.statusCode === 0) {
             return res.data;
+        }else if(res.data.status.statusCode === 1895001){
+            store.dispatch('logoutHandle');
         } else {
             store.dispatch("showWarnAsync", {//提示信息
                 warnBool: true,
@@ -94,6 +94,26 @@ function http(url, method, data, params) {
         Promise.reject(error);
     })
 }
+function specialHttp(url, method, data, params) {
+    return Service({
+        url: url,
+        method: method,
+        data: data,
+        params,
+    }).then(res => {
+        if (res.status === 200) {
+            return res.data;
+        }else {
+            store.dispatch("showWarnAsync", {//提示信息
+                warnBool: true,
+                warnText: res.statusText,
+            });
+            return false;
+        }
+    }).catch(error=>{
+        Promise.reject(error);
+    })
+}
 
-export { Service,http }
+export { Service,http,specialHttp}
 

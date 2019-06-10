@@ -2,14 +2,13 @@
   <div class="scroll-box">
     <app-head :backBool="false" :search="false"></app-head>
     <div class="content-box">
-      <div class="shop-none" v-if="shopCarData.validShoppingCartDealerVos.length<=0"
-        v-for="obj,cartIndex in shopCarData.validShoppingCartDealerVos"
-        >
+      <div class="shop-none" v-if="shopCarData.validShoppingCartDealerVos.length<=0">
         <span>
           <img src="../../assets/img/Page 1 Copy.png">
         </span>
         <a>您的购物车暂无商品</a>
       </div>
+
       <div
         class="shop-group"
         v-if="shopCarData.validShoppingCartDealerVos.length>0"
@@ -20,7 +19,7 @@
         <!-- 公司信息 -->
         <div class="company">
           <span>
-            <input type="checkbox" @click="partCheck(cartIndex)" ref="companyCheck">
+            <input type="checkbox" @click="componyCheck(cartIndex)" ref="companyCheck">
             <a>{{obj.dealerName}}</a>
             <img src="../../assets/img/ic-next-left.png">
           </span>
@@ -46,9 +45,14 @@
               type="checkbox"
               @click="selectSingleShop(shop,shopIndex)"
               ref="singleShopChecked"
+              :disabled="shop.inStock?false:true"
+              v-model="shop.choiceOrNo"
             >
             <div class="shopimg-box">
               <img :src="shop.picUrl">
+              <div class="outOfStock" v-if="!shop.inStock">
+                <span>无货</span>
+              </div>
             </div>
             <div class="msg-box">
               <a class="name">{{shop.goodsName}}</a>
@@ -101,7 +105,7 @@
           <a>￥{{obj.totalAmount}}</a>
           <span>
             <a>已省：</a>
-            <a>-￥55.00</a>
+            <a>-￥{{obj.savedAmount}}</a>
           </span>
         </div>
       </div>
@@ -118,13 +122,13 @@
             <a>合计:</a>
             <span class="total-money">
               <a>￥</a>
-              <a>530.00</a>
+              <a>{{shopCarData.totalAmount}}</a>
             </span>
           </span>
           <span class="saved-money">
             <a>已省:</a>
             <a>-￥</a>
-            <a>80.00</a>
+            <a>{{shopCarData.savedAmount}}</a>
           </span>
         </div>
       </div>
@@ -146,11 +150,18 @@ export default {
   name: "Scroll-box",
   data() {
     return {
-      allCheckBool: true,
+      allCheckBool: true
     };
   },
   mounted() {
     this.$store.dispatch("publicMain/getShopCarData");
+    console.log("购物车总数据：", this.shopCarData);
+    // for(let x in this.shopCarData.validShoppingCartDealerVos){
+    //   for(let s in this.shopCarData.validShoppingCartDealerVos[x].groupGoodsVoList[0].shoppingCartGoodsResponseVo){
+
+    //  }
+    //   console.log("xxx",this.shopCarData.validShoppingCartDealerVos[x]);
+    // }
   },
   computed: {
     ...mapState({
@@ -158,8 +169,27 @@ export default {
       userMsg: state => state.userMsg,
       userSecondMsg: state => state.userSecondMsg,
       groupId: state => state.userMsg.groupId,
-      shopCarData:state=>state.publicMain.shopCarData
-    })
+      shopCarData: state => state.publicMain.shopCarData
+    }),
+    // setAllCheckBool() {
+    //   let currentCompony = this.shopCarData.validShoppingCartDealerVos;
+    //   for (let c in currentCompony) {
+    //     let currentComponyShop =
+    //     currentCompony[c].groupGoodsVoList[0].shoppingCartGoodsResponseVo;
+    //     if (!this.$refs.companyCheck[c].checked) {
+    //       return false;
+    //     } else {
+    //       for (let s in currentComponyShop) {
+    //         if(!currentComponyShop[s].choiceOrNo){
+    //           return false;
+    //         }else{
+    //           return true;
+    //         }
+    //       }
+    //     }
+        
+    //   }
+    // }
   },
   methods: {
     selectShop(userMsg, userSecondMsg, shopObj, checkBool) {
@@ -176,20 +206,21 @@ export default {
         isCheck: checkBool,
         skuIds: shopObj.skuId
       }).then(res => {
+        this.$store.commit("publicMain/setShopCarData", res.result);
         console.log("选中商品：", res);
       });
     },
     //全部选择
     allCheck() {
-      // if (this.allCheckBool === true) {
-      //   this.allCheckBool = false;
-      //   this.companyCheckBool = false;
-      //   this.shopCheckBool = false;
-      // } else {
-      //   this.allCheckBool = true;
-      //   this.companyCheckBool = true;
-      //   this.shopCheckBool = true;
-      // }
+      this.allCheckBool = !this.allCheckBool;
+      let currentCompony = this.shopCarData.validShoppingCartDealerVos; //当前商品
+      for (let c in currentCompony) {
+        this.$refs.companyCheck[c].checked = this.allCheckBool;
+        let currentComponyShop =
+          currentCompony[c].groupGoodsVoList[0].shoppingCartGoodsResponseVo;
+        for (let s in currentComponyShop)
+          currentComponyShop[s].choiceOrNo = this.allCheckBool;
+      }
     },
     //选择单个商品
     selectSingleShop(shopObj, shopIndex) {
@@ -198,36 +229,86 @@ export default {
         this.userMsg,
         this.userSecondMsg,
         shopObj,
+        !shopObj.choiceOrNo
+        // this.$refs.singleShopChecked[shopIndex].checked
+      );
+      console.log(
+        "单选框的checked",
         this.$refs.singleShopChecked[shopIndex].checked
       );
+      console.log("当前的当前", shopObj);
+    },
+    //公司局部选择
+    componyCheck(cartIndex) {
+      let currentComponyCheck = this.$refs.companyCheck[cartIndex].checked;
+      let currentComponyShop = this.shopCarData.validShoppingCartDealerVos[
+        cartIndex
+      ].groupGoodsVoList[0].shoppingCartGoodsResponseVo; //当前商品
+      for (let c in currentComponyShop) {
+        currentComponyShop[c].choiceOrNo = currentComponyCheck;
+      }
+      if (!currentComponyCheck) {
+        this.allCheckBool = false;
+      }
     },
 
     add(cartIndex, shopIndex) {
       let currentShop = this.shopCarData.validShoppingCartDealerVos[cartIndex]
-        .groupGoodsVoList[0].shoppingCartGoodsResponseVo[shopIndex];
-      let firstNum=currentShop.firstQuantity;
-      firstNum++;
-      this.modify(currentShop,firstNum);
+        .groupGoodsVoList[0].shoppingCartGoodsResponseVo[shopIndex]; //当前商品
+      let firstNum = currentShop.totalQuantity;
+      let minQuantity = parseInt(
+        currentShop.integerZeroConvert.substring(
+          currentShop.integerZeroConvert.indexOf("=") + 1,
+          currentShop.integerZeroConvert.indexOf(currentShop.firstUnit)
+        )
+      );
+      if (
+        currentShop.inStock &&
+        currentShop.stock > currentShop.totalQuantity
+      ) {
+        firstNum++;
+        this.modify(currentShop, firstNum);
+      } else {
+        this.$store.dispatch("showWarnAsync", {
+          warnBool: true,
+          warnText: "商品库存不足"
+        });
+      }
     },
     minus(cartIndex, shopIndex) {
       let currentShop = this.shopCarData.validShoppingCartDealerVos[cartIndex]
         .groupGoodsVoList[0].shoppingCartGoodsResponseVo[shopIndex];
-      let firstNum=currentShop.firstQuantity;
-      if (currentShop.firstQuantity >= firstNum) {
+      console.log("currentShop", currentShop);
+      let minQuantity = parseInt(
+        currentShop.integerZeroConvert.substring(
+          currentShop.integerZeroConvert.indexOf("=") + 1,
+          currentShop.integerZeroConvert.indexOf(currentShop.firstUnit)
+        )
+      );
+      let firstNum = currentShop.totalQuantity;
+      if (currentShop.inStock) {
+        if (minQuantity >= currentShop.totalQuantity) {
+          this.$store.dispatch("showWarnAsync", {
+            warnBool: true,
+            warnText:
+              "至少购买" +
+              currentShop.minimumOrderQuantity +
+              currentShop.secondUnit
+          });
+        } else {
+          firstNum--;
+          this.modify(currentShop, firstNum);
+          console.log("怎么肥四??", firstNum);
+        }
+      } else {
         this.$store.dispatch("showWarnAsync", {
           warnBool: true,
-          warnText:
-            "至少购买" +
-            currentShop.firstQuantity +
-            currentShop.firstUnit
+          warnText: "商品库存不足"
         });
-      } else {
-        firstNum--;
-        this.modify(currentShop,firstNum);
       }
     },
-    modify(currentShop,firstNum) {
-      
+    //修改购物车的商品数量
+    modify(currentShop, firstNum) {
       modify({
         choiceOrNo: true,
         cityId: this.userMsg.cityId,
@@ -238,17 +319,18 @@ export default {
         firstUnit: currentShop.firstUnit,
         merchantId: this.userMsg.merchantId,
         provId: this.userMsg.provinceId,
-        secondQuantity: currentShop.secondQuantity,
-        secondUnit: currentShop.secondUnit,
+        secondQuantity: 0,
+        secondUnit: 0,
         shopId: this.userSecondMsg.id,
         siteId: this.userMsg.stationId,
         skuId: currentShop.skuId,
         storeId: this.userSecondMsg.storeId,
         streetId: this.userSecondMsg.town,
-        thirdQuantity: currentShop.thirdQuantity,
-        thirdUnit: currentShop.thirdUnit,
+        thirdQuantity: 0,
+        thirdUnit: 0,
         userId: this.userId
       }).then(res => {
+        this.$store.commit("publicMain/setShopCarData", res.result);
         console.log("修改已加入购物车的数量：", res);
       });
     }

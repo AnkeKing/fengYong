@@ -154,10 +154,35 @@
             width: 1rem;
             height: 1rem;
             margin: 0 0.1rem 0 0.07rem;
+            position: relative;
 
             img {
               width: 100%;
               height: 100%;
+            }
+
+            .outOfStock {//无货标识
+              width: 100%;
+              height: 100%;
+              background: rgba(255, 255, 255, 0.27);
+              position: absolute;
+              top: 0rem;
+              left: 0rem;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+
+              >span {
+                width: 0.4rem;
+                height: 0.4rem;
+                background: rgba(0, 0, 0, 0.50);
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 0.14rem;
+                color: rgba(255, 255, 255, 0.80);
+              }
             }
           }
 
@@ -357,6 +382,7 @@
           }
         }
       }
+
       //总价
       .total-price-box {
         width: 100%;
@@ -365,13 +391,14 @@
         flex-direction: column;
         align-items: flex-end;
         background-color: #ffffff;
+
         >a {
           margin-bottom: 0.05rem;
           font-size: 0.16rem;
           font-weight: bold;
           color: #333333;
         }
-  
+
         >span {
           a {
             font-size: 0.12rem;
@@ -380,14 +407,16 @@
         }
       }
     }
+
     //购物车无商品
-    .shop-none{
+    .shop-none {
       display: flex;
       justify-items: center;
       flex-direction: column;
       align-items: center;
       margin-top: 1.3rem;
-      >span{
+
+      >span {
         width: 0.5rem;
         height: 0.5rem;
         border-radius: 50%;
@@ -397,11 +426,13 @@
         justify-content: center;
         align-items: center;
         margin-bottom: 0.15rem;
-        img{
+
+        img {
           width: 0.27rem;
         }
       }
-      >a{
+
+      >a {
         font-size: 0.12rem;
         color: #999999;
       }

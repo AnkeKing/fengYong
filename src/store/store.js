@@ -124,13 +124,13 @@ const publicMain = {
         quantityNum: 0,
         measurementNum: 0,
         shopCarAmount: 0,
-        shopCarData: [
-            {
-                validShoppingCartDealerVos: [
-                    { groupGoodsVoList: [{ shoppingCartGoodsResponseVo: "" }] }
-                ]
-            }
-        ],
+        shopCarData:
+        {
+            validShoppingCartDealerVos: [
+
+            ]
+        }
+        ,
     },
     mutations: {
         setShopCarAmount(state, num) {
@@ -164,12 +164,25 @@ const publicMain = {
             }
         },
         setShopCarData(state, obj) {
-            state.shopCarData = obj
+            state.shopCarData = obj;
+            let currentCompony = state.shopCarData.validShoppingCartDealerVos;
+            for (let c in currentCompony) {
+                let currentComponyShop =
+                    currentCompony[c].groupGoodsVoList[0].shoppingCartGoodsResponseVo;
+                let an = currentComponyShop.every(function (v, i, a) {
+                    console.log("v", v);
+                    console.log("i", i);
+                    console.log("a", a);
+                    // return typeof(v)=="string";
+                })
+            }
+
+            // state.shopCarData.
         }
     },
     actions: {
         getGoodsColl(context, obj) {
-            getGoodsColl({
+            return getGoodsColl({
                 userId: context.rootState.userId,
                 skuId: obj.skuId,
                 source: context.rootState.userSecondMsg.source
@@ -188,7 +201,7 @@ const publicMain = {
                 cityId: context.rootState.userSecondMsg.city,
                 countyId: context.rootState.userSecondMsg.county,
                 streetId: context.rootState.userSecondMsg.town,
-                storeId: context.rootState.userSecondMsg.id
+                storeId: context.rootState.userSecondMsg.id,
             }).then(res => {
                 context.commit("setShopCarData", res.result);
                 return res.result;
