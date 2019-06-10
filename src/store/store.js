@@ -166,18 +166,32 @@ const publicMain = {
         setShopCarData(state, obj) {
             state.shopCarData = obj;
             let currentCompony = state.shopCarData.validShoppingCartDealerVos;
-            for (let c in currentCompony) {
+            for (let c in currentCompony) {//设置公司bool
                 let currentComponyShop =
                     currentCompony[c].groupGoodsVoList[0].shoppingCartGoodsResponseVo;
-                let an = currentComponyShop.every(function (v, i, a) {
-                    console.log("v", v);
-                    console.log("i", i);
-                    console.log("a", a);
-                    // return typeof(v)=="string";
+                let dicideBool = currentComponyShop.every(function (v, i, a) {
+                    return v.choiceOrNo === true;
                 })
+                if (dicideBool) {
+                    state.shopCarData.validShoppingCartDealerVos[c].componyBool = true;
+                } else {
+                    state.shopCarData.validShoppingCartDealerVos[c].componyBool = false;
+                }
             }
+            let alldicideBool = currentCompony.every(function (cv, i, a) {
+                return cv.componyBool === true && cv.groupGoodsVoList[0].shoppingCartGoodsResponseVo.every(function (sv, i, a) {
+                    return sv.choiceOrNo === true;
+                })
+            })
+            if (alldicideBool) {
+                state.shopCarData.allSelectBool = true;
+            } else {
+                state.shopCarData.allSelectBool = false;
+            }
+        },
+        setComponyBool(state, componyObj) {
+            state.shopCarData.validShoppingCartDealerVos[componyObj.index].componyBool = componyObj.bool;
 
-            // state.shopCarData.
         }
     },
     actions: {
@@ -206,6 +220,10 @@ const publicMain = {
                 context.commit("setShopCarData", res.result);
                 return res.result;
             });
+        },
+        updateBool(context, obj) {
+            context.commit("setComponyBool", obj.componyObj);
+            context.commit('setShopCarData', obj.shopCarData);
         }
     },
     modules: {

@@ -2,6 +2,7 @@
   <div class="scroll-box">
     <app-head :backBool="false" :search="false"></app-head>
     <div class="content-box">
+      <!-- 购物车暂无商品 -->
       <div class="shop-none" v-if="shopCarData.validShoppingCartDealerVos.length<=0">
         <span>
           <img src="../../assets/img/Page 1 Copy.png">
@@ -19,7 +20,12 @@
         <!-- 公司信息 -->
         <div class="company">
           <span>
-            <input type="checkbox" @click="componyCheck(cartIndex)" ref="companyCheck">
+            <input
+              type="checkbox"
+              @click="selectPartShop(cartIndex)"
+              ref="companyCheck"
+              v-model="obj.componyBool"
+            >
             <a>{{obj.dealerName}}</a>
             <img src="../../assets/img/ic-next-left.png">
           </span>
@@ -43,7 +49,7 @@
             <hr>
             <input
               type="checkbox"
-              @click="selectSingleShop(shop,shopIndex)"
+              @click="selectSingleShop(shop)"
               ref="singleShopChecked"
               :disabled="shop.inStock?false:true"
               v-model="shop.choiceOrNo"
@@ -114,8 +120,8 @@
     <div class="settle-accounts-box">
       <div class="price-sum">
         <div>
-          <input type="checkbox" v-model="allCheckBool" @click="allCheck">
-          <a @click="allCheck">全选</a>
+          <input type="checkbox" v-model="shopCarData.allSelectBool" @click="selectAllShop">
+          <a @click="selectAllShop">全选</a>
         </div>
         <div>
           <span class="total">
@@ -156,12 +162,6 @@ export default {
   mounted() {
     this.$store.dispatch("publicMain/getShopCarData");
     console.log("购物车总数据：", this.shopCarData);
-    // for(let x in this.shopCarData.validShoppingCartDealerVos){
-    //   for(let s in this.shopCarData.validShoppingCartDealerVos[x].groupGoodsVoList[0].shoppingCartGoodsResponseVo){
-
-    //  }
-    //   console.log("xxx",this.shopCarData.validShoppingCartDealerVos[x]);
-    // }
   },
   computed: {
     ...mapState({
@@ -170,88 +170,75 @@ export default {
       userSecondMsg: state => state.userSecondMsg,
       groupId: state => state.userMsg.groupId,
       shopCarData: state => state.publicMain.shopCarData
-    }),
-    // setAllCheckBool() {
-    //   let currentCompony = this.shopCarData.validShoppingCartDealerVos;
-    //   for (let c in currentCompony) {
-    //     let currentComponyShop =
-    //     currentCompony[c].groupGoodsVoList[0].shoppingCartGoodsResponseVo;
-    //     if (!this.$refs.companyCheck[c].checked) {
-    //       return false;
-    //     } else {
-    //       for (let s in currentComponyShop) {
-    //         if(!currentComponyShop[s].choiceOrNo){
-    //           return false;
-    //         }else{
-    //           return true;
-    //         }
-    //       }
-    //     }
-        
-    //   }
-    // }
+    })
   },
   methods: {
-    selectShop(userMsg, userSecondMsg, shopObj, checkBool) {
+    //接口方法
+    selectShop(shopObj, checkBool) {
       selectShop({
         userId: shopObj.userId,
         merchantId: shopObj.merchantId,
-        siteId: userMsg.stationId,
-        shopId: userSecondMsg.storeId,
-        provId: userSecondMsg.province,
-        cityId: userSecondMsg.city,
-        countyId: userSecondMsg.county,
-        streetId: userSecondMsg.town,
-        storeId: userSecondMsg.id,
+        siteId: this.userMsg.stationId,
+        shopId: this.userSecondMsg.storeId,
+        provId: this.userSecondMsg.province,
+        cityId: this.userSecondMsg.city,
+        countyId: this.userSecondMsg.county,
+        streetId: this.userSecondMsg.town,
+        storeId: this.userSecondMsg.id,
         isCheck: checkBool,
         skuIds: shopObj.skuId
       }).then(res => {
         this.$store.commit("publicMain/setShopCarData", res.result);
-        console.log("选中商品：", res);
       });
     },
-    //全部选择
-    allCheck() {
-      this.allCheckBool = !this.allCheckBool;
-      let currentCompony = this.shopCarData.validShoppingCartDealerVos; //当前商品
-      for (let c in currentCompony) {
-        this.$refs.companyCheck[c].checked = this.allCheckBool;
-        let currentComponyShop =
-          currentCompony[c].groupGoodsVoList[0].shoppingCartGoodsResponseVo;
-        for (let s in currentComponyShop)
-          currentComponyShop[s].choiceOrNo = this.allCheckBool;
+    //选择商品封装方法
+    kingSelectShop(selectType, ...obj) {
+      if (selectType === "single") {
+        this.selectShop(obj[0], !obj[0].choiceOrNo);
+      } else if (selectType === "part") {
+        for (let c in obj[0]) {
+          this.selectShop(obj[0][c], obj[1]);
+        }
+      } else {
+        for (let c in obj[0]) {
+          let currentComponyShop = this.shopCarData.validShoppingCartDealerVos[
+            c
+          ].groupGoodsVoList[0].shoppingCartGoodsResponseVo; //当前商品
+          for (let s in currentComponyShop) {
+            this.selectShop(currentComponyShop[s], obj[1]);
+          }
+        }
       }
     },
-    //选择单个商品
-    selectSingleShop(shopObj, shopIndex) {
-      this.$store.commit("addToShopCar", shopObj);
-      this.selectShop(
-        this.userMsg,
-        this.userSecondMsg,
-        shopObj,
-        !shopObj.choiceOrNo
-        // this.$refs.singleShopChecked[shopIndex].checked
-      );
-      console.log(
-        "单选框的checked",
-        this.$refs.singleShopChecked[shopIndex].checked
-      );
-      console.log("当前的当前", shopObj);
+    //单个商品选择
+    selectSingleShop(shopObj) {
+      this.kingSelectShop("single", shopObj);
     },
     //公司局部选择
-    componyCheck(cartIndex) {
-      let currentComponyCheck = this.$refs.companyCheck[cartIndex].checked;
+    selectPartShop(cartIndex) {
+      let currentComponyBool = this.shopCarData.validShoppingCartDealerVos[
+        cartIndex
+      ].componyBool; //当前公司的bool
       let currentComponyShop = this.shopCarData.validShoppingCartDealerVos[
         cartIndex
       ].groupGoodsVoList[0].shoppingCartGoodsResponseVo; //当前商品
-      for (let c in currentComponyShop) {
-        currentComponyShop[c].choiceOrNo = currentComponyCheck;
-      }
-      if (!currentComponyCheck) {
-        this.allCheckBool = false;
+      if (!currentComponyBool) {
+        this.kingSelectShop("part", currentComponyShop, true);
+      } else {
+        this.kingSelectShop("part", currentComponyShop, false);
       }
     },
-
+    //全部选择
+    selectAllShop() {
+      let allSelectBool = this.shopCarData.allSelectBool;
+      let currentCompony = this.shopCarData.validShoppingCartDealerVos;
+      if (!allSelectBool) {
+        this.kingSelectShop("all", currentCompony, true);
+      } else {
+        this.kingSelectShop("all", currentCompony, false);
+      }
+    },
+    //加加
     add(cartIndex, shopIndex) {
       let currentShop = this.shopCarData.validShoppingCartDealerVos[cartIndex]
         .groupGoodsVoList[0].shoppingCartGoodsResponseVo[shopIndex]; //当前商品
@@ -275,6 +262,7 @@ export default {
         });
       }
     },
+    //减减
     minus(cartIndex, shopIndex) {
       let currentShop = this.shopCarData.validShoppingCartDealerVos[cartIndex]
         .groupGoodsVoList[0].shoppingCartGoodsResponseVo[shopIndex];
