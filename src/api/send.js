@@ -65,12 +65,15 @@ export const getGoodsColl = data => {//咱也不知道这是啥
 export const getGoodsDetail = data => {//商品详情
     return http('/goodsDetail/' + data.skuId + "/" + data.stationId + "/" + data.userId + "/" + data.storeId + "/" + data.merchantId + "/" + data.id, 'get', data, data);
 }
-export const getGoodsParams = data => {//进入商品详情 --error
+export const getGoodsParams = data => {//商品规格参数 
     return specialHttp('/html/getGoodsParamsBySkuId/' + data.skuId, 'get', qs.stringify(data), data);
 }
 export const join = data => {//加入购物车
     return http('/join', 'post',data, data);
 }
-export const modify = data => {//加入购物车-依赖
+export const modify = data => {//修改购物车的数量
     return http('/modify', 'post',data, data);
+}
+export const deleteShop = data => {//加入购物车-依赖
+    return http('/delete', 'post',data, data);
 }

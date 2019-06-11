@@ -166,7 +166,8 @@ const publicMain = {
         setShopCarData(state, obj) {
             state.shopCarData = obj;
             let currentCompony = state.shopCarData.validShoppingCartDealerVos;
-            for (let c in currentCompony) {//设置公司bool
+            //判断公司局部bool
+            for (let c in currentCompony) {
                 let currentComponyShop =
                     currentCompony[c].groupGoodsVoList[0].shoppingCartGoodsResponseVo;
                 let dicideBool = currentComponyShop.every(function (v, i, a) {
@@ -178,8 +179,9 @@ const publicMain = {
                     state.shopCarData.validShoppingCartDealerVos[c].componyBool = false;
                 }
             }
+            //判断全选bool
             let alldicideBool = currentCompony.every(function (cv, i, a) {
-                return cv.componyBool === true && cv.groupGoodsVoList[0].shoppingCartGoodsResponseVo.every(function (sv, i, a) {
+                return cv.groupGoodsVoList[0].shoppingCartGoodsResponseVo.every(function (sv, i, a) {
                     return sv.choiceOrNo === true;
                 })
             })
@@ -188,11 +190,17 @@ const publicMain = {
             } else {
                 state.shopCarData.allSelectBool = false;
             }
+            let settleDicideBool = currentCompony.some(function (cv, i, a) {
+                return cv.groupGoodsVoList[0].shoppingCartGoodsResponseVo.some(function (sv, i, a) {
+                    return sv.choiceOrNo === true;
+                })
+            })
+            if (settleDicideBool) {
+                state.shopCarData.settleAccountBool = true;
+            } else {
+                state.shopCarData.settleAccountBool = false;
+            }
         },
-        setComponyBool(state, componyObj) {
-            state.shopCarData.validShoppingCartDealerVos[componyObj.index].componyBool = componyObj.bool;
-
-        }
     },
     actions: {
         getGoodsColl(context, obj) {
@@ -206,25 +214,25 @@ const publicMain = {
             })
         },
         getShopCarData(context) {
-            return getShopCarData({
-                userId: context.rootState.userMsg.userId,
-                merchantId: context.rootState.userMsg.merchantId,
-                siteId: context.rootState.userMsg.stationId,
-                shopId: context.rootState.userSecondMsg.storeId,
-                provId: context.rootState.userSecondMsg.province,
-                cityId: context.rootState.userSecondMsg.city,
-                countyId: context.rootState.userSecondMsg.county,
-                streetId: context.rootState.userSecondMsg.town,
-                storeId: context.rootState.userSecondMsg.id,
-            }).then(res => {
-                context.commit("setShopCarData", res.result);
-                return res.result;
-            });
+            if (context.rootState.userMsg) {
+                return getShopCarData({
+                    userId: context.rootState.userMsg.userId,
+                    merchantId: context.rootState.userMsg.merchantId,
+                    siteId: context.rootState.userMsg.stationId,
+                    shopId: context.rootState.userSecondMsg.storeId,
+                    provId: context.rootState.userSecondMsg.province,
+                    cityId: context.rootState.userSecondMsg.city,
+                    countyId: context.rootState.userSecondMsg.county,
+                    streetId: context.rootState.userSecondMsg.town,
+                    storeId: context.rootState.userSecondMsg.id,
+                }).then(res => {
+                    context.commit("setShopCarData", res.result);
+                    return res.result;
+                });
+            }else{
+                console.log(context.rootState);
+            }
         },
-        updateBool(context, obj) {
-            context.commit("setComponyBool", obj.componyObj);
-            context.commit('setShopCarData', obj.shopCarData);
-        }
     },
     modules: {
     }

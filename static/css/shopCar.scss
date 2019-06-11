@@ -161,7 +161,8 @@
               height: 100%;
             }
 
-            .outOfStock {//无货标识
+            .outOfStock {
+              //无货标识
               width: 100%;
               height: 100%;
               background: rgba(255, 255, 255, 0.27);
@@ -517,6 +518,36 @@
 
     .toSettleAccounts {
       width: 30%;
+    }
+  }
+
+  //编辑
+  .edit-collect-box {
+    width: 100%;
+    height: 0.5rem;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    .check-box {
+      display: flex;
+      align-items: center;
+      margin: 0 0.12rem 0 0.14rem;
+      width: 30%;
+      a {
+        font-size: 0.14rem;
+        color: #666666;
+        margin-left: 0.09rem;
+      }
+    }
+
+    .delect-box {
+      width: 30%;
+    }
+
+    .collect-box {
+      display: flex;
+      flex: 1;
     }
   }
 }

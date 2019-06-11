@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <app-warn-alert></app-warn-alert>
+    <app-Select-alert></app-Select-alert>
     <app-sku></app-sku>
     <app-loading :loadingText="loadingText"></app-loading>
     <router-view></router-view>

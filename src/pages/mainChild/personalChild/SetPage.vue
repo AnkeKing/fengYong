@@ -5,7 +5,6 @@
         <a>设置</a>
       </template>
     </app-slot-head>
-    <app-Select-alert ref="selectAlert"></app-Select-alert>
     <div class="photo-box">
       <span class="photo-span">
         <img src="../../../assets/img/ic_bills_come.png">

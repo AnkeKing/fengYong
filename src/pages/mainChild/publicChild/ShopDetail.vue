@@ -177,14 +177,12 @@ export default {
         quantity:this.goodsDetail.goodsOl.minimumOrderQuantity,
         measurement:this.goodsDetail.goodsOl.ratio1
       });
-      console.log("当前展示的商品",this.goodsDetail);
       this.$store.commit("publicMain/setSkuBool", true);
       
     }
   },
   mounted() {
     this.getGoodsDetail({ skuId: this.$route.query.skuId }).then(res=>{
-      console.log("uuuuu",res);
     });
     this.getGoodsParams({ skuId: this.$route.query.skuId });
   },

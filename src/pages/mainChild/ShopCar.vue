@@ -1,6 +1,13 @@
 <template>
   <div class="scroll-box">
-    <app-head :backBool="false" :search="false"></app-head>
+    <app-slot-head styles="shop-car-head" :backBool="false" :searchBool="false">
+      <template v-slot:title>
+        <span>
+          <a>购物车</a>
+          <a @click="toEdit">{{editText}}</a>
+        </span>
+      </template>
+    </app-slot-head>
     <div class="content-box">
       <!-- 购物车暂无商品 -->
       <div class="shop-none" v-if="shopCarData.validShoppingCartDealerVos.length<=0">
@@ -106,7 +113,7 @@
             </div>
           </li>
         </ul>
-        <!-- 总价 -->
+        <!-- 公司区域总价 -->
         <div class="total-price-box">
           <a>￥{{obj.totalAmount}}</a>
           <span>
@@ -117,7 +124,7 @@
       </div>
     </div>
     <!-- 结算 -->
-    <div class="settle-accounts-box">
+    <div class="settle-accounts-box" v-if="!editBool">
       <div class="price-sum">
         <div>
           <input type="checkbox" v-model="shopCarData.allSelectBool" @click="selectAllShop">
@@ -141,22 +148,41 @@
       <div class="toSettleAccounts">
         <button
           class="footer-btn"
-          :class="allCheckBool?'red':'gray'"
-          :disabled="allCheckBool?true:false"
-        >去结算</button>
+          :class="shopCarData.settleAccountBool&&shopCarData.freightpol?'red':'gray'"
+          :disabled="!shopCarData.settleAccountBool&&!shopCarData.freightpol?true:false"
+        >{{settleText}}</button>
+      </div>
+    </div>
+    <!-- 编辑 -->
+    <div class="edit-collect-box" v-else>
+      <div class="check-box">
+        <input type="checkbox" v-model="shopCarData.allSelectBool" @click="selectAllShop">
+        <a @click="selectAllShop">全选</a>
+      </div>
+      <div class="delect-box">
+        <button
+          class="footer-btn gray"
+          @click="toDelectShop"
+          :disabled="!shopCarData.settleAccountBool?true:false"
+        >删除</button>
+      </div>
+      <div class="collect-box">
+        <button class="footer-btn red" :disabled="!shopCarData.settleAccountBool?true:false">加入收藏</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { getShopCarData, selectShop, modify } from "../../api/send";
+import { getShopCarData, selectShop, modify, deleteShop } from "../../api/send";
 import { mapState } from "vuex";
 export default {
   name: "Scroll-box",
   data() {
     return {
-      allCheckBool: true
+      allCheckBool: true,
+      editText: "编辑",
+      editBool: false
     };
   },
   mounted() {
@@ -170,10 +196,17 @@ export default {
       userSecondMsg: state => state.userSecondMsg,
       groupId: state => state.userMsg.groupId,
       shopCarData: state => state.publicMain.shopCarData
-    })
+    }),
+    settleText() {
+      if (!this.shopCarData.freightpol) {
+        return '￥'+this.shopCarData.freightmoney+".00起配";
+      }else{
+        return "去结算"
+      }
+    }
   },
   methods: {
-    //接口方法
+    //选择接口方法
     selectShop(shopObj, checkBool) {
       selectShop({
         userId: shopObj.userId,
@@ -240,6 +273,7 @@ export default {
     },
     //加加
     add(cartIndex, shopIndex) {
+      console.log("购物车总数据：", this.shopCarData);
       let currentShop = this.shopCarData.validShoppingCartDealerVos[cartIndex]
         .groupGoodsVoList[0].shoppingCartGoodsResponseVo[shopIndex]; //当前商品
       let firstNum = currentShop.totalQuantity;
@@ -319,7 +353,29 @@ export default {
         userId: this.userId
       }).then(res => {
         this.$store.commit("publicMain/setShopCarData", res.result);
-        console.log("修改已加入购物车的数量：", res);
+      });
+    },
+    //编辑
+    toEdit() {
+      this.editBool = !this.editBool;
+      if (this.editBool) {
+        this.editText = "完成";
+      } else {
+        this.editText = "编辑";
+      }
+    },
+    //删除
+    toDelectShop() {
+      let currentCompony = this.shopCarData.validShoppingCartDealerVos;
+      this.$store.dispatch("showSelectAlert", {
+        selectObj: {
+          question: "确定删除所选宝贝?",
+          btns: "取消-确定",
+          boxType: "confirm",
+          confirmType: "question",
+          nextActionType: "nextDelect",
+          currentCompony: currentCompony
+        }
       });
     }
   },

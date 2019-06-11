@@ -40,6 +40,8 @@
 </template>
 
 <script>
+import { getShopCarData, selectShop, modify, deleteShop } from "../api/send";
+import { mapState } from "vuex";
 export default {
   name: "Select-alertbox",
   data() {
@@ -49,6 +51,13 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      userId: state => state.userId,
+      userMsg: state => state.userMsg,
+      userSecondMsg: state => state.userSecondMsg,
+      groupId: state => state.userMsg.groupId,
+      shopCarData: state => state.publicMain.shopCarData
+    }),
     alertBool() {
       return this.$store.state.alertBool;
     },
@@ -56,7 +65,6 @@ export default {
       if (this.$store.state.selectObj.btns) {
         this.btnArr = this.$store.state.selectObj.btns.split("-");
       }
-      // console.log("计算属性中响应：", this.$store.state.selectObj);
       return this.$store.state.selectObj;
     }
   },
@@ -64,8 +72,8 @@ export default {
     hiddenAlert() {
       this.$store.commit("changeAlertBool", false);
     },
+    //判断是哪个模块调用的弹窗以便调用对应的方法
     selectRealizeFun(modelObj) {
-      //判断是哪个模块调用的弹窗以便调用对应的方法
       if (modelObj.model == "papers") {
         this.selectPapersType(modelObj.type);
       } else if (modelObj.model == "photo") {
@@ -89,6 +97,23 @@ export default {
       });
       this.selectType = type;
     },
+    //删除接口方法
+    delectShop(currentShop) {
+      deleteShop({
+        userId: this.userId,
+        merchantId:  this.userMsg.merchantId,
+        siteId: this.userMsg.stationId,
+        shopId: this.userSecondMsg.id,
+        provId:  this.userMsg.provinceId,
+        cityId: this.userMsg.cityId,
+        countyId:this.userSecondMsg.county,
+        streetId: this.userSecondMsg.town,
+        storeId: this.userSecondMsg.storeId,
+        skuId: currentShop.skuId
+      }).then(res => {
+        this.$store.commit("publicMain/setShopCarData", res.result);
+      });
+    },
     btnEvent(btn, obj) {
       //按钮后点击后触发对应的事件
       if (btn == "取消") {
@@ -99,10 +124,25 @@ export default {
           this.$store.commit("changePapersType", this.selectType);
           this.Event.$emit("clear", true);
         } else if (obj.nextActionType == "nextLogout") {
-          this.$store.dispatch('logoutHandle');
+          this.$store.dispatch("logoutHandle");
           this.$store.dispatch("showWarnAsync", {
             warnBool: true,
             warnText: "退出登录成功"
+          });
+        } else if (obj.nextActionType == "nextDelect") {
+          for (let c in obj.currentCompony) {
+            let currentComponyShop =
+              obj.currentCompony[c].groupGoodsVoList[0]
+                .shoppingCartGoodsResponseVo;
+            for (let s in currentComponyShop) {
+              if (currentComponyShop[s].choiceOrNo&&currentComponyShop[s]) {
+                this.delectShop(currentComponyShop[s]);
+              }
+            }
+          }
+          this.$store.dispatch("showWarnAsync", {
+            warnBool: true,
+            warnText: "删除成功"
           });
         }
         this.hiddenAlert();

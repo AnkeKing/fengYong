@@ -16,6 +16,8 @@ import Sku from './components/Sku';
 import 'normalize.css'
 import { Loading } from 'vant';
 import { Swipe, SwipeItem } from 'vant';
+import { Dialog } from 'vant';
+Vue.use(Dialog);
 
 Vue.use(Swipe).use(SwipeItem);
 
