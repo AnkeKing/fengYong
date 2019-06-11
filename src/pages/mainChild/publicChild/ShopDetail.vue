@@ -32,7 +32,7 @@
       <div class="show-shop">
         <div class="shop-swiper">
           <van-swipe :autoplay="0" indicator-color="#DD3333">
-            <van-swipe-item v-for="p,index in picsUrl" :key="index">
+            <van-swipe-item v-for="p,index in picsUrlArr" :key="index">
               <img :src="p.image">
             </van-swipe-item>
           </van-swipe>
@@ -81,12 +81,13 @@
     <div class="footer">
       <hr>
       <ul class="tab-bar">
-        <li>
+        <li @click="toWithInStore">
           <img src="../../../assets/img/ic_details_shop.png">
           <a>店铺</a>
         </li>
         <li>
-          <img src="../../../assets/img/ic_collect_defult.png">
+          <img src="../../../assets/img/ic_collect_defult.png"v-if="!goodsColl">
+          <img src="../../../assets/img/ic_collect.png"v-else>
           <a>收藏</a>
         </li>
         <router-link :to="{name:'shopCar'}" tag="li">
@@ -112,11 +113,6 @@ export default {
     return {
       recommendBool: true,
       normsParamsBool: false,
-      shopDetail: null,
-      description: [], //商品详情图
-      picsUrl: [], //商品展示图
-      orderPrice: [],
-      goodsDetail: null,
       navBool: false,
       goodsParams:""
     };
@@ -132,33 +128,6 @@ export default {
       this.recommendBool = false;
       this.normsParamsBool = true;
     },
-    //商品详情
-    getGoodsDetail(obj) {
-      return getGoodsDetail({
-        skuId: obj.skuId,
-        stationId: this.stationId,
-        userId: this.userId,
-        storeId: this.storeId,
-        merchantId: this.merchantId,
-        id: this.id
-      }).then(res => {
-        this.goodsDetail = res.result;
-        let initArr = this.goodsDetail.description.split('"'); //处理商品详情的图片
-        this.description = [];
-        for (let r = 0; r < initArr.length; r++) {
-          if (initArr[r].indexOf("http") != -1) {
-            this.description.push({ image: initArr[r] });
-          }
-        }
-        this.picsUrl = [];
-        let initArr2 = this.goodsDetail.goodsOl.picsUrl.split(","); //处理商品展示滑动图片
-        for (let r = 0; r < initArr2.length; r++) {
-          this.picsUrl.push({ image: initArr2[r] });
-        }
-        this.orderPrice = (this.goodsDetail.goodsOl.orderPrice + "").split(".");
-        return res.result;
-      });
-    },
     //商品规格参数
     getGoodsParams(obj) {
       getGoodsParams({
@@ -170,21 +139,22 @@ export default {
       });
     },
     toAddShopCar() {
-      this.$store.commit("publicMain/setGoodsDetail", {
-        goodsDetail: this.goodsDetail,
-        orderPrice: this.orderPrice,
-        picsUrl: this.picsUrl[0].image,
-        quantity:this.goodsDetail.goodsOl.minimumOrderQuantity,
-        measurement:this.goodsDetail.goodsOl.ratio1
-      });
       this.$store.commit("publicMain/setSkuBool", true);
+    },
+    toWithInStore(){
+      this.$router.push({
+        name:"storeDetail",
+        query:{dealerId:this.goodsDetail.goodsOl.dealerId}
+      })
       
+      // console.log("不明接口",this.$store.state.publicMain.goodsColl);
+      // console.log("当前商品",this.goodsDetail);
     }
   },
   mounted() {
-    this.getGoodsDetail({ skuId: this.$route.query.skuId }).then(res=>{
-    });
+    this.$store.dispatch('publicMain/getGoodsDetail',{ skuId: this.$route.query.skuId });
     this.getGoodsParams({ skuId: this.$route.query.skuId });
+     this.$store.dispatch("publicMain/getGoodsColl", {skuId: this.$route.query.skuId});
   },
   created() {
     this.$store.commit("setHeaderTitle", "商品详情");
@@ -197,7 +167,13 @@ export default {
       storeId: state => state.userSecondMsg.storeId,
       merchantId: state => state.userMsg.merchantId,
       id: state => state.userSecondMsg.id,
-      shopCarData:state=>state.publicMain.shopCarData
+      shopCarData:state=>state.publicMain.shopCarData,
+      description:state=>state.publicMain.description, //商品详情图
+      picsUrl: state=>state.publicMain.picsUrl, //商品展示图
+      picsUrlArr:state=>state.publicMain.picsUrlArr,
+      orderPrice:state=>state.publicMain.orderPrice,
+      goodsDetail: state=>state.publicMain.goodsDetail,
+      goodsColl:state=>state.publicMain.goodsColl,
     })
   },
   components: {}

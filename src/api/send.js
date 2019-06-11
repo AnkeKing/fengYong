@@ -59,7 +59,7 @@ export const getShopCarData = data => {//购物车
 export const selectShop = data => {//check选中商品
     return http('/modifyCheckState', 'post', data, data);
 }
-export const getGoodsColl = data => {//咱也不知道这是啥
+export const getGoodsColl = data => {//商品收藏信息
     return http('/goodsColl/collected', 'post', data, data);
 }
 export const getGoodsDetail = data => {//商品详情
@@ -74,6 +74,18 @@ export const join = data => {//加入购物车
 export const modify = data => {//修改购物车的数量
     return http('/modify', 'post',data, data);
 }
-export const deleteShop = data => {//加入购物车-依赖
+export const deleteShop = data => {//删除购物车商品
     return http('/delete', 'post',data, data);
+}
+export const searchGoodsList = data => {//获取店铺商品
+    return http('/searchGoodsList', 'post',data, data);
+}
+export const dealerColl = data => {//店铺收藏信息
+    return http('/dealerColl/collectStatus', 'post',data, data);
+}
+export const toAddCollStore = data => {//收藏店铺
+    return http('/dealerColl/add', 'post',data, data);
+}
+export const toDelCollStore = data => {//取消收藏店铺
+    return http('/dealerColl/del', 'post',data, data);
 }

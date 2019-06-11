@@ -2,7 +2,10 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import router from '../router/index';
 import createPersistedState from "vuex-persistedstate"
-import { getPersonalData, getPersonalDataSecond, getGoodsColl, getShopCarData } from "../api/send";
+import {
+    getPersonalData, getPersonalDataSecond,
+    getGoodsColl, getGoodsDetail, getShopCarData, searchGoodsList, dealerColl
+} from "../api/send";
 Vue.use(Vuex)
 const home = {//孙级
     namespaced: true,
@@ -28,13 +31,6 @@ const shopList = {//孙级
         },
     }
 }
-// const shopCarPersiste = createPersiste({
-// 	ciphertext: true, // 加密存本地, 默认为false
-// 	LS: {
-// 		module: shopCar,
-// 		storePath: 'shopCar' // __storePath:(和Vuex中的option.modules:{key：value}的key,一,一对应)__
-// 	},
-// })
 const register = {//子级
     namespaced: true,
     state: {
@@ -113,13 +109,15 @@ const main = {//子级
         shopList: shopList,
     }
 }
-const publicMain = {
+const publicMain = {//子级
     namespaced: true,
     state: {
-        goodsColl: [],
-        goodsDetail: null,//商品详情
+        goodsColl: "",
+        goodsDetail: { goodsOl: [] },//商品详情
         orderPrice: [],
+        description: [],
         picsUrl: "",
+        picsUrlArr: [],
         skuBool: false,
         quantityNum: 0,
         measurementNum: 0,
@@ -139,12 +137,14 @@ const publicMain = {
         setGoodsColl(state, obj) {
             state.goodsColl = obj;
         },
-        setGoodsDetail(state, obj) {
+        setGoodsDetail(state, obj) {//商品详情
             state.goodsDetail = obj.goodsDetail;
             state.orderPrice = obj.orderPrice;
             state.picsUrl = obj.picsUrl;
             state.quantityNum = obj.quantity;
             state.measurementNum = obj.measurement
+            state.description = obj.description;
+            state.picsUrlArr = obj.picsUrlArr
         },
         setSkuBool(state, bool) {
             state.skuBool = bool;
@@ -203,36 +203,131 @@ const publicMain = {
         },
     },
     actions: {
+        //商品收藏
         getGoodsColl(context, obj) {
             return getGoodsColl({
                 userId: context.rootState.userId,
                 skuId: obj.skuId,
                 source: context.rootState.userSecondMsg.source
             }).then(res => {
-                console.log("这是什么鬼：", res);
+                // console.log("商品收藏",res.result);
                 context.commit("setGoodsColl", res)
+                return res.result;
             })
         },
-        getShopCarData(context) {
-            if (context.rootState.userMsg) {
-                return getShopCarData({
-                    userId: context.rootState.userMsg.userId,
-                    merchantId: context.rootState.userMsg.merchantId,
-                    siteId: context.rootState.userMsg.stationId,
-                    shopId: context.rootState.userSecondMsg.storeId,
-                    provId: context.rootState.userSecondMsg.province,
-                    cityId: context.rootState.userSecondMsg.city,
-                    countyId: context.rootState.userSecondMsg.county,
-                    streetId: context.rootState.userSecondMsg.town,
-                    storeId: context.rootState.userSecondMsg.id,
-                }).then(res => {
-                    context.commit("setShopCarData", res.result);
-                    return res.result;
+        //单个商品详情
+        getGoodsDetail(context, obj) {
+            return getGoodsDetail({
+                skuId: obj.skuId,
+                stationId: context.rootState.userMsg.stationId,
+                userId: context.rootState.userId,
+                storeId: context.rootState.userSecondMsg.storeId,
+                merchantId: context.rootState.userMsg.merchantId,
+                id: context.rootState.userSecondMsg.id
+            }).then(res => {
+                let goodsDetail = res.result;
+                let initArr = goodsDetail.description.split('"'); //处理商品详情的图片
+                let description = [];
+                for (let r = 0; r < initArr.length; r++) {
+                    if (initArr[r].indexOf("http") != -1) {
+                        description.push({ image: initArr[r] });
+                    }
+                }
+                let picsUrl = [];
+                let initArr2 = goodsDetail.goodsOl.picsUrl.split(","); //处理商品展示滑动图片
+                for (let r = 0; r < initArr2.length; r++) {
+                    picsUrl.push({ image: initArr2[r] });
+                }
+                let orderPrice = (goodsDetail.goodsOl.orderPrice + "").split(".");
+                context.commit("setGoodsDetail", {
+                    goodsDetail: goodsDetail,
+                    orderPrice: orderPrice,
+                    picsUrl: picsUrl[0].image,
+                    picsUrlArr: picsUrl,
+                    quantity: goodsDetail.goodsOl.minimumOrderQuantity,
+                    measurement: goodsDetail.goodsOl.ratio1,
+                    description: description,
                 });
-            }else{
-                console.log(context.rootState);
+                return res.result;
+            });
+        },
+        //购物车全部数据
+        getShopCarData({ commit, rootState, dispatch, state }) {
+            if (rootState.token) {
+                if (rootState.userMsg) {
+                    return getShopCarData({
+                        userId: rootState.userMsg.userId,
+                        merchantId: rootState.userMsg.merchantId,
+                        siteId: rootState.userMsg.stationId,
+                        shopId: rootState.userSecondMsg.storeId,
+                        provId: rootState.userSecondMsg.province,
+                        cityId: rootState.userSecondMsg.city,
+                        countyId: rootState.userSecondMsg.county,
+                        streetId: rootState.userSecondMsg.town,
+                        storeId: rootState.userSecondMsg.id,
+                    }).then(res => {
+                        commit("setShopCarData", res.result);
+                        return res.result;
+                    });
+                } else {//需要再次请求个人数据
+                    dispatch('getUserMsg', { id: rootState.userId }, { root: true }).then(oneRes => {
+                        let userMsg = oneRes;
+                        dispatch('getUserSecondMsg', { groupId: userMsg.groupId }, { root: true }).then(twoRes => {
+                            let userSecondMsg = twoRes;
+                            return getShopCarData({
+                                userId: userMsg.userId,
+                                merchantId: userMsg.merchantId,
+                                siteId: userMsg.stationId,
+                                shopId: userSecondMsg.storeId,
+                                provId: userSecondMsg.province,
+                                cityId: userSecondMsg.city,
+                                countyId: userSecondMsg.county,
+                                streetId: userSecondMsg.town,
+                                storeId: userSecondMsg.id,
+                            }).then(res => {
+                                commit("setShopCarData", res.result);
+                                return res.result;
+                            });
+                        })
+                    })
+                }
             }
         },
+        //获取店铺商品
+        searchGoodsList({ commit, rootState, dispatch, state },storeObj) {
+            return searchGoodsList({
+                cityId: rootState.userSecondMsg.city,
+                countyId: rootState.userSecondMsg.county,
+                dealerId: storeObj.dealerId,
+                groupStoreId: rootState.userSecondMsg.id,
+                merchantId: rootState.userMsg.merchantId,
+                orderBy: "shelvesTime",
+                orderWay: 0,
+                pageNum: 1,
+                pageSize: 20,
+                provId: rootState.userSecondMsg.province,
+                stationId:rootState.userMsg.stationId,
+                status: rootState.userMsg.status,
+                stock: 1,
+                storeId: rootState.userSecondMsg.storeId,
+                tagRecommend: 2,
+                town: rootState.userSecondMsg.town
+            }).then(res=>{
+                console.log("店铺商品:",res.result);
+                return res.result;
+            })
+        },
+        //店铺收藏信息
+        dealerColl({ commit, rootState },storeObj) {
+            return dealerColl({
+                userId: rootState.userId,
+                dealerId: storeObj.dealerId
+            }).then(res=>{
+                console.log("店铺收藏",res.result);
+                return res.result;
+            })
+        }
+
     },
     modules: {
     }
@@ -252,7 +347,6 @@ const Store = new Vuex.Store({
         userId: '',
         userMsg: null,
         userSecondMsg: null,
-        shopCarData: [],
     },
     getters: {
     },
@@ -292,22 +386,6 @@ const Store = new Vuex.Store({
         setHeaderTitle(state, title) {//设置头部title
             state.headerTitle = title;
         },
-        addToShopCar(state, shopCarData) {//加入购物车
-            let localShopCarData = JSON.parse(localStorage.getItem('vuex'))['shopCarData'];
-            let arr = [];
-            console.log(localShopCarData.length);
-            if (!localShopCarData.length > 0) {
-                arr.push(shopCarData);
-                console.log("arr:", arr);
-            } else {
-                for (let sc in localShopCarData) {
-                    if (localShopCarData[sc].skuId != shopCarData.skuId) {
-                        arr.push(shopCarData);
-                    }
-                }
-            }
-            state.shopCarData = arr;
-        }
     },
     actions: {
         showWarnAsync(context, warnObj) {//显示信息
@@ -328,7 +406,7 @@ const Store = new Vuex.Store({
             context.commit("setUserSecondMsg", null);
             router.replace("/login");
         },
-        getUserMsg(context, obj) {
+        getUserMsg(context, obj) {//个人数据1
             return getPersonalData({ id: obj.id }).then(res => {
                 if (res) {
                     context.commit("setUserMsg", res.result);
@@ -336,7 +414,7 @@ const Store = new Vuex.Store({
                 }
             })
         },
-        getUserSecondMsg(context, obj) {
+        getUserSecondMsg(context, obj) {//个人数据2
             return getPersonalDataSecond({ groupId: obj.groupId }).then(res => {
                 if (res) {
                     context.commit("setUserSecondMsg", res.result.items[0]);
@@ -360,7 +438,6 @@ const Store = new Vuex.Store({
                 userId: val.userId,
                 userMsg: val.userMsg,
                 userSecondMsg: val.userSecondMsg,
-                shopCarData: val.shopCarData
             }
         }
     })],

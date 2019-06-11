@@ -197,6 +197,7 @@ export default {
       groupId: state => state.userMsg.groupId,
       shopCarData: state => state.publicMain.shopCarData
     }),
+     //设置结算按钮的text
     settleText() {
       if (!this.shopCarData.freightpol) {
         return '￥'+this.shopCarData.freightmoney+".00起配";
@@ -273,7 +274,6 @@ export default {
     },
     //加加
     add(cartIndex, shopIndex) {
-      console.log("购物车总数据：", this.shopCarData);
       let currentShop = this.shopCarData.validShoppingCartDealerVos[cartIndex]
         .groupGoodsVoList[0].shoppingCartGoodsResponseVo[shopIndex]; //当前商品
       let firstNum = currentShop.totalQuantity;

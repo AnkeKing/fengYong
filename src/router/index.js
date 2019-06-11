@@ -10,6 +10,7 @@ import Home from '../pages/mainChild/Home';
 
 import PublicMain from '../pages/mainChild/PublicMain';
 import ShopDetail from '../pages/mainChild/publicChild/ShopDetail';
+import StoreDetail from '../pages/mainChild/publicChild/StoreDetail';
 
 import HomeMain from '../pages/mainChild/HomeMain';
 import SelectCityPage from '../pages/mainChild/homeChild/SelectCityPage';
@@ -36,7 +37,7 @@ const router = new Router({
       path: '/login',
       name: 'login',
       component: Login
-    }, 
+    },
     //setPassword
     {
       path: '/setPassword',
@@ -57,7 +58,7 @@ const router = new Router({
       // beforeEnter: (to, from, next) => {
       //   console.log(to);
       // }
-    }, 
+    },
     //main
     {
       path: '/',
@@ -65,14 +66,14 @@ const router = new Router({
       component: Main,
       redirect: '/main/home',
       children: [
-         //home
+        //home
         {
           path: '/main/home',
           name: 'home',
           component: Home,
         },
         //homeMain
-         {
+        {
           path: '/main/homeMain',
           name: 'homeMain',
           component: HomeMain,
@@ -84,7 +85,7 @@ const router = new Router({
             }
           ]
         },
-         //shopList
+        //shopList
         {
           path: '/main/shopList',
           name: 'shopList',
@@ -109,7 +110,7 @@ const router = new Router({
           }
         },
         //personalMain
-         {
+        {
           path: '/personalMain',
           name: 'personalMain',
           component: PersonalMain,
@@ -118,11 +119,11 @@ const router = new Router({
               path: '/setPage',
               name: 'setPage',
               component: SetPage,
-            },{
+            }, {
               path: '/msgMain',
               name: 'msgMain',
-              component:MsgMain,
-              children:[
+              component: MsgMain,
+              children: [
                 {
                   path: '/personalMsg',
                   name: 'personalMsg',
@@ -139,13 +140,20 @@ const router = new Router({
         },
         //publicMain 
         {
-          path:"/publicMain",
-          name:"publicMain",
-          component:PublicMain,
-          children:[
-            {path:"/shopDetail",
-            name:"shopDetail",
-            component:ShopDetail,}
+          path: "/publicMain",
+          name: "publicMain",
+          component: PublicMain,
+          children: [
+            {
+              path: "/shopDetail",
+              name: "shopDetail",
+              component: ShopDetail,
+            },
+            {
+              path: "/storeDetail",
+              name: "storeDetail",
+              component: StoreDetail,
+            }
           ]
         }
       ]

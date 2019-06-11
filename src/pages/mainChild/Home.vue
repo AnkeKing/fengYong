@@ -60,7 +60,7 @@
             <span class="shop-msg-box">
               <a v-if="obj.suggestPrice">￥{{obj.suggestPrice}}</a>
               <a v-else>￥{{obj.orderPrice}}</a>
-              <img src="../../assets/img/ic_shop.png">
+              <img src="../../assets/img/ic_shop.png" @click="toAddShopCar(obj)">
             </span>
           </li>
         </ul>
@@ -82,7 +82,7 @@
 <script>
 import HomeHead from "../../components/HomeHead";
 import { mapState } from "vuex";
-import { getHomeData, getPersonalData, getGoodsDetail } from "../../api/send";
+import { getHomeData, getPersonalData } from "../../api/send";
 export default {
   name: "Scroll-box",
   data() {
@@ -146,6 +146,9 @@ export default {
         b2bFloorVoList: []
       }, //商品分类
       loadingText: "加载中",
+      picsUrl: [], //商品展示图
+      orderPrice: [],
+      goodsDetail: null
     };
   },
   methods: {
@@ -184,19 +187,37 @@ export default {
         this.homeList = res.result;
       });
     },
-    toShopDetail(obj) {//跳入商品详情页
-        console.log("obj",obj);
-        this.$store.dispatch("publicMain/getGoodsColl",obj);
-        this.$router.push({name:"shopDetail",query:{skuId:obj.skuId}});
+    //进入商品详情页
+    toShopDetail(obj) {
+      if (this.token) {
+        this.$router.push({ name: "shopDetail", query: { skuId: obj.skuId } });
+      } else {
+        this.$store.dispatch("showWarnAsync", {//提示信息
+                warnBool: true,
+                warnText: '请先登录哥们',
+            });
+      }
     },
+    toAddShopCar(obj) {
+      if (this.token) {
+        this.$store.dispatch("publicMain/getGoodsDetail", { skuId: obj.skuId });
+        this.$store.commit("publicMain/setSkuBool", true);
+      } else {
+        this.$store.dispatch("showWarnAsync", {//提示信息
+                warnBool: true,
+                warnText: '请先登录老弟',
+            });
+      }
+    }
   },
   computed: {
     ...mapState({
+      token: state => state.token,
       stationId: state => state.userMsg.stationId,
       userId: state => state.userId,
       storeId: state => state.userSecondMsg.storeId,
       merchantId: state => state.userMsg.merchantId,
-      id: state => state.userSecondMsg.id,
+      id: state => state.userSecondMsg.id
     })
   },
   mounted() {
