@@ -1,7 +1,6 @@
 <template>
  <div class="box">
-     <app-head :backBool="true" :search="false"></app-head>
-     <router-view></router-view>
+     <h1>档案</h1>
  </div>
 </template>
 
@@ -20,10 +19,4 @@ name:'Box',
 </script>
 
 <style  rel='stylesheet/scss' lang='scss' scoped>
-.box{
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
 </style>

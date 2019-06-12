@@ -30,7 +30,7 @@
     </div>
     <div class="content-box" v-if="goodsDetail&&goodsDetail.goodsOl">
       <div class="show-shop">
-        <div class="shop-swiper">
+        <div class="shop-swiper"@click="onlyBool=!onlyBool":style="onlyBool?onlyClass:shopSwiper">
           <van-swipe :autoplay="0" indicator-color="#DD3333">
             <van-swipe-item v-for="p,index in picsUrlArr" :key="index">
               <img :src="p.image">
@@ -115,6 +115,21 @@ export default {
       normsParamsBool: false,
       navBool: false,
       goodsParams:"",
+      onlyBool:false,
+      shopSwiper:{
+        width: '100%',
+        position:'relative',
+        zIndex: 3,
+      },
+      onlyClass:{
+        height:'100%',
+        width: '100vh',
+        position: 'fixed',
+        zIndex: 99,
+        background: 'rgba(0,0,0,1)',
+        display: 'flex !important',
+        alignItems:'center !important',
+      }
     };
   },
   methods: {
@@ -145,7 +160,7 @@ export default {
     //进入商铺
     toWithInStore(){
       this.$router.push({
-        name:"storeDetail",
+        name:"storeMain",
         query:{dealerId:this.goodsDetail.goodsOl.dealerId}
       })
       
