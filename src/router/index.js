@@ -10,7 +10,12 @@ import Home from '../pages/mainChild/Home';
 
 import PublicMain from '../pages/mainChild/PublicMain';
 import ShopDetail from '../pages/mainChild/publicChild/ShopDetail';
-import StoreDetail from '../pages/mainChild/publicChild/StoreDetail';
+import StoreMain from '../pages/mainChild/publicChild/StoreMain';
+import StoreHome from '../pages/mainChild/publicChild/storeChild/StoreHome';
+import StoreList from '../pages/mainChild/publicChild/storeChild/StoreList';
+import StoreBrand from '../pages/mainChild/publicChild/storeChild/StoreBrand';
+import StoreFile from '../pages/mainChild/publicChild/storeChild/StoreFile';
+import SearchPage from '../pages/mainChild/publicChild/storeChild/SearchPage';
 
 import HomeMain from '../pages/mainChild/HomeMain';
 import SelectCityPage from '../pages/mainChild/homeChild/SelectCityPage';
@@ -149,10 +154,38 @@ const router = new Router({
               name: "shopDetail",
               component: ShopDetail,
             },
+             //storeMain
             {
-              path: "/storeDetail",
-              name: "storeDetail",
-              component: StoreDetail,
+              path: "/storeMain",
+              name: "storeMain",
+              component: StoreMain,
+              redirect: '/storeMain/storeHome',
+              children: [
+                {
+                  path: "/storeMain/storeHome",
+                  name: "storeHome",
+                  component: StoreHome,
+                },
+                {
+                  path: "/storeMain/storeList",
+                  name: "storeList",
+                  component: StoreList,
+                },{
+                  path: "/storeMain/storeBrand",
+                  name: "storeBrand",
+                  component: StoreBrand,
+                },
+                {
+                  path: "/storeMain/storeFile",
+                  name: "storeFile",
+                  component: StoreFile,
+                },
+                {
+                  path: "/searchPage",
+                  name: "searchPage",
+                  component: SearchPage,
+                }
+              ]
             }
           ]
         }

@@ -40,6 +40,7 @@ export default {
     font-size: 0.18rem;
     color: #030303;
     width:42%;
+    text-align: center;
     overflow : hidden; /* 溢出的部分隐藏；*/
     text-overflow: ellipsis; /*文本溢出显示省略号；*/
     display: -webkit-box;	/*作为弹性伸缩盒子模型显示*/

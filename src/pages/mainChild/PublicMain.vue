@@ -20,4 +20,10 @@ name:'Box',
 </script>
 
 <style  rel='stylesheet/scss' lang='scss' scoped>
+.box{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 </style>

@@ -341,7 +341,7 @@ const publicMain = {//子级
                 status: rootState.userMsg.status,
                 stock:storeObj.stock,
                 storeId: rootState.userSecondMsg.storeId,
-                tagRecommend: 2,
+                tagRecommend: storeObj.tagRecommend,
                 town: rootState.userSecondMsg.town
             }).then(res => {
                 console.log("店铺商品",res.result)

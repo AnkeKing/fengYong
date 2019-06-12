@@ -1,24 +1,11 @@
 <template>
-  <div class="tab-bar" v-show="$route.path.indexOf('/main')!=-1">
+  <div class="tab-bar"v-show="$route.path.indexOf('/main')!=-1">
     <ul>
-      <router-link
-        v-for="(item,index) in tabBarIcon"
-        :key="index"
-        :to="item.name"
-        :class="{'current-select':item.name===$route.name}"
-        tag="li"
-      >
-        <img
-          :src="item.defaultImg"
-          v-if="item.name!==$route.name"
-          :class="item.name=="shopList"?"specialImg":"""
-        >
-        <img :src="item.selectedImg" v-else :class="item.name=="shopList"?"specialImg":""">
+      <router-link v-for="(item,index) in tabBarIcon":key="index":to="item.name" :class="{'current-select':item.name===$route.name}"tag="li">
+        <img :src="item.defaultImg"v-if="item.name!==$route.name":class='item.name=="shopList"?"specialImg":""'>
+        <img :src="item.selectedImg"v-else :class='item.name=="shopList"?"specialImg":""'>
         <a>{{item.title}}</a>
-        <a
-          class="count-circe"
-          v-if="item.name=='shopCar'&&shopCarData.goodsCount>0"
-        >{{shopCarData.goodsCount}}</a>
+        <a class="count-circe"v-if="item.name=='shopCar'&&shopCarData.goodsCount>0">{{shopCarData.goodsCount}}</a>
       </router-link>
     </ul>
   </div>
@@ -29,18 +16,39 @@ import { mapState } from "vuex";
 export default {
   name: "Tab-bar",
   data() {
-    return {};
+    return {
+      tabBarIcon:[
+        {
+          title:'首页',
+          defaultImg:require('../assets/img/ic_index_default.png'),
+          selectedImg:require('../assets/img/ic_index_selected.png'),
+          name:'home'
+        },
+        {
+          title:'分类',
+          defaultImg:require('../assets/img/page.png'),
+          selectedImg:require('../assets/img/Page 1@3x.png'),
+          name:'shopList'
+        },{
+          title:'购物车',
+          defaultImg:require('../assets/img/ic_cart_default.png'),
+          selectedImg:require('../assets/img/ic_cart_selected.png'),
+          name:'shopCar'
+        },{
+          title:'我的',
+          defaultImg:require('../assets/img/ic_my_default.png'),
+          selectedImg:require('../assets/img/ic_my_selected.png'),
+          name:'personal'
+        }
+      ],
+    };
   },
-  props: ["tabBarIcon"],
-  mounted() {
+   mounted() {
     this.$store.dispatch("publicMain/getShopCarData");
-  },
-  created() {
-    // this.$store.dispatch("publicMain/getShopCarData");
   },
   computed: {
     ...mapState({
-      shopCarData: state => state.publicMain.shopCarData
+      shopCarData:state=>state.publicMain.shopCarData
     })
   },
   components: {}
@@ -53,21 +61,21 @@ export default {
   background-color: #ffffff;
   position: relative;
   z-index: 9;
-  &::after {
-    content: "";
-    position: absolute;
-    border: 1px solid #666666;
-    width: 100%;
-    transform: scaleY(0.05);
-    top: 0px;
-  }
+  &::after{
+      content: "";
+      position:absolute;
+      border: 1px solid #666666;
+      width: 100%;
+      transform: scaleY(0.05);
+      top: 0px;
+    }
   ul {
     width: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
     padding: 0.05rem 0 0.05rem 0;
-
+    
     li {
       display: flex;
       flex-direction: column;
@@ -77,16 +85,16 @@ export default {
       img {
         width: 0.3rem;
       }
-      .specialImg {
-        width: 0.22rem;
-        margin: 0.06rem 0 0.02rem 0;
+      .specialImg{
+          width: 0.22rem;
+          margin: 0.06rem 0 0.02rem 0;
       }
       a {
         font-size: 0.11rem;
         color: #666666;
         margin-top: 0.05rem;
       }
-      .count-circe {
+      .count-circe{
         font-size: 0.12rem;
         color: #ffffff !important;
         position: absolute;
@@ -97,7 +105,7 @@ export default {
         opacity: 0.8;
       }
     }
-    .current-select {
+    .current-select{
       a {
         color: #dd3333;
       }
