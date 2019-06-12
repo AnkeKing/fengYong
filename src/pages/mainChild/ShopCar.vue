@@ -61,7 +61,7 @@
               :disabled="shop.inStock?false:true"
               v-model="shop.choiceOrNo"
             >
-            <div class="shopimg-box">
+            <div class="stock-none">
               <img :src="shop.picUrl">
               <div class="outOfStock" v-if="!shop.inStock">
                 <span>无货</span>

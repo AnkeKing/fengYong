@@ -4,7 +4,8 @@ import router from '../router/index';
 import createPersistedState from "vuex-persistedstate"
 import {
     getPersonalData, getPersonalDataSecond,
-    getGoodsColl, getGoodsDetail, getShopCarData, searchGoodsList, dealerColl
+    getGoodsColl, getGoodsDetail, getShopCarData, searchGoodsList, dealerColl,
+    addGoodsColl, delGoodsColl
 } from "../api/send";
 Vue.use(Vuex)
 const home = {//孙级
@@ -127,8 +128,8 @@ const publicMain = {//子级
             validShoppingCartDealerVos: [
 
             ]
-        }
-        ,
+        },
+        currentStatusObj:{},
     },
     mutations: {
         setShopCarAmount(state, num) {
@@ -161,6 +162,13 @@ const publicMain = {//子级
                 state.quantityNum--;
             } else {
                 state.measurementNum--;
+            }
+        },
+        setShopNum(state,numObj){
+            if (numObj.name == "quantity") {
+                state.quantityNum=numObj.num;
+            } else {
+                state.measurementNum=numObj.num;
             }
         },
         setShopCarData(state, obj) {
@@ -201,18 +209,40 @@ const publicMain = {//子级
                 state.shopCarData.settleAccountBool = false;
             }
         },
+        setCurrentStatusObj(state,obj){
+            state.currentStatusObj=obj;
+        }
     },
     actions: {
         //商品收藏
         getGoodsColl(context, obj) {
             return getGoodsColl({
                 userId: context.rootState.userId,
-                skuId: obj.skuId,
-                source: context.rootState.userSecondMsg.source
+                skuId: parseInt(obj.skuId),
+                source: 0
             }).then(res => {
-                // console.log("商品收藏",res.result);
-                context.commit("setGoodsColl", res)
+                context.commit("setGoodsColl", res.result)
                 return res.result;
+            })
+        },
+        //添加商品收藏
+        addGoodsColl({ commit, rootState, dispatch, state },obj) {
+            addGoodsColl({
+                skuId:parseInt(obj.skuId),
+                source:0,
+                userId:rootState.userId,
+            }).then(res => {
+                dispatch('getGoodsColl',{skuId:obj.skuId,source:res});
+            })
+        },
+        //删除商品收藏
+        delGoodsColl({ commit, rootState, dispatch, state },obj) {
+            delGoodsColl({
+                skuId:parseInt(obj.skuId),
+                source:0,
+                userId:rootState.userId,
+            }).then(res => {
+                dispatch('getGoodsColl',{skuId:obj.skuId,source:res});
             })
         },
         //单个商品详情
@@ -294,36 +324,36 @@ const publicMain = {//子级
             }
         },
         //获取店铺商品
-        searchGoodsList({ commit, rootState, dispatch, state },storeObj) {
+        searchGoodsList({ commit, rootState, dispatch, state }, storeObj) {
+            commit("setCurrentStatusObj",storeObj);
             return searchGoodsList({
                 cityId: rootState.userSecondMsg.city,
                 countyId: rootState.userSecondMsg.county,
                 dealerId: storeObj.dealerId,
                 groupStoreId: rootState.userSecondMsg.id,
                 merchantId: rootState.userMsg.merchantId,
-                orderBy: "shelvesTime",
-                orderWay: 0,
+                orderBy: storeObj.type,
+                orderWay:storeObj.orderWay,
                 pageNum: 1,
                 pageSize: 20,
                 provId: rootState.userSecondMsg.province,
-                stationId:rootState.userMsg.stationId,
+                stationId: rootState.userMsg.stationId,
                 status: rootState.userMsg.status,
-                stock: 1,
+                stock:storeObj.stock,
                 storeId: rootState.userSecondMsg.storeId,
                 tagRecommend: 2,
                 town: rootState.userSecondMsg.town
-            }).then(res=>{
-                console.log("店铺商品:",res.result);
+            }).then(res => {
+                console.log("店铺商品",res.result)
                 return res.result;
             })
         },
         //店铺收藏信息
-        dealerColl({ commit, rootState },storeObj) {
+        dealerColl({ commit, rootState }, storeObj) {
             return dealerColl({
                 userId: rootState.userId,
                 dealerId: storeObj.dealerId
-            }).then(res=>{
-                console.log("店铺收藏",res.result);
+            }).then(res => {
                 return res.result;
             })
         }

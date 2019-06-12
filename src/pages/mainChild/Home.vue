@@ -198,6 +198,7 @@ export default {
             });
       }
     },
+    //加入购物车
     toAddShopCar(obj) {
       if (this.token) {
         this.$store.dispatch("publicMain/getGoodsDetail", { skuId: obj.skuId });

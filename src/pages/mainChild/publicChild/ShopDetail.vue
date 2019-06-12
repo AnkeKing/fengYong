@@ -85,7 +85,7 @@
           <img src="../../../assets/img/ic_details_shop.png">
           <a>店铺</a>
         </li>
-        <li>
+        <li @click="setCollectShop">
           <img src="../../../assets/img/ic_collect_defult.png"v-if="!goodsColl">
           <img src="../../../assets/img/ic_collect.png"v-else>
           <a>收藏</a>
@@ -114,7 +114,7 @@ export default {
       recommendBool: true,
       normsParamsBool: false,
       navBool: false,
-      goodsParams:""
+      goodsParams:"",
     };
   },
   methods: {
@@ -138,9 +138,11 @@ export default {
         this.goodsParams=res.substring(res.indexOf('<div class="lis"'),res.indexOf('</body>'));
       });
     },
+    //加入购物车
     toAddShopCar() {
       this.$store.commit("publicMain/setSkuBool", true);
     },
+    //进入商铺
     toWithInStore(){
       this.$router.push({
         name:"storeDetail",
@@ -149,10 +151,18 @@ export default {
       
       // console.log("不明接口",this.$store.state.publicMain.goodsColl);
       // console.log("当前商品",this.goodsDetail);
-    }
+    },
+    //设置收藏商品
+    setCollectShop() {
+      if (!this.goodsColl) {
+        this.$store.dispatch('publicMain/addGoodsColl',{skuId: this.$route.query.skuId });
+      } else {
+        this.$store.dispatch('publicMain/delGoodsColl',{skuId: this.$route.query.skuId });
+      }
+    },
   },
   mounted() {
-    this.$store.dispatch('publicMain/getGoodsDetail',{ skuId: this.$route.query.skuId });
+    this.$store.dispatch('publicMain/getGoodsDetail',{ skuId: this.$route.query.skuId});
     this.getGoodsParams({ skuId: this.$route.query.skuId });
      this.$store.dispatch("publicMain/getGoodsColl", {skuId: this.$route.query.skuId});
   },

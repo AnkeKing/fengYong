@@ -62,6 +62,12 @@ export const selectShop = data => {//check选中商品
 export const getGoodsColl = data => {//商品收藏信息
     return http('/goodsColl/collected', 'post', data, data);
 }
+export const addGoodsColl = data => {//收藏商品
+    return http('/goodsColl/add', 'post', data, data);
+}
+export const delGoodsColl = data => {//取消收藏商品
+    return http('/goodsColl/del', 'post', data, data);
+}
 export const getGoodsDetail = data => {//商品详情
     return http('/goodsDetail/' + data.skuId + "/" + data.stationId + "/" + data.userId + "/" + data.storeId + "/" + data.merchantId + "/" + data.id, 'get', data, data);
 }

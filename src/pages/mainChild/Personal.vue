@@ -206,12 +206,11 @@
 </template>
 
 <script>
-import {getPersonalData} from '../../api/send';
+import { mapState } from "vuex";
 export default {
   name: "Scroll-box",
   data() {
     return {
-      userMsg: "",
       telphone: ""
     };
   },
@@ -222,26 +221,24 @@ export default {
     viewPersonalMsg() {
       this.$router.push({ name: "personalMsg" });
     },
-    getPersonal(id) {
-      //个人中心
-      return getPersonalData({ id: id }).then(res => {
-        if (res) {
-          this.$store.commit("setUserMsg", res.result);
-          console.log("个人中心接口返回的数据：", res.result);
-        }
-      });
-    }
   },
   mounted() {
-    if (this.$store.state.token) {
-      if (this.$store.state.userMsg) {
-        this.userMsg = this.$store.state.userMsg; //获取个人信息
+    if (this.token) {
+      if (this.userMsg) {
         let tel = this.userMsg.telphone;
         this.telphone = tel.replace(tel.substring(3, 7), "****");
+        console.log(this.userMsg);
       } else {
-        this.getPersonal(this.$store.state.userId);
+        this.$store.dispatch('getUserMsg',{id:this.$store.state.userId})
       }
     }
+  },
+  computed: {
+    ...mapState({
+      token: state => state.token,
+      userMsg: state => state.userMsg,
+      userId: state => state.userId,
+    })
   },
   components: {}
 };
