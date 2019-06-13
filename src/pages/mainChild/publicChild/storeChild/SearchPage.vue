@@ -26,26 +26,35 @@
         <img src="../../../../assets/img/ic_del.png" @click="clearBrowseHistory">
       </div>
       <ul class="history-ul">
-        <li v-for="l,index in globalBrowseArr" :key="index"v-if="globalBool&&globalBrowseArr.length>0"@click="setSearchText(index)">{{l.text}}</li>
-        <li v-for="l,index in partBrowseArr" :key="index" v-if="!globalBool&&partBrowseArr.length>0"@click="setSearchText(index)">{{l.text}}</li>
+        <li
+          v-for="l,index in globalBrowseArr"
+          :key="index"
+          v-if="globalBool&&globalBrowseArr.length>0"
+          @click="setSearchText(index)"
+        >{{l.text}}</li>
+        <li
+          v-for="l,index in partBrowseArr"
+          :key="index"
+          v-if="!globalBool&&partBrowseArr.length>0"
+          @click="setSearchText(index)"
+        >{{l.text}}</li>
       </ul>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "SearchPage-box",
   data() {
     return {
       globalBool: true,
-      searchText: "",
-      globalBrowseArr: [],
-      partBrowseArr: []
+      searchText: ""
     };
   },
   methods: {
-     // 切换全站与店铺内商品
+    // 切换全站与店铺内商品
     cutSearchContent(bool) {
       if (bool != this.globalBool) {
         this.globalBool = bool;
@@ -63,7 +72,7 @@ export default {
             searchText: this.searchText
           }
         });
-        this.saveBrowseArr(this.globalBrowseArr, "globalBrowseArr");
+        this.saveBrowseArr("globalBrowseArr");
       } else {
         this.$router.replace({
           name: "storeHome",
@@ -73,59 +82,56 @@ export default {
             searchText: this.searchText
           }
         });
-        this.saveBrowseArr(this.partBrowseArr, "partBrowseArr");
+        this.saveBrowseArr("partBrowseArr");
       }
       this.$store.commit("publicMain/setInSearch", true);
     },
     //保存搜索历史
-    saveBrowseArr(arr, name) {
-      if (arr.length > 0) {
-        for (let l in arr) {
-          if (arr[l].text != this.searchText) {
-            arr.push({ text: this.searchText });
-          }
-        }
+    saveBrowseArr(name) {
+      if (name == "globalBrowseArr") {
+        this.$store.commit("setBrowseArr", {
+          name: "globalBrowseArr",
+          text: this.searchText
+        });
       } else {
-        arr.push({ text: this.searchText });
+        this.$store.commit("setBrowseArr", {
+          name: "partBrowseArr",
+          text: this.searchText
+        });
       }
-      localStorage.setItem(name, JSON.stringify(arr));
     },
     //删除搜索历史
     clearBrowseHistory() {
-      if (!this.globalBool) {
-        localStorage.removeItem("partBrowseArr");
-        this.decide('partBrowseArr');
+      if (this.globalBool) {
+        this.$store.commit("delBrowseArr", {
+          name: "globalBrowseArr"
+        });
       } else {
-        localStorage.removeItem("globalBrowseArr");
-        this.decide('globalBrowseArr');
+        this.$store.commit("delBrowseArr", {
+          name: "partBrowseArr"
+        });
       }
-    },
-    //
-    decide(name) {
-      if (JSON.parse(localStorage.getItem(name))) {
-        this[name] = JSON.parse(
-          localStorage.getItem(name)
-        );
-      }
+      this.searchText="";
     },
     //选中搜索历史
-    setSearchText(index){
-        if (this.globalBool) {
-        this.searchText=this.globalBrowseArr[index].text;
+    setSearchText(index) {
+      if (this.globalBool) {
+        this.searchText = this.globalBrowseArr[index].text;
       } else {
-        this.searchText=this.partBrowseArr[index].text;
+        this.searchText = this.partBrowseArr[index].text;
       }
     }
   },
   mounted() {
-    this.decide('globalBrowseArr');
-    this.decide('partBrowseArr');
     if (!this.$route.query.searchText == "") {
       this.searchText = this.$route.query.searchText;
     }
   },
-  computed:{
-
+  computed: {
+    ...mapState({
+      globalBrowseArr: state => state.globalBrowseArr,
+      partBrowseArr: state => state.partBrowseArr
+    })
   },
   components: {}
 };

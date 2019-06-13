@@ -130,8 +130,8 @@ const publicMain = {//子级
             ]
         },
         currentStatusObj: {},
-        onlyBool:false,
-        inSearch:false
+        onlyBool: false,
+        inSearch: false
     },
     mutations: {
         setShopCarAmount(state, num) {
@@ -214,11 +214,11 @@ const publicMain = {//子级
         setCurrentStatusObj(state, obj) {
             state.currentStatusObj = obj;
         },
-        setOnlyBool(state,bool){
-            state.onlyBool=bool;
+        setOnlyBool(state, bool) {
+            state.onlyBool = bool;
         },
-        setInSearch(state,bool){
-            state.inSearch=bool;
+        setInSearch(state, bool) {
+            state.inSearch = bool;
         },
     },
     actions: {
@@ -409,6 +409,8 @@ const Store = new Vuex.Store({
         userId: '',
         userMsg: null,
         userSecondMsg: null,
+        globalBrowseArr: [],
+        partBrowseArr: []
     },
     getters: {
     },
@@ -448,6 +450,21 @@ const Store = new Vuex.Store({
         setHeaderTitle(state, title) {//设置头部title
             state.headerTitle = title;
         },
+        setBrowseArr(state, obj) {
+            state[obj.name].push({ text: obj.text });
+            if (state[obj.name].length > 0) {
+                for (let l in state[obj.name]) {
+                    if (state[obj.name][l].text != obj.text) {
+                        state[obj.name].push({ text: obj.text });
+                    }
+                }
+            } else {
+                state[obj.name].push({ text: obj.text });
+            }
+        },
+        delBrowseArr(state, obj) {
+            state[obj.name] = [];
+        }
     },
     actions: {
         showWarnAsync(context, warnObj) {//显示信息
@@ -500,6 +517,8 @@ const Store = new Vuex.Store({
                 userId: val.userId,
                 userMsg: val.userMsg,
                 userSecondMsg: val.userSecondMsg,
+                globalBrowseArr: val.globalBrowseArr,
+                partBrowseArr: val.partBrowseArr
             }
         }
     })],
