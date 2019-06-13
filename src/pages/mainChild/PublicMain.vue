@@ -1,6 +1,6 @@
 <template>
  <div class="box">
-     <app-head :backBool="true" :search="false"></app-head>
+     <app-head :backBool="true" :search="false"v-if="!this.$store.state.publicMain.onlyBool"></app-head>
      <router-view></router-view>
  </div>
 </template>

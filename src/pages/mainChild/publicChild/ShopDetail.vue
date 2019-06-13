@@ -1,36 +1,10 @@
 <template>
   <div class="scroll-box">
     <!-- 快速导航 -->
-    <div class="fix-nav">
-      <div class="nav-btn" @click="navBool=!navBool">
-        <img src="../../../assets/img/ic_tabs.png" v-if="!navBool">
-        <span v-else>
-          <img src="../../../assets/img/ic_tabsX.png">
-        </span>
-        <a v-if="!navBool">快速导航</a>
-      </div>
-      <ul class="show-link" v-show="navBool">
-        <router-link :to="{name:'home'}" tag="li">
-          <img src="../../../assets/img/ic_tabsGrunp(5).png">
-        </router-link>
-        <router-link :to="{name:'shopList'}" tag="li">
-          <img src="../../../assets/img/ic_tabsGrunp(3).png">
-        </router-link>
-        <router-link :to="{name:'shopCar'}" tag="li">
-          <img src="../../../assets/img/ic_tabsGrunp(4).png">
-          <a class="count-circe"v-if="shopCarData.goodsCount>0">{{shopCarData.goodsCount}}</a>
-        </router-link>
-        <router-link :to="{name:'personal'}" tag="li">
-          <img src="../../../assets/img/ic_tabsGrunp(6).png">
-        </router-link>
-        <router-link :to="{name:'home'}" tag="li">
-          <img src="../../../assets/img/ic_tabsGrunp(1).png">
-        </router-link>
-      </ul>
-    </div>
+    <app-nav :shopCarData="shopCarData"></app-nav>
     <div class="content-box" v-if="goodsDetail&&goodsDetail.goodsOl">
       <div class="show-shop">
-        <div class="shop-swiper"@click="onlyBool=!onlyBool":style="onlyBool?onlyClass:shopSwiper">
+        <div class="shop-swiper"@click="showSwiper":style="onlyBool?onlyClass:shopSwiper">
           <van-swipe :autoplay="0" indicator-color="#DD3333">
             <van-swipe-item v-for="p,index in picsUrlArr" :key="index">
               <img :src="p.image">
@@ -107,15 +81,15 @@
 <script>
 import { getGoodsDetail, getGoodsParams } from "../../../api/send";
 import { mapState } from "vuex";
+import Nav from '../../../components/Nav';
 export default {
   name: "Box",
   data() {
     return {
       recommendBool: true,
       normsParamsBool: false,
-      navBool: false,
       goodsParams:"",
-      onlyBool:false,
+      oyBool:false,
       shopSwiper:{
         width: '100%',
         position:'relative',
@@ -175,6 +149,10 @@ export default {
         this.$store.dispatch('publicMain/delGoodsColl',{skuId: this.$route.query.skuId });
       }
     },
+    showSwiper(){
+      this.oyBool=!this.oyBool;
+      this.$store.commit('publicMain/setOnlyBool',this.oyBool);
+    }
   },
   mounted() {
     this.$store.dispatch('publicMain/getGoodsDetail',{ skuId: this.$route.query.skuId});
@@ -183,7 +161,6 @@ export default {
   },
   created() {
     this.$store.commit("setHeaderTitle", "商品详情");
-    this.navBool = false;
   },
   computed: {
     ...mapState({
@@ -199,9 +176,12 @@ export default {
       orderPrice:state=>state.publicMain.orderPrice,
       goodsDetail: state=>state.publicMain.goodsDetail,
       goodsColl:state=>state.publicMain.goodsColl,
+      onlyBool:state=>state.publicMain.onlyBool
     })
   },
-  components: {}
+  components: {
+    appNav:Nav
+  }
 };
 </script>
 

@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <router-view></router-view>
-    <div class="tab-bar"v-if="$route.path.indexOf('/storeMain')!=-1">
+    <div class="tab-bar" v-if="$route.path.indexOf('/storeMain')!=-1&&!inSearch">
       <ul>
         <li
           v-for="(item,index) in tabBarIcon"
@@ -10,9 +10,9 @@
           :class="{'current-select':item.name===$route.name}"
         >
           <img
-          :src="item.defaultImg"
-          v-if="item.name!==$route.name"
-          :class='item.name=="shopList"?"specialImg":""'
+            :src="item.defaultImg"
+            v-if="item.name!==$route.name"
+            :class='item.name=="shopList"?"specialImg":""'
           >
           <img :src="item.selectedImg" v-else :class='item.name=="shopList"?"specialImg":""'>
           <a>{{item.title}}</a>
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "Box",
   data() {
@@ -55,13 +56,31 @@ export default {
       ]
     };
   },
-  methods:{
-    link(itemName){
+  methods: {
+    link(itemName) {
       this.$router.replace({
-        name:itemName,
-        query:{dealerId:this.$route.query.dealerId}
-      })
+        name: itemName,
+        query: { dealerId: this.$route.query.dealerId }
+      });
     }
+  },
+  mounted() {
+    this.$store
+      .dispatch("publicMain/searchGoodsList", {
+        dealerId: this.$route.query.dealerId,
+        type: "shelvesTime",
+        orderWay: 0,
+        stock: 1,
+        tagRecommend: 2
+      })
+      .then(res => {
+        this.$store.commit("setHeaderTitle", res.goodses[0].dealerName);
+      });
+  },
+  computed:{
+     ...mapState({
+      inSearch: state => state.publicMain.inSearch,
+    })
   },
   components: {}
 };

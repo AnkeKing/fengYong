@@ -57,7 +57,7 @@ const login = {//子级
     state: {
         loginRecordArr: [],
         TEL_REGEXP: /^1[3|4|5|8][0-9]\d{8}$/,
-        PASS_REGEXP: /^[\da-zA-Z]{6,16}$/
+        PASS_REGEXP: /[\da-zA-Z]{6,16}/
     },
     getters: {
         verifyUserPhone: (state) => (phoneValue) => {
@@ -129,7 +129,9 @@ const publicMain = {//子级
 
             ]
         },
-        currentStatusObj:{},
+        currentStatusObj: {},
+        onlyBool:false,
+        inSearch:false
     },
     mutations: {
         setShopCarAmount(state, num) {
@@ -164,11 +166,11 @@ const publicMain = {//子级
                 state.measurementNum--;
             }
         },
-        setShopNum(state,numObj){
+        setShopNum(state, numObj) {
             if (numObj.name == "quantity") {
-                state.quantityNum=numObj.num;
+                state.quantityNum = numObj.num;
             } else {
-                state.measurementNum=numObj.num;
+                state.measurementNum = numObj.num;
             }
         },
         setShopCarData(state, obj) {
@@ -209,9 +211,15 @@ const publicMain = {//子级
                 state.shopCarData.settleAccountBool = false;
             }
         },
-        setCurrentStatusObj(state,obj){
-            state.currentStatusObj=obj;
-        }
+        setCurrentStatusObj(state, obj) {
+            state.currentStatusObj = obj;
+        },
+        setOnlyBool(state,bool){
+            state.onlyBool=bool;
+        },
+        setInSearch(state,bool){
+            state.inSearch=bool;
+        },
     },
     actions: {
         //商品收藏
@@ -226,23 +234,23 @@ const publicMain = {//子级
             })
         },
         //添加商品收藏
-        addGoodsColl({ commit, rootState, dispatch, state },obj) {
+        addGoodsColl({ commit, rootState, dispatch, state }, obj) {
             addGoodsColl({
-                skuId:parseInt(obj.skuId),
-                source:0,
-                userId:rootState.userId,
+                skuId: parseInt(obj.skuId),
+                source: 0,
+                userId: rootState.userId,
             }).then(res => {
-                dispatch('getGoodsColl',{skuId:obj.skuId,source:res});
+                dispatch('getGoodsColl', { skuId: obj.skuId, source: res });
             })
         },
         //删除商品收藏
-        delGoodsColl({ commit, rootState, dispatch, state },obj) {
+        delGoodsColl({ commit, rootState, dispatch, state }, obj) {
             delGoodsColl({
-                skuId:parseInt(obj.skuId),
-                source:0,
-                userId:rootState.userId,
+                skuId: parseInt(obj.skuId),
+                source: 0,
+                userId: rootState.userId,
             }).then(res => {
-                dispatch('getGoodsColl',{skuId:obj.skuId,source:res});
+                dispatch('getGoodsColl', { skuId: obj.skuId, source: res });
             })
         },
         //单个商品详情
@@ -325,7 +333,7 @@ const publicMain = {//子级
         },
         //获取店铺商品
         searchGoodsList({ commit, rootState, dispatch, state }, storeObj) {
-            commit("setCurrentStatusObj",storeObj);
+            commit("setCurrentStatusObj", storeObj);
             return searchGoodsList({
                 cityId: rootState.userSecondMsg.city,
                 countyId: rootState.userSecondMsg.county,
@@ -333,18 +341,18 @@ const publicMain = {//子级
                 groupStoreId: rootState.userSecondMsg.id,
                 merchantId: rootState.userMsg.merchantId,
                 orderBy: storeObj.type,
-                orderWay:storeObj.orderWay,
+                orderWay: storeObj.orderWay,
                 pageNum: 1,
                 pageSize: 20,
                 provId: rootState.userSecondMsg.province,
                 stationId: rootState.userMsg.stationId,
                 status: rootState.userMsg.status,
-                stock:storeObj.stock,
+                stock: storeObj.stock,
                 storeId: rootState.userSecondMsg.storeId,
                 tagRecommend: storeObj.tagRecommend,
                 town: rootState.userSecondMsg.town
             }).then(res => {
-                console.log("店铺商品",res.result)
+                // console.log("店铺商品",res.result)
                 return res.result;
             })
         },
@@ -356,8 +364,32 @@ const publicMain = {//子级
             }).then(res => {
                 return res.result;
             })
+        },
+        //搜索商品
+        searchShop({ commit, rootState, dispatch, state }, obj) {
+            return searchGoodsList({
+                cityId: rootState.userSecondMsg.city,
+                countyId: rootState.userSecondMsg.county,
+                dealerId: obj.dealerId,
+                goodsName: obj.goodsName,
+                groupStoreId: rootState.userSecondMsg.id,
+                merchantId: rootState.userMsg.merchantId,
+                orderBy: obj.orderBy,
+                orderWay: obj.orderWay,
+                pageNum: 1,
+                pageSize: 20,
+                provId: rootState.userSecondMsg.province,
+                stationId: rootState.userMsg.stationId,
+                status: rootState.userMsg.status,
+                stock: obj.stock,
+                storeId: rootState.userSecondMsg.storeId,
+                tagRecommend: obj.tagRecommend,
+                town: rootState.userSecondMsg.town
+            }).then(res => {
+                // console.log("搜索商品", res.result)
+                return res.result;
+            })
         }
-
     },
     modules: {
     }

@@ -99,8 +99,8 @@ export default {
     async toHome() {
       let PASS_REGEXP = /^\S+$/;
       if (
-        this.$store.getters["login/verifyUserPhone"](this.phoneValue) &&
-        this.$store.getters["login/verifyUserPassword"](this.passValue)
+        this.$store.getters["login/verifyUserPhone"](this.phoneValue) 
+        &&this.$store.getters["login/verifyUserPassword"](this.passValue)
       ) {
         //1.判断用户名密码格式
         const loginMsg = {

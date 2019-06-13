@@ -206,6 +206,9 @@ router.beforeEach((to, from, next) => {
       next({ path: '/login', query: { nextPath: to.path } });
     }
   }
+  if(to.path!='/storeMain/storeHome'){
+    store.commit('publicMain/setInSearch', false);
+  }
   next();
 })
 export default router

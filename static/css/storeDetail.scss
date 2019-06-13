@@ -150,6 +150,59 @@
     .top-next {
         width: 100%;
       //商品排序导航
+      .search{
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        padding: 0.1rem 0 0.1rem 0;
+        background: linear-gradient(left, #DD3333, #F46839);
+        div {
+          width: 3.47rem;
+          height: 0.26rem;
+          position: relative;
+
+          img {
+            position: absolute;
+            width: 0.21rem;
+            height: 0.21rem;
+            padding: 0.035rem 0.035rem 0.035rem 0.035rem;
+            top: 0.03rem;
+            left: 0.05rem;
+          }
+
+          input {
+            border-radius: 16px;
+            width: 100%;
+            height: 0.26rem;
+            border: none;
+            padding-left: 0.32rem;
+            font-size: 0.12rem;
+            color: #333333;
+            background: #ffffff;
+          }
+
+          ::-webkit-input-placeholder {
+            /* WebKit, Blink, Edge */
+            color: #999999;
+          }
+
+          :-moz-placeholder {
+            /* Mozilla Firefox 4 to 18 */
+            color: #999999;
+          }
+
+          ::-moz-placeholder {
+            /* Mozilla Firefox 19+ */
+            color: #999999;
+          }
+
+          :-ms-input-placeholder {
+            /* Internet Explorer 10-11 */
+            color: #999999;
+          }
+
+        }
+      }
       .shop-sort-nav {
         width: 100%;
         height: 0.37rem;
