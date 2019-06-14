@@ -4,7 +4,8 @@
     <app-nav :shopCarData="shopCarData"></app-nav>
     <div class="content-box" v-if="goodsDetail&&goodsDetail.goodsOl">
       <div class="show-shop">
-        <div class="shop-swiper"@click="showSwiper":style="onlyBool?onlyClass:shopSwiper">
+        <!-- <div class="shop-swiper"@click="showSwiper":style="onlyBool?onlyClass:shopSwiper"> -->
+        <div class="shop-swiper"@click="onlyBool=!onlyBool":style="onlyBool?onlyClass:shopSwiper">
           <van-swipe :autoplay="0" indicator-color="#DD3333">
             <van-swipe-item v-for="p,index in picsUrlArr" :key="index">
               <img :src="p.image">
@@ -90,6 +91,7 @@ export default {
       normsParamsBool: false,
       goodsParams:"",
       oyBool:false,
+      onlyBool:false,
       shopSwiper:{
         width: '100%',
         position:'relative',
