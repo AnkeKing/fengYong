@@ -181,8 +181,9 @@ export default {
       onlyBool:state=>state.publicMain.onlyBool
     })
   },
+
   components: {
-    appNav:Nav
+    appNav:Nav，
   }
 };
 </script>
