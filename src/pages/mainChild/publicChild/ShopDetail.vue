@@ -91,7 +91,6 @@ export default {
       normsParamsBool: false,
       goodsParams:"",
       oyBool:false,
-      onlyBool:false,
       shopSwiper:{
         width: '100%',
         position:'relative',
@@ -183,11 +182,11 @@ export default {
   },
 
   components: {
-    appNav:Nav，
+    appNav:Nav
   }
 };
 </script>
 
-<style  rel='stylesheet/scss' lang='scss' scoped>
+<style lang='scss' scoped>
 @import url("../../../../static/css/shopDetail.min");
 </style>
