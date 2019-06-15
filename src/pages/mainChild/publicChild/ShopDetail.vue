@@ -1,7 +1,8 @@
 <template>
   <div class="scroll-box">
     <!-- 快速导航 -->
-    <app-nav :shopCarData="shopCarData"></app-nav>
+    <!-- <app-nav :shopCarData="shopCarData"></app-nav> -->
+    <app-nav></app-nav>
     <div class="content-box" v-if="goodsDetail&&goodsDetail.goodsOl">
       <div class="show-shop">
         <!-- <div class="shop-swiper"@click="showSwiper":style="onlyBool?onlyClass:shopSwiper"> -->
@@ -67,7 +68,7 @@
         </li>
         <router-link :to="{name:'shopCar'}" tag="li">
           <img src="../../../assets/img/ic_shoppingCart.png">
-          <a class="count-circe"v-if="shopCarData.goodsCount>0">{{shopCarData.goodsCount}}</a>
+          <!-- <a class="count-circe"v-if="shopCarData.goodsCount>0">{{shopCarData.goodsCount}}</a> -->
           <a>购物车</a>
         </router-link>
       </ul>
@@ -170,7 +171,7 @@ export default {
       storeId: state => state.userSecondMsg.storeId,
       merchantId: state => state.userMsg.merchantId,
       id: state => state.userSecondMsg.id,
-      shopCarData:state=>state.publicMain.shopCarData,
+      // shopCarData:state=>state.publicMain.shopCarData,
       description:state=>state.publicMain.description, //商品详情图
       picsUrl: state=>state.publicMain.picsUrl, //商品展示图
       picsUrlArr:state=>state.publicMain.picsUrlArr,

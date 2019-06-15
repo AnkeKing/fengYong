@@ -16,7 +16,7 @@
       </router-link>
       <router-link :to="{name:'shopCar'}" tag="li">
         <img src=".././assets/img/ic_tabsGrunp(4).png">
-        <a class="count-circe" v-if="shopCarData.goodsCount>0">{{shopCarData.goodsCount}}</a>
+        <!-- <a class="count-circe" v-if="shopCarData.goodsCount>0">{{shopCarData.goodsCount}}</a> -->
       </router-link>
       <router-link :to="{name:'personal'}" tag="li">
         <img src=".././assets/img/ic_tabsGrunp(6).png">
@@ -36,7 +36,7 @@ export default {
       navBool: false
     };
   },
-  props: ["shopCarData"],
+  // props: ["shopCarData"],
   created() {
     this.navBool = false;
   },
