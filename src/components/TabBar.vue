@@ -5,7 +5,7 @@
         <img :src="item.defaultImg"v-if="item.name!==$route.name":class='item.name=="shopList"?"specialImg":""'>
         <img :src="item.selectedImg"v-else :class='item.name=="shopList"?"specialImg":""'>
         <a>{{item.title}}</a>
-        <a class="count-circe"v-if="item.name=='shopCar'&&shopCarData.goodsCount>0">{{shopCarData.goodsCount}}</a>
+        <!-- <a class="count-circe"v-if="item.name=='shopCar'&&shopCarData.goodsCount>0">{{shopCarData.goodsCount}}</a> -->
       </router-link>
     </ul>
   </div>
@@ -44,11 +44,11 @@ export default {
     };
   },
    mounted() {
-    this.$store.dispatch("publicMain/getShopCarData");
+    // this.$store.dispatch("publicMain/getShopCarData");
   },
   computed: {
     ...mapState({
-      shopCarData:state=>state.publicMain.shopCarData
+      // shopCarData:state=>state.publicMain.shopCarData
     })
   },
   components: {}

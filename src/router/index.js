@@ -154,7 +154,7 @@ const router = new Router({
               name: "shopDetail",
               component: ShopDetail,
             },
-             //storeMain
+            //storeMain
             {
               path: "/storeMain",
               name: "storeMain",
@@ -170,7 +170,7 @@ const router = new Router({
                   path: "/storeMain/storeList",
                   name: "storeList",
                   component: StoreList,
-                },{
+                }, {
                   path: "/storeMain/storeBrand",
                   name: "storeBrand",
                   component: StoreBrand,
@@ -206,8 +206,15 @@ router.beforeEach((to, from, next) => {
       next({ path: '/login', query: { nextPath: to.path } });
     }
   }
-  if(to.path!='/storeMain/storeHome'){
+  if (to.path != '/storeMain/storeHome') {
     store.commit('publicMain/setInSearch', false);
+  }
+  if (to.path == '/main/shopCar') {
+    store.dispatch("showWarnAsync", {//提示信息
+      warnBool: true,
+      warnText: '购物车分支已毁',
+    });
+    next({name:"home"});
   }
   next();
 })
