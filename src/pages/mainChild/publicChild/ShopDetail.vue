@@ -4,6 +4,7 @@
     <app-nav :shopCarData="shopCarData"></app-nav>
     <div class="content-box" v-if="goodsDetail&&goodsDetail.goodsOl">
       <div class="show-shop">
+        <div class="shop-swiper"@click="showSwiper":style="onlyBool?onlyClass:shopSwiper">
         <!-- <div class="shop-swiper"@click="showSwiper":style="onlyBool?onlyClass:shopSwiper"> -->
         <div class="shop-swiper"@click="onlyBool=!onlyBool":style="onlyBool?onlyClass:shopSwiper">
           <van-swipe :autoplay="0" indicator-color="#DD3333">
