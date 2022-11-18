@@ -42,7 +42,7 @@
     "gulp-clean": "^0.4.0",
     "gulp-clean-css": "^4.2.0",
     "gulp-livereload": "^4.0.1",
-    "html-webpack-plugin": "^2.30.1",
+    "html-webpack-plugin": "^5.5.0",
     "node-notifier": "^5.1.2",
     "node-sass": "^4.12.0",
     "normalize.css": "^8.0.1",
